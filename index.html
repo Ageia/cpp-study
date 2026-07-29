@@ -166,7 +166,18 @@
     }
 
     .panel { display: none; animation: fadeIn .16s ease; }
-    .panel.active { display: block; }
+    /* 패널 자식(card / grid-2 / callout) 간격을 gap으로 통일
+       — .card+.card 만 쓰면 grid-2가 끼일 때 간격이 사라져 05 등에서 붙음 */
+    .panel.active {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .panel.active > .card + .card { margin-top: 0; }
+    .panel.active > .panel-lead { margin-bottom: 0; }
+    .panel.active > .deep-related { margin-bottom: 4px; }
+    .panel.active > .callout { margin-top: 0; }
+    .panel.active > .topic-head { margin-bottom: 0; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(3px); }
       to { opacity: 1; transform: none; }
@@ -216,9 +227,21 @@
     .card > .table-wrap {
       margin-top: 8px;
       box-shadow: none; /* 카드 안 이중 그림자 방지 */
+      background: rgba(0, 0, 0, 0.18);
     }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+    /* 카드 안 표: 강제 min-width 520 제거 → 가로 스크롤·들쭉날쭉 방지 */
+    .card > .table-wrap table {
+      min-width: 0;
+      width: 100%;
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+    .grid-2 > .card,
+    .grid-3 > .card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
     @media (max-width: 900px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
     }
@@ -236,7 +259,7 @@
     .map-grid {
       display: grid;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 0; /* 패널 flex gap이 담당 */
       align-items: stretch;
     }
     .map-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -413,22 +436,26 @@
       height: auto;
       margin: 0 auto;
     }
-    /* 05 진법 — HTML 그리드 (긴 0b… 은 SVG text 금지, flex/grid) */
+    /* 05 진법 — 카드 전체 폭 기준 HTML 그리드 (max-width 520 금지: 표와 들쭉날쭉) */
+    .base-viz.guide-viz {
+      width: 100%;
+      box-sizing: border-box;
+    }
     .base-head {
       text-align: center;
       font-size: 12px;
       font-weight: 700;
       color: var(--text-muted);
-      margin: 0 0 12px;
+      margin: 0 0 14px;
       letter-spacing: 0.02em;
     }
     .base-trio {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
-      gap: 8px;
+      grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr);
+      gap: 0 6px;
       align-items: stretch;
-      max-width: 520px;
-      margin: 0 auto;
+      width: 100%;
+      margin: 0;
     }
     .base-eq {
       display: flex;
@@ -436,65 +463,74 @@
       justify-content: center;
       color: var(--text-dim);
       font-weight: 700;
-      font-size: 14px;
-      padding: 0 2px;
+      font-size: 16px;
       user-select: none;
+      line-height: 1;
     }
     .base-chip {
       border-radius: 12px;
       border: 2px solid var(--border);
       background: #0b0e14;
-      padding: 12px 10px 14px;
+      padding: 14px 12px;
       text-align: center;
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       justify-content: center;
+      align-items: center;
     }
     .base-chip .lbl {
       font-size: 11px;
       color: var(--text-dim);
-      line-height: 1.3;
+      line-height: 1.35;
     }
     .base-chip .val {
       font-family: var(--mono);
       font-weight: 800;
-      font-size: 18px;
-      line-height: 1.2;
+      font-size: clamp(13px, 2.2vw, 20px);
+      line-height: 1.25;
       word-break: break-all;
     }
     .base-chip.is-dec { border-color: #6ee7b7; }
-    .base-chip.is-dec .val { color: #a7f3d0; font-size: 22px; }
+    .base-chip.is-dec .val { color: #a7f3d0; }
     .base-chip.is-hex { border-color: #67e8f9; }
-    .base-chip.is-hex .val { color: #67e8f9; font-size: 22px; }
+    .base-chip.is-hex .val { color: #67e8f9; }
     .base-chip.is-bin { border-color: #c4b5fd; }
-    .base-chip.is-bin .val { color: #c4b5fd; font-size: 14px; }
+    .base-chip.is-bin .val { color: #c4b5fd; font-size: clamp(12px, 1.8vw, 16px); }
+    /* 니블 단위 컬럼 — 비트 4칸 + 라벨을 한 묶음으로 정렬 보장 */
     .base-bits-block {
-      max-width: 520px;
-      margin: 16px auto 0;
+      width: 100%;
+      margin: 18px 0 0;
     }
     .base-bits-title {
       font-size: 11px;
       font-weight: 700;
       color: var(--text-muted);
-      margin: 0 0 8px;
+      margin: 0 0 10px;
     }
-    .base-bits {
+    .base-nibble-row {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) 10px repeat(4, minmax(0, 1fr));
-      gap: 6px;
-      align-items: center;
-    }
-    .base-bits .gap {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 14px;
       width: 100%;
-      height: 1px;
+    }
+    .base-nibble {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .base-nibble .bits {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
     }
     .base-bit {
       border-radius: 8px;
       border: 1.5px solid rgba(255,255,255,0.12);
       background: #0b0e14;
-      min-height: 40px;
+      min-height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -503,51 +539,57 @@
       font-size: 14px;
       color: var(--text-dim);
     }
-    .base-bit.on-hi {
+    .base-nibble.is-hi .base-bit.on {
       border-color: #c4b5fd;
       color: #e9d5ff;
     }
-    .base-bit.on-lo {
+    .base-nibble.is-lo .base-bit.on {
       border-color: #67e8f9;
       color: #a5f3fc;
     }
-    .base-nibbles {
-      display: grid;
-      grid-template-columns: 1fr 10px 1fr;
-      gap: 6px;
-      margin-top: 8px;
+    .base-nibble .cap {
       text-align: center;
+      padding-top: 2px;
+      border-top: 1.5px solid rgba(255,255,255,0.08);
     }
-    .base-nibbles .n {
+    .base-nibble.is-hi .cap { border-top-color: rgba(196,181,253,0.35); }
+    .base-nibble.is-lo .cap { border-top-color: rgba(103,232,249,0.35); }
+    .base-nibble .cap .hexd {
       font-family: var(--mono);
       font-weight: 800;
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.3;
     }
-    .base-nibbles .n.hi { color: #c4b5fd; }
-    .base-nibbles .n.lo { color: #67e8f9; }
-    .base-nibbles .sub {
+    .base-nibble.is-hi .cap .hexd { color: #c4b5fd; }
+    .base-nibble.is-lo .cap .hexd { color: #67e8f9; }
+    .base-nibble .cap .sub {
       display: block;
-      font-family: var(--sans, "Segoe UI", system-ui, sans-serif);
-      font-weight: 600;
       font-size: 10px;
+      font-weight: 600;
       color: var(--text-dim);
       margin-top: 2px;
     }
     .base-foot {
-      margin: 12px 0 0;
+      margin: 14px 0 0;
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-dim);
-      line-height: 1.45;
+      line-height: 1.5;
     }
-    @media (max-width: 560px) {
+    @media (max-width: 640px) {
       .base-trio {
         grid-template-columns: 1fr;
         gap: 6px;
       }
-      .base-eq { padding: 2px 0; transform: rotate(90deg); }
-      .base-chip.is-bin .val { font-size: 16px; }
+      .base-eq {
+        padding: 2px 0;
+        height: 20px;
+        transform: rotate(90deg);
+      }
+      .base-nibble-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
     }
     .debug-out {
       font-family: var(--mono);
@@ -1707,21 +1749,25 @@ int combo = 3;  // 선언 + 초기화 (권장)</pre>
               </div>
               <div class="base-bits-block">
                 <p class="base-bits-title">비트 8개 = 1바이트 · 16진 2자리</p>
-                <div class="base-bits" aria-hidden="true">
-                  <span class="base-bit">0</span>
-                  <span class="base-bit on-hi">1</span>
-                  <span class="base-bit on-hi">1</span>
-                  <span class="base-bit on-hi">1</span>
-                  <span class="gap"></span>
-                  <span class="base-bit on-lo">1</span>
-                  <span class="base-bit">0</span>
-                  <span class="base-bit">0</span>
-                  <span class="base-bit">0</span>
-                </div>
-                <div class="base-nibbles">
-                  <div class="n hi">7<span class="sub">상위 4비트</span></div>
-                  <span class="gap"></span>
-                  <div class="n lo">8<span class="sub">하위 4비트</span></div>
+                <div class="base-nibble-row" aria-hidden="true">
+                  <div class="base-nibble is-hi">
+                    <div class="bits">
+                      <span class="base-bit">0</span>
+                      <span class="base-bit on">1</span>
+                      <span class="base-bit on">1</span>
+                      <span class="base-bit on">1</span>
+                    </div>
+                    <div class="cap"><span class="hexd">7</span><span class="sub">상위 4비트</span></div>
+                  </div>
+                  <div class="base-nibble is-lo">
+                    <div class="bits">
+                      <span class="base-bit on">1</span>
+                      <span class="base-bit">0</span>
+                      <span class="base-bit">0</span>
+                      <span class="base-bit">0</span>
+                    </div>
+                    <div class="cap"><span class="hexd">8</span><span class="sub">하위 4비트</span></div>
+                  </div>
                 </div>
               </div>
               <p class="base-foot">16진 한 자리 = 비트 4개 (니블) · 그래서 0x78 ↔ 0111 1000</p>
