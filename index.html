@@ -389,6 +389,22 @@
       color: var(--text-muted);
       margin: 10px 0 6px;
     }
+    /* Number bases diagram (05) */
+    .base-viz {
+      margin: 12px 0 4px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #12151e;
+      padding: 14px 12px 12px;
+      overflow-x: auto;
+    }
+    .base-svg {
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      margin: 0 auto;
+    }
     .debug-out {
       font-family: var(--mono);
       font-size: 12px;
@@ -1195,7 +1211,7 @@
               <div class="level-body">
                 <p>값을 담고, 갈라지고, 반복하고, 묶기.</p>
                 <ul>
-                  <li>타입과 연산</li>
+                  <li>타입 · 진법 · 연산</li>
                   <li>if / for / while</li>
                   <li>함수 · 배열 · string</li>
                 </ul>
@@ -1519,6 +1535,133 @@ int combo = 3;  // 선언 + 초기화 (권장)</pre>
               </ul>
             </article>
           </div>
+
+          <article class="card">
+            <h3>진법 — 2진 · 10진 · 16진</h3>
+            <p>
+              컴퓨터 안 값은 결국 <strong class="hl">0과 1(비트)</strong>입니다.
+              같은 수를 <em>쓰기만 다르게</em> 할 수 있고, C++ 코드·메모리 덤프·색상 코드에서
+              표기가 섞여 나옵니다.
+            </p>
+            <div class="base-viz" aria-label="같은 값의 10진 16진 2진 표기">
+              <svg class="base-svg" viewBox="0 0 400 268" role="img">
+                <title>같은 값 120 — 10진 · 16진 · 2진</title>
+                <text x="200" y="20" text-anchor="middle" fill="#9aa3b8" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">같은 값 · 세 가지 쓰기</text>
+
+                <!-- decimal -->
+                <rect x="16" y="36" width="112" height="72" rx="12" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                <text x="72" y="58" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">10진 (decimal)</text>
+                <text x="72" y="86" text-anchor="middle" fill="#a7f3d0" font-size="22" font-weight="800" font-family="Consolas, monospace">120</text>
+
+                <!-- hex -->
+                <rect x="144" y="36" width="112" height="72" rx="12" fill="#0b0e14" stroke="#67e8f9" stroke-width="2"/>
+                <text x="200" y="58" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">16진 (hex)</text>
+                <text x="200" y="86" text-anchor="middle" fill="#67e8f9" font-size="22" font-weight="800" font-family="Consolas, monospace">0x78</text>
+
+                <!-- binary -->
+                <rect x="272" y="36" width="112" height="72" rx="12" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                <text x="328" y="58" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">2진 (binary)</text>
+                <text x="328" y="86" text-anchor="middle" fill="#c4b5fd" font-size="15" font-weight="800" font-family="Consolas, monospace">0b01111000</text>
+
+                <!-- equals hints -->
+                <text x="132" y="76" text-anchor="middle" fill="#6b7389" font-size="14" font-weight="700">=</text>
+                <text x="260" y="76" text-anchor="middle" fill="#6b7389" font-size="14" font-weight="700">=</text>
+
+                <!-- bit row: 8 bits of 0x78 -->
+                <text x="16" y="136" fill="#9aa3b8" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">비트 8개 = 1바이트 · 16진 2자리</text>
+                <!-- bits: 0 1 1 1 | 1 0 0 0 -->
+                <g font-family="Consolas, monospace" font-weight="800" font-size="14" text-anchor="middle">
+                  <rect x="16" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(196,181,253,0.45)" stroke-width="1.5"/>
+                  <text x="34" y="174" fill="#6b7389">0</text>
+                  <rect x="56" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.5"/>
+                  <text x="74" y="174" fill="#e9d5ff">1</text>
+                  <rect x="96" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.5"/>
+                  <text x="114" y="174" fill="#e9d5ff">1</text>
+                  <rect x="136" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.5"/>
+                  <text x="154" y="174" fill="#e9d5ff">1</text>
+                  <rect x="192" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#67e8f9" stroke-width="1.5"/>
+                  <text x="210" y="174" fill="#a5f3fc">1</text>
+                  <rect x="232" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(103,232,249,0.45)" stroke-width="1.5"/>
+                  <text x="250" y="174" fill="#6b7389">0</text>
+                  <rect x="272" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(103,232,249,0.45)" stroke-width="1.5"/>
+                  <text x="290" y="174" fill="#6b7389">0</text>
+                  <rect x="312" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(103,232,249,0.45)" stroke-width="1.5"/>
+                  <text x="330" y="174" fill="#6b7389">0</text>
+                </g>
+                <!-- nibble braces -->
+                <text x="94" y="210" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="700" font-family="Consolas, monospace">7</text>
+                <text x="94" y="226" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">상위 4비트</text>
+                <text x="262" y="210" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="700" font-family="Consolas, monospace">8</text>
+                <text x="262" y="226" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">하위 4비트</text>
+                <path d="M16 194 H172" stroke="rgba(196,181,253,0.35)" stroke-width="1.5" fill="none"/>
+                <path d="M192 194 H348" stroke="rgba(103,232,249,0.35)" stroke-width="1.5" fill="none"/>
+                <text x="200" y="254" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">16진 한 자리 = 비트 4개 (니블) · 그래서 0x78 ↔ 0111 1000</text>
+              </svg>
+            </div>
+
+            <div class="table-wrap" style="margin-top:14px">
+              <table>
+                <thead><tr><th>이름</th><th>밑</th><th>쓰는 숫자</th><th>C++ 표기</th><th>언제 보나</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>10진</strong></td>
+                    <td>10</td><td>0–9</td>
+                    <td><code class="inline">120</code></td>
+                    <td>일상 숫자, HP·점수</td>
+                  </tr>
+                  <tr>
+                    <td><strong>16진</strong></td>
+                    <td>16</td><td>0–9, A–F</td>
+                    <td><code class="inline">0x78</code></td>
+                    <td>메모리 덤프, 색 <code class="inline">#FF8800</code>, 마스크</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2진</strong></td>
+                    <td>2</td><td>0, 1</td>
+                    <td><code class="inline">0b01111000</code></td>
+                    <td>비트 플래그, 하드웨어 비트</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:10px;font-size:13px;color:var(--text-dim)">
+              A=10 … F=15. 대소문자 모두 가능 (<code class="inline">0xFF</code> = <code class="inline">0xff</code>).
+              <code class="inline">0b</code> 접두사는 <strong>C++14</strong>부터.
+            </p>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>상황 · 코드 · 쓰임</h3>
+              <p><strong class="hl">상황:</strong> “같은 상수”를 읽기 쉬운 진법으로 적고 싶다.</p>
+              <pre>int a = 120;          // 10진
+int b = 0x78;         // 16진  (b == a)
+int c = 0b01111000;   // 2진   (c == a)  // C++14+
+
+// 출력 진법 바꾸기
+std::cout &lt;&lt; std::hex &lt;&lt; a &lt;&lt; "\n";  // 78
+std::cout &lt;&lt; std::dec &lt;&lt; a &lt;&lt; "\n";  // 120
+// 2진 출력은 비트 루프나 C++20 format 등</pre>
+              <p style="margin-top:8px;margin-bottom:0">
+                <strong class="hl">쓰임:</strong> 색상·플래그·주소·파일 매직 넘버는 16진이 읽기 쉽고,
+                점수·카운트는 10진이 자연스럽습니다.
+              </p>
+            </article>
+            <article class="card">
+              <h3>왜 16진을 많이 쓰나?</h3>
+              <ul class="checklist">
+                <li class="yes"><strong class="hl">4비트 = 16진 1자리</strong> — 2진을 짧게 묶음</li>
+                <li class="yes"><strong class="hl">1바이트 = 16진 2자리</strong> — <code class="inline">0x00</code>~<code class="inline">0xFF</code> (0~255)</li>
+                <li class="yes">덤프 <code class="inline">78 56 34 12</code> 처럼 바이트 단위로 읽기 편함</li>
+                <li class="tip">엔디안(25)에서 보는 <code class="inline">0x12345678</code> 도 “의미”를 16진으로 쓴 것</li>
+              </ul>
+              <div class="callout cyan" style="margin-top:10px;margin-bottom:0">
+                <strong>이어지기:</strong>
+                비트 연산 → <a href="#06">06 연산자</a> ·
+                바이트 줄 서기 → <a href="#25">25 엔디안</a>
+              </div>
+            </article>
+          </div>
         </section>
 
         <!-- 06 -->
@@ -1571,11 +1714,14 @@ int b = i++;  // b=1, i=2  (나중에 증가)</pre>
             </article>
             <article class="card">
               <h3>비트 맛보기</h3>
-              <pre>// 플래그 on/off
+              <pre>// 플래그 on/off  (2진·16진 감각 → 05 진법)
 unsigned flags = 0;
-flags |= 1u &lt;&lt; 0;   // 0번 비트 on
+flags |= 1u &lt;&lt; 0;   // 0번 비트 on  (= 0b0001)
 bool on = flags &amp; (1u &lt;&lt; 0);</pre>
-              <p style="margin-top:8px;margin-bottom:0">충돌 레이어·옵션 묶음에 자주. 깊게는 심화.</p>
+              <p style="margin-top:8px;margin-bottom:0">
+                충돌 레이어·옵션 묶음에 자주.
+                <code class="inline">0b</code>/<code class="inline">0x</code> 읽기 → <a href="#05">05 진법</a>.
+              </p>
             </article>
           </div>
 
@@ -3559,7 +3705,8 @@ for (int i = 0; i &lt; n; ++i) sum += a[i];</pre>
           <div class="deep-related">
             <span class="label">관련 메인</span>
             <span class="links">
-              <a href="#05">05 변수와 타입</a>
+              <a href="#05">05 변수·진법</a>
+              <a href="#06">06 연산자</a>
               <a href="#10">10 스택과 힙</a>
               <a href="#11">11 포인터</a>
             </span>
@@ -3568,7 +3715,8 @@ for (int i = 0; i &lt; n; ++i) sum += a[i];</pre>
           <article class="card">
             <h3>1. 문제를 먼저 잡기</h3>
             <p>
-              사람이 쓰는 수 <code class="inline">0x12345678</code> 은 “의미”입니다.
+              사람이 쓰는 수 <code class="inline">0x12345678</code> 은 “의미”입니다
+              (16진 표기 — <a href="#05">05 진법</a>).
               메모리 주소는 <strong class="hl">한 칸에 1바이트</strong>씩 번호를 매깁니다.
               4바이트 정수를 쓰려면 주소 4칸이 필요하고, 그때
               <em>어느 칸에 어느 바이트를 넣을지</em> 규칙이 필요합니다.
@@ -3879,6 +4027,13 @@ std::uint32_t bswap32(std::uint32_t x) {
         { term: "분할 컴파일", en: "separate compilation", g: "A", def: ".cpp를 따로 컴파일한 뒤 링크. 바뀐 파일만 다시 빌드.", ref: "03" },
         { term: "변수", en: "variable", g: "B", def: "값을 담아 두는 이름 붙인 상자.", ref: "05" },
         { term: "타입", en: "type", g: "B", def: "상자에 어떤 종류의 값을 넣을지 정하는 라벨.", ref: "05" },
+        { term: "진법", en: "numeral system / base", g: "B", def: "수를 적는 규칙. 밑(base)에 따라 2진·10진·16진 등으로 같은 값을 다르게 씀.", ref: "05" },
+        { term: "2진수", en: "binary", g: "B", def: "0과 1만 쓰는 표기. 비트 하나하나. 코드에선 0b… (C++14+).", ref: "05" },
+        { term: "10진수", en: "decimal", g: "B", def: "일상 숫자 표기(0–9). HP·점수 등 사람에게 익숙한 쪽.", ref: "05" },
+        { term: "16진수", en: "hexadecimal / hex", g: "B", def: "0–9·A–F. 4비트=1자리, 1바이트=2자리. 접두사 0x. 덤프·색·마스크에 자주.", ref: "05" },
+        { term: "비트", en: "bit", g: "B", def: "0 또는 1 한 칸. 정보·메모리의 최소 단위.", ref: "05" },
+        { term: "바이트", en: "byte", g: "B", def: "보통 8비트. 주소가 한 칸씩 세는 기본 단위. 0x00–0xFF.", ref: "05" },
+        { term: "니블", en: "nibble", g: "B", def: "4비트 = 16진 한 자리. 바이트의 반쪽.", ref: "05" },
         { term: "함수", en: "function", g: "B", def: "일을 묶어 이름 붙인 레시피. 입력 → 처리 → 반환.", ref: "08" },
         { term: "조건문", en: "if / else", g: "B", def: "참·거짓에 따라 실행 길을 가르는 문법.", ref: "07" },
         { term: "반복문", en: "for / while", g: "B", def: "같은 일을 여러 번 또는 조건이 참인 동안 반복.", ref: "07" },
