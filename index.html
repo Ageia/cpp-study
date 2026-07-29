@@ -545,7 +545,7 @@
       transform-origin: center;
     }
 
-    /* Vector growth (13) */
+    /* Vector growth (14) */
     .vec-svg .vec-hide { opacity: 0; }
     .vec-svg .vec-cell {
       opacity: 0;
@@ -592,7 +592,7 @@
       .vec-viz .vec-grow { opacity: 0.45 !important; }
     }
 
-    /* new/delete (14) + smart pointer (15) */
+    /* new/delete (15) + smart pointer (16) */
     .own-viz {
       margin-top: 14px;
       border-radius: 16px;
@@ -699,7 +699,7 @@
       .own-viz .own-del { opacity: 0.35 !important; }
     }
 
-    /* move (16) + template (17) */
+    /* move (17) + template (18) */
     .mv-viz, .tp-viz {
       margin-top: 14px;
       border-radius: 16px;
@@ -767,6 +767,49 @@
         stroke-dashoffset: 0 !important;
       }
       .mv-viz .mv-fade-copy { opacity: 0.25 !important; }
+    }
+
+    /* operator overloading (13) */
+    .op-viz {
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse 70% 45% at 40% 30%, rgba(103,232,249,0.1), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(251,191,36,0.08), transparent 50%),
+        #12151e;
+      padding: 16px 14px 12px;
+      overflow: hidden;
+    }
+    .op-svg {
+      display: block; width: 100%; height: auto;
+      max-width: 520px; margin: 0 auto;
+    }
+    .op-svg .op-hide { opacity: 0; }
+    .op-viz.play .op-a { animation: objPop 0.35s 0.1s cubic-bezier(.2,.9,.2,1) forwards; }
+    .op-viz.play .op-plus { animation: ptrFade 0.3s 0.4s ease forwards; }
+    .op-viz.play .op-b { animation: objPop 0.35s 0.55s cubic-bezier(.2,.9,.2,1) forwards; }
+    .op-viz.play .op-line {
+      animation: ptrLineDraw 0.4s 0.95s ease forwards;
+    }
+    .op-viz.play .op-call { animation: ptrFade 0.3s 1.2s ease forwards; }
+    .op-viz.play .op-r { animation: objPop 0.4s 1.45s cubic-bezier(.2,.9,.2,1) forwards; }
+    .op-viz.play .op-note { animation: ptrFade 0.35s 1.85s ease forwards; }
+    .op-svg .op-line {
+      fill: none; stroke-linecap: round;
+      stroke-dasharray: 80; stroke-dashoffset: 80; opacity: 0;
+    }
+    .op-svg .op-a, .op-svg .op-b, .op-svg .op-r {
+      transform-box: fill-box; transform-origin: center;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .op-viz .op-hide, .op-viz .op-a, .op-viz .op-b, .op-viz .op-r,
+      .op-viz .op-plus, .op-viz .op-line, .op-viz .op-call, .op-viz .op-note {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        stroke-dashoffset: 0 !important;
+      }
     }
 
     .nav-row {
@@ -870,7 +913,7 @@
       <div class="side-brand">
         <div class="kicker">cpp-study</div>
         <div class="logo">C++ 가이드 사전</div>
-        <div class="sub">01–20 · 번호 순으로 읽기</div>
+        <div class="sub">01–21 · 번호 순으로 읽기</div>
       </div>
       <nav class="side-nav" id="side-nav" role="tablist" aria-label="주제 목록">
         <div class="side-group">시작</div>
@@ -915,32 +958,35 @@
           <span class="n">12</span><span class="t">구조체와 클래스</span>
         </button>
         <button type="button" role="tab" data-tab="13" aria-selected="false">
-          <span class="n">13</span><span class="t">STL · vector</span>
+          <span class="n">13</span><span class="t">연산자 오버로딩</span>
         </button>
         <button type="button" role="tab" data-tab="14" aria-selected="false">
-          <span class="n">14</span><span class="t">new 와 delete</span>
+          <span class="n">14</span><span class="t">STL · vector</span>
+        </button>
+        <button type="button" role="tab" data-tab="15" aria-selected="false">
+          <span class="n">15</span><span class="t">new 와 delete</span>
         </button>
 
         <div class="side-group">현대 C++</div>
-        <button type="button" role="tab" data-tab="15" aria-selected="false">
-          <span class="n">15</span><span class="t">스마트 포인터</span>
-        </button>
         <button type="button" role="tab" data-tab="16" aria-selected="false">
-          <span class="n">16</span><span class="t">이동(move)</span>
+          <span class="n">16</span><span class="t">스마트 포인터</span>
         </button>
         <button type="button" role="tab" data-tab="17" aria-selected="false">
-          <span class="n">17</span><span class="t">템플릿</span>
+          <span class="n">17</span><span class="t">이동(move)</span>
         </button>
         <button type="button" role="tab" data-tab="18" aria-selected="false">
-          <span class="n">18</span><span class="t">다음으로 갈 길</span>
+          <span class="n">18</span><span class="t">템플릿</span>
+        </button>
+        <button type="button" role="tab" data-tab="19" aria-selected="false">
+          <span class="n">19</span><span class="t">다음으로 갈 길</span>
         </button>
 
         <div class="side-group">도구</div>
-        <button type="button" role="tab" data-tab="19" aria-selected="false">
-          <span class="n">19</span><span class="t">용어 사전</span>
-        </button>
         <button type="button" role="tab" data-tab="20" aria-selected="false">
-          <span class="n">20</span><span class="t">활용 예시 · FAQ</span>
+          <span class="n">20</span><span class="t">용어 사전</span>
+        </button>
+        <button type="button" role="tab" data-tab="21" aria-selected="false">
+          <span class="n">21</span><span class="t">활용 예시 · FAQ</span>
         </button>
       </nav>
     </aside>
@@ -997,7 +1043,7 @@
             </article>
             <article class="level-card clickable" data-goto="10">
               <div class="level-head">
-                <div class="level-icon">10–14</div>
+                <div class="level-icon">10–15</div>
                 <div>
                   <h3 style="margin:0 0 4px">메모리와 구조</h3>
                   <span class="tag tag-cyan">주소 · 객체 · STL</span>
@@ -1015,9 +1061,9 @@
           </div>
 
           <div class="grid-2" style="margin-bottom:14px">
-            <article class="level-card clickable" data-goto="15">
+            <article class="level-card clickable" data-goto="16">
               <div class="level-head">
-                <div class="level-icon">15–18</div>
+                <div class="level-icon"16–19</div>
                 <div>
                   <h3 style="margin:0 0 4px">현대 C++</h3>
                   <span class="tag tag-purple">안전 · 성능 · 재사용</span>
@@ -1032,9 +1078,9 @@
                 </ul>
               </div>
             </article>
-            <article class="level-card clickable" data-goto="19">
+            <article class="level-card clickable" data-goto="20">
               <div class="level-head">
-                <div class="level-icon">19–20</div>
+                <div class="level-icon"20–21</div>
                 <div>
                   <h3 style="margin:0 0 4px">사전 · 활용</h3>
                   <span class="tag tag-ok">검색 · 예시 · FAQ</span>
@@ -1062,11 +1108,11 @@
             </div>
             <div class="path-item">
               <div class="lv">그다음</div>
-              <div class="body"><strong>10–14:</strong> 포인터·vector·클래스 활용 패턴을 코드로 익히기.</div>
+              <div class="body"><strong>10–15:</strong> 포인터·vector·클래스 활용 패턴을 코드로 익히기.</div>
             </div>
             <div class="path-item">
               <div class="lv">이후</div>
-              <div class="body"><strong>15–18:</strong> unique_ptr·move 감각 후 관심 분야(게임/알고/시스템)로.</div>
+              <div class="body"><strong16–19:</strong> unique_ptr·move 감각 후 관심 분야(게임/알고/시스템)로.</div>
             </div>
           </div>
           <div class="callout mint">
@@ -1244,6 +1290,7 @@ int combo = 3;  // 선언 + 초기화 (권장)</pre>
                   <tr><td><strong>증감</strong></td><td><code class="inline">++ --</code></td><td>1 늘리기 / 줄이기</td></tr>
                   <tr><td><strong>비교</strong></td><td><code class="inline">== != &lt; &gt; &lt;= &gt;=</code></td><td>참/거짓 만들기</td></tr>
                   <tr><td><strong>논리</strong></td><td><code class="inline">&amp;&amp; || !</code></td><td>그리고 / 또는 / 아님</td></tr>
+                  <tr><td><strong>비트</strong></td><td><code class="inline">&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td><td>플래그·마스크 (맛보기)</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1265,23 +1312,27 @@ double b = 5.0 / 2.0;  // 2.5</pre>
             <p><strong class="hl">쓰임:</strong> 데미지 공식, 이동 속도, 조건 플래그, 타이머 틱.</p>
           </article>
 
-          <div class="grid-2">
+          <div class="split-cards">
             <article class="card">
-              <h3>자주 하는 실수</h3>
-              <ul class="checklist">
-                <li class="no"><code class="inline">=</code> (넣기) vs <code class="inline">==</code> (같은지)</li>
-                <li class="no"><code class="inline">int / int</code> → 소수 버려짐</li>
-                <li class="tip"><code class="inline">%</code> 는 정수 나머지 (짝/홀, 슬롯 순환)</li>
-              </ul>
+              <h3>++ 앞/뒤 (감각)</h3>
+              <pre>int i = 0;
+int a = ++i;  // i=1, a=1  (먼저 증가)
+int b = i++;  // b=1, i=2  (나중에 증가)</pre>
+              <p style="margin-top:8px;margin-bottom:0">루프에선 보통 <code class="inline">++i</code> 습관. 차이는 “그 식의 값”.</p>
             </article>
             <article class="card">
-              <h3>나머지의 쓰임</h3>
-              <pre>// 3칸마다 한 번씩
-if (frame % 3 == 0) {
-    // 스폰 or 깜빡임
-}</pre>
-              <p style="margin-top:8px">주기·그리드·원형 버퍼 인덱스에 자주 등장합니다.</p>
+              <h3>비트 맛보기</h3>
+              <pre>// 플래그 on/off
+unsigned flags = 0;
+flags |= 1u &lt;&lt; 0;   // 0번 비트 on
+bool on = flags &amp; (1u &lt;&lt; 0);</pre>
+              <p style="margin-top:8px;margin-bottom:0">충돌 레이어·옵션 묶음에 자주. 깊게는 심화.</p>
             </article>
+          </div>
+
+          <div class="callout mint">
+            <strong>다음 단계:</strong> 기본 타입 기호는 여기(06).
+            <code class="inline">Point</code> 같은 <em>내 타입</em>에 <code class="inline">+</code> 를 붙이려면 → <strong>13 · 연산자 오버로딩</strong> (클래스 이후).
           </div>
         </section>
 
@@ -1457,7 +1508,7 @@ std::cout &lt;&lt; name[0];      // 'H'</pre>
             <h3>배열 vs 곧 배울 vector</h3>
             <div class="table-wrap" style="margin-top:8px">
               <table>
-                <thead><tr><th></th><th>배열 <code class="inline">T a[N]</code></th><th>vector (13)</th></tr></thead>
+                <thead><tr><th></th><th>배열 <code class="inline">T a[N]</code></th><th>vector (14)</th></tr></thead>
                 <tbody>
                   <tr><td><strong>길이</strong></td><td>컴파일 때 고정인 경우가 많음</td><td>실행 중 <code class="inline">push_back</code>으로 늘어남</td></tr>
                   <tr><td><strong>편함</strong></td><td>단순·가볍</td><td>목록·스폰·인벤토리에 강함</td></tr>
@@ -1466,7 +1517,7 @@ std::cout &lt;&lt; name[0];      // 'H'</pre>
               </table>
             </div>
             <div class="callout cyan">
-              <strong>권장 루트:</strong> 09에서 인덱스·string만 익히고, 늘어나는 목록은 <strong>13 · STL · vector</strong>로.
+              <strong>권장 루트:</strong> 09에서 인덱스·string만 익히고, 늘어나는 목록은 <strong>14 · STL · vector</strong>로.
             </div>
           </article>
         </section>
@@ -1630,7 +1681,7 @@ int* big = new int[1000];  // 힙에 1000칸
 // ... 여러 함수에서 big을 넘기며 사용 ...
 delete[] big;              // 반납 (안 하면 누수)</pre>
             <p><strong class="hl">쓰임:</strong> 긴 수명의 리소스, 큰 버퍼, 엔진 객체가 “월드에 남아 있는” 느낌.
-            일상 목록은 보통 <code class="inline">vector</code>(13)가 힙을 대신 관리해 줍니다.</p>
+            일상 목록은 보통 <code class="inline">vector</code>(14)가 힙을 대신 관리해 줍니다.</p>
             <div class="callout warn">
               <strong>지금 목표:</strong> raw <code class="inline">new</code> 숙달이 아니라
               “스택 = 자동 / 힙 = 수명 설계” 감각. 상세 할당은 <strong>14</strong>, 안전한 소유는 <strong>15</strong>.
@@ -1642,8 +1693,8 @@ delete[] big;              // 반납 (안 하면 누수)</pre>
               <h3>선택 가이드</h3>
               <ul class="checklist">
                 <li class="yes">작다 + 함수 안에서만 → 스택 (일반 변수)</li>
-                <li class="yes">목록이 늘어난다 → vector (13)</li>
-                <li class="tip">소유·수명이 복잡 → 스마트 포인터 (15)</li>
+                <li class="yes">목록이 늘어난다 → vector (14)</li>
+                <li class="tip">소유·수명이 복잡 → 스마트 포인터 (16)</li>
                 <li class="no">초보 구간에서 raw new 남발</li>
               </ul>
             </article>
@@ -1834,7 +1885,7 @@ int main() {
               <ul class="checklist">
                 <li class="no">댕글링 — 이미 사라진 대상을 가리킴</li>
                 <li class="no">널 역참조 — <code class="inline">nullptr</code>에 <code class="inline">*</code></li>
-                <li class="tip">소유·해제는 스마트 포인터로 (15)</li>
+                <li class="tip">소유·해제는 스마트 포인터로 (16)</li>
                 <li class="yes">참조는 보통 “항상 유효한 별명”으로 씀</li>
               </ul>
             </article>
@@ -1842,7 +1893,8 @@ int main() {
 
           <div class="callout mint">
             <strong>다음에 이어짐:</strong> 데이터+행동을 묶으면 <strong>12 · 구조체와 클래스</strong>,
-            같은 종류 여러 개는 <strong>13 · vector</strong> (내부적으로 힙+연속 저장).
+            같은 종류 여러 개는 <strong>14 · vector</strong> (내부적으로 힙+연속 저장).
+            타입에 <code class="inline">+</code> 를 붙이려면 <strong>13 · 연산자 오버로딩</strong>.
           </div>
         </section>
 
@@ -1981,13 +2033,121 @@ int main() {
           <div class="callout cyan">
             <strong>지금은 여기까지:</strong> “상태+행동을 타입으로 묶는다”.
             가상함수·상속 트리·메모리 레이아웃(패딩)은 <em>나중에 심화</em>로 남겨 둡니다.
+            타입에 <code class="inline">+</code>·<code class="inline">==</code> 를 붙이려면 → <strong>13</strong>.
           </div>
         </section>
 
-        <!-- 13 -->
+        <!-- 13 operator overloading -->
         <section class="panel" data-panel="13" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">13</span> STL · vector</h2>
+            <h2><span class="num">13</span> 연산자 오버로딩</h2>
+          </div>
+          <p class="panel-lead">
+            <strong class="hl">연산자 오버로딩</strong>(operator overloading) =
+            <code class="inline">+</code>, <code class="inline">==</code> 같은 기호를
+            <em>내 타입</em>에도 쓰이게 만드는 것. 기호가 사실은 <strong class="hl">함수 호출</strong>이 됩니다.
+          </p>
+
+          <article class="card">
+            <h3>한 줄로</h3>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">a + b</code> → 컴파일러가 <code class="inline">a.operator+(b)</code> (또는 전역) 로 해석</li>
+              <li class="yes">벡터·행렬·점수 타입에 “자연스러운 수식”을 줄 때</li>
+              <li class="no">모든 기호를 다 오버로드할 필요 없음 · 의도가 흐려지면 독이 됨</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>한눈에 보기 — 기호가 함수가 되다</h3>
+            <p><code class="inline">p1 + p2</code> 가 <code class="inline">operator+</code> 호출로 바뀌는 그림입니다.</p>
+
+            <div class="op-viz" id="op-viz" aria-label="연산자 오버로딩 애니메이션">
+              <div class="mem-viz-toolbar">
+                <p>수식 → operator+ 호출 → 새 Point</p>
+                <button type="button" id="op-replay">다시 보기</button>
+              </div>
+              <svg class="op-svg" viewBox="0 0 500 200" role="img" aria-labelledby="op-title">
+                <title id="op-title">operator+ 호출</title>
+                <defs>
+                  <marker id="mOpArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#67e8f9"/>
+                  </marker>
+                </defs>
+
+                <g class="op-a op-hide">
+                  <rect x="24" y="40" width="100" height="56" rx="12" fill="#0b0e14" stroke="#67e8f9" stroke-width="2"/>
+                  <text x="74" y="64" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="800" font-family="Consolas, monospace">p1</text>
+                  <text x="74" y="82" text-anchor="middle" fill="#9aa3b8" font-size="11" font-family="Consolas, monospace">(1, 2)</text>
+                </g>
+                <text class="op-hide op-plus" x="140" y="74" text-anchor="middle" fill="#fde68a" font-size="22" font-weight="800" font-family="Consolas, monospace">+</text>
+                <g class="op-b op-hide">
+                  <rect x="164" y="40" width="100" height="56" rx="12" fill="#0b0e14" stroke="#67e8f9" stroke-width="2"/>
+                  <text x="214" y="64" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="800" font-family="Consolas, monospace">p2</text>
+                  <text x="214" y="82" text-anchor="middle" fill="#9aa3b8" font-size="11" font-family="Consolas, monospace">(3, 4)</text>
+                </g>
+
+                <line class="op-line" x1="280" y1="68" x2="330" y2="68" stroke="#67e8f9" stroke-width="2.5" marker-end="url(#mOpArrow)"/>
+                <text class="op-hide op-call" x="305" y="56" text-anchor="middle" fill="#a5f3fc" font-size="11" font-weight="700" font-family="Consolas, monospace">operator+</text>
+
+                <g class="op-r op-hide">
+                  <rect x="344" y="40" width="120" height="56" rx="12" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                  <text x="404" y="64" text-anchor="middle" fill="#a7f3d0" font-size="13" font-weight="800" font-family="Consolas, monospace">result</text>
+                  <text x="404" y="82" text-anchor="middle" fill="#e2e8f0" font-size="11" font-family="Consolas, monospace">(4, 6)</text>
+                </g>
+
+                <g class="op-hide op-note">
+                  <rect x="24" y="120" width="440" height="52" rx="12" fill="rgba(103,232,249,0.08)" stroke="rgba(103,232,249,0.3)"/>
+                  <text x="244" y="142" text-anchor="middle" fill="#e2e8f0" font-size="13" font-family="Consolas, monospace">p1 + p2  ≈  p1.operator+(p2)</text>
+                  <text x="244" y="160" text-anchor="middle" fill="#9aa3b8" font-size="12" font-family="Segoe UI, sans-serif">기호 문법 · 안은 우리가 정의한 함수</text>
+                </g>
+              </svg>
+              <div class="mem-legend">
+                <span><i class="c-code"></i>피연산자</span>
+                <span><i class="c-stack"></i>결과 객체</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임</h3>
+            <p><strong class="hl">상황:</strong> 2D 좌표 두 개를 더해 새 좌표를 만들고 싶다.</p>
+            <pre>struct Point {
+    float x = 0, y = 0;
+
+    Point operator+(const Point&amp; o) const {
+        return Point{ x + o.x, y + o.y };
+    }
+};
+
+Point a{1, 2}, b{3, 4};
+Point c = a + b;   // (4, 6)</pre>
+            <p><strong class="hl">쓰임:</strong> 벡터·행렬 수학, 점수/머니 타입, 게임 엔진의 <code class="inline">FVector</code> 같은 “수식처럼 보이는 API”.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>자주 오버로드하는 것</h3>
+              <ul class="checklist">
+                <li class="yes"><code class="inline">+</code> <code class="inline">-</code> <code class="inline">*</code> (벡터/행렬)</li>
+                <li class="yes"><code class="inline">==</code> <code class="inline">!=</code> (비교)</li>
+                <li class="tip"><code class="inline">&lt;&lt;</code> 출력 (고급·취향) — 입문 필수 아님</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>지금은 여기까지</h3>
+              <ul class="checklist">
+                <li class="yes">“기호 = 함수” 그림만 잡기</li>
+                <li class="no">모든 연산자 마스터 / 남용</li>
+                <li class="tip">기본 연산자 기호는 <strong>06</strong>, 타입 묶음은 <strong>12</strong></li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- 14 -->
+        <section class="panel" data-panel="14" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">14</span> STL · vector</h2>
           </div>
           <p class="panel-lead">
             <strong class="hl">STL</strong>(Standard Template Library, 표준 템플릿 라이브러리) =
@@ -2126,9 +2286,9 @@ int main() {
         </section>
 
         <!-- 14 -->
-        <section class="panel" data-panel="14" role="tabpanel" hidden>
+        <section class="panel" data-panel="15" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">14</span> new 와 delete</h2>
+            <h2><span class="num">15</span> new 와 delete</h2>
           </div>
           <p class="panel-lead">
             힙에 자리를 <strong class="hl">빌리고(<code class="inline">new</code>)</strong>
@@ -2206,7 +2366,7 @@ std::cout &lt;&lt; *p &lt;&lt; "\n";
 delete p;               // 반납
 p = nullptr;            // 잘못된 재사용 방지 습관</pre>
             <p><strong class="hl">쓰임:</strong> 레거시 API, 엔진 내부 일부, “직접 수명 관리”를 이해하는 데.
-            목록이면 <code class="inline">vector</code>(13), 소유 객체면 <strong>15 · 스마트 포인터</strong>가 기본.</p>
+            목록이면 <code class="inline">vector</code>(14), 소유 객체면 <strong>15 · 스마트 포인터</strong>가 기본.</p>
           </article>
 
           <div class="split-cards">
@@ -2230,9 +2390,9 @@ delete[] a;   // 배열은 delete[]</pre>
         </section>
 
         <!-- 15 -->
-        <section class="panel" data-panel="15" role="tabpanel" hidden>
+        <section class="panel" data-panel="16" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">15</span> 스마트 포인터</h2>
+            <h2><span class="num">16</span> 스마트 포인터</h2>
           </div>
           <p class="panel-lead">
             포인터처럼 쓰되, <strong class="hl">수명이 끝나면 자동으로 반납</strong>하는 객체입니다.
@@ -2352,9 +2512,9 @@ void run() {
         </section>
 
         <!-- 16 -->
-        <section class="panel" data-panel="16" role="tabpanel" hidden>
+        <section class="panel" data-panel="17" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">16</span> 이동(move)</h2>
+            <h2><span class="num">17</span> 이동(move)</h2>
           </div>
           <p class="panel-lead">
             큰 데이터를 <strong class="hl">통째로 복사</strong>하는 대신,
@@ -2457,9 +2617,9 @@ auto b = std::move(a);  // 소유권이 b로
         </section>
 
         <!-- 17 -->
-        <section class="panel" data-panel="17" role="tabpanel" hidden>
+        <section class="panel" data-panel="18" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">17</span> 템플릿</h2>
+            <h2><span class="num">18</span> 템플릿</h2>
           </div>
           <p class="panel-lead">
             <strong class="hl">타입을 매개변수</strong>처럼 넘기는 문법입니다.
@@ -2563,9 +2723,9 @@ max2(1.5, 0.2);   // T = double</pre>
         </section>
 
         <!-- 18 -->
-        <section class="panel" data-panel="18" role="tabpanel" hidden>
+        <section class="panel" data-panel="19" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">18</span> 다음으로 갈 길</h2>
+            <h2><span class="num">19</span> 다음으로 갈 길</h2>
           </div>
           <p class="panel-lead">뼈대를 잡았다면 관심 분야로 분기합니다.</p>
           <article class="card">
@@ -2577,15 +2737,15 @@ max2(1.5, 0.2);   // T = double</pre>
             </ul>
             <div class="callout">
               <strong>엔진 입문 전:</strong> 05–12(문법·함수·클래스·포인터 감각)면 따라 치기는 가능합니다.
-              15–17은 엔진 코드 읽으면서 채워도 됩니다.
+              15–18은 엔진 코드 읽으면서 채워도 됩니다.
             </div>
           </article>
         </section>
 
         <!-- 19 DICT -->
-        <section class="panel" data-panel="19" role="tabpanel" hidden>
+        <section class="panel" data-panel="20" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">19</span> 용어 사전</h2>
+            <h2><span class="num">20</span> 용어 사전</h2>
             <span class="tag tag-ok">검색</span>
           </div>
           <p class="panel-lead">막히는 단어만 짧게 풉니다. 자세한 설명은 해당 번호로 이동하세요.</p>
@@ -2606,9 +2766,9 @@ max2(1.5, 0.2);   // T = double</pre>
         </section>
 
         <!-- 20 USAGE EXAMPLES + FAQ -->
-        <section class="panel" data-panel="20" role="tabpanel" hidden>
+        <section class="panel" data-panel="21" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">20</span> 활용 예시 · FAQ</h2>
+            <h2><span class="num">21</span> 활용 예시 · FAQ</h2>
           </div>
           <p class="panel-lead">
             숙제·퀴즈 대신 <strong class="hl">짧은 완성 예시</strong>를 보여 주고,
@@ -2658,7 +2818,7 @@ while (hp &gt; 0) {
           </article>
 
           <article class="card" style="margin-top:12px">
-            <h3>예시 C · 클래스 + vector (12–13) — 적 목록</h3>
+            <h3>예시 C · 클래스 + vector (12–14) — 적 목록</h3>
             <p><strong class="hl">상황:</strong> 적 여러 마리의 HP를 한 리스트로 관리.</p>
             <pre>struct Enemy {
     std::string name;
@@ -2678,7 +2838,7 @@ for (const Enemy&amp; e : enemies) {
           </article>
 
           <article class="card" style="margin-top:12px">
-            <h3>예시 D · unique_ptr (15) — 소유권 한 곳에</h3>
+            <h3>예시 D · unique_ptr (16) — 소유권 한 곳에</h3>
             <p><strong class="hl">상황:</strong> 큰 리소스(텍스처·세션)를 누가 지우는지 명확히.</p>
             <pre>#include &lt;memory&gt;
 
@@ -2727,7 +2887,7 @@ void run() {
               </div>
               <div>
                 <h3 style="font-size:0.95rem">Q. 언리얼은?</h3>
-                <p>05–12 감각이면 입문 가능. 15–17은 엔진과 함께.</p>
+                <p>05–12 감각이면 입문 가능. 15–18은 엔진과 함께.</p>
               </div>
               <div>
                 <h3 style="font-size:0.95rem">Q. 안 짜도 되나요?</h3>
@@ -2768,7 +2928,7 @@ void run() {
     (function () {
       const ORDER = [
         "01","02","03","04","05","06","07","08","09","10",
-        "11","12","13","14","15","16","17","18","19","20"
+        "11","12","13","14","15","16","17","18","19","20","21"
       ];
 
       const DICT = [
@@ -2792,18 +2952,19 @@ void run() {
         { term: "참조", en: "reference", g: "C", def: "이미 있는 변수에 붙인 별명. 복사 없이 같은 대상.", ref: "11" },
         { term: "클래스", en: "class", g: "C", def: "상태(데이터)와 행동(함수)을 한 타입으로 묶는 틀.", ref: "12" },
         { term: "구조체", en: "struct", g: "C", def: "관련 데이터를 묶는 타입. class와 비슷.", ref: "12" },
-        { term: "STL", en: "Standard Template Library", g: "C", def: "표준 템플릿 라이브러리. vector, map, algorithm 등 표준 자료구조·알고리즘 모음.", ref: "13" },
-        { term: "vector", en: "std::vector", g: "C", def: "크기가 늘어날 수 있는 동적 배열. 최우선 도구.", ref: "13" },
-        { term: "new / delete", en: "dynamic allocation", g: "C", def: "힙 메모리를 빌리고 반납하는 방식. 남용 지양.", ref: "14" },
-        { term: "메모리 누수", en: "memory leak", g: "C", def: "빌린 메모리를 반납하지 않아 사용 가능 영역이 줄어드는 문제.", ref: "14" },
+        { term: "연산자 오버로딩", en: "operator overloading", g: "C", def: "+, == 같은 기호를 사용자 타입에 함수로 정의하는 것. a+b → operator+ 호출.", ref: "13" },
+        { term: "STL", en: "Standard Template Library", g: "C", def: "표준 템플릿 라이브러리. vector, map, algorithm 등 표준 자료구조·알고리즘 모음.", ref: "14" },
+        { term: "vector", en: "std::vector", g: "C", def: "크기가 늘어날 수 있는 동적 배열. 최우선 도구.", ref: "14" },
+        { term: "new / delete", en: "dynamic allocation", g: "C", def: "힙 메모리를 빌리고 반납하는 방식. 남용 지양.", ref: "15" },
+        { term: "메모리 누수", en: "memory leak", g: "C", def: "빌린 메모리를 반납하지 않아 사용 가능 영역이 줄어드는 문제.", ref: "15" },
         { term: "nullptr", en: "null pointer", g: "C", def: "아무 것도 가리키지 않는다는 의미의 포인터 값.", ref: "11" },
         { term: "헤더", en: "header (.h / .hpp)", g: "C", def: "선언(약속)을 모아 두는 파일. 구현은 보통 .cpp.", ref: "03" },
-        { term: "스마트 포인터", en: "smart pointer", g: "D", def: "수명이 끝나면 자동으로 메모리를 정리하는 포인터 객체.", ref: "15" },
-        { term: "unique_ptr", en: "std::unique_ptr", g: "D", def: "소유자가 하나인 스마트 포인터. 기본 선택지.", ref: "15" },
-        { term: "shared_ptr", en: "std::shared_ptr", g: "D", def: "여러 곳이 공유 소유. 참조 카운트, 남용 주의.", ref: "15" },
-        { term: "RAII", en: "Resource Acquisition Is Initialization", g: "D", def: "자원을 객체 생성·소멸에 묶어 자동 정리하는 설계 습관.", ref: "15" },
-        { term: "move", en: "move semantics", g: "D", def: "복사 대신 소유권을 넘겨 큰 데이터의 비용을 줄이는 기법.", ref: "16" },
-        { term: "템플릿", en: "template", g: "D", def: "타입을 매개변수처럼 써서 코드를 일반화. STL의 기반.", ref: "17" }
+        { term: "스마트 포인터", en: "smart pointer", g: "D", def: "수명이 끝나면 자동으로 메모리를 정리하는 포인터 객체.", ref: "16" },
+        { term: "unique_ptr", en: "std::unique_ptr", g: "D", def: "소유자가 하나인 스마트 포인터. 기본 선택지.", ref: "16" },
+        { term: "shared_ptr", en: "std::shared_ptr", g: "D", def: "여러 곳이 공유 소유. 참조 카운트, 남용 주의.", ref: "16" },
+        { term: "RAII", en: "Resource Acquisition Is Initialization", g: "D", def: "자원을 객체 생성·소멸에 묶어 자동 정리하는 설계 습관.", ref: "16" },
+        { term: "move", en: "move semantics", g: "D", def: "복사 대신 소유권을 넘겨 큰 데이터의 비용을 줄이는 기법.", ref: "17" },
+        { term: "템플릿", en: "template", g: "D", def: "타입을 매개변수처럼 써서 코드를 일반화. STL의 기반.", ref: "18" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대" };
@@ -2850,6 +3011,7 @@ void run() {
       function playSpViz() { playViz(document.getElementById("sp-viz")); }
       function playMvViz() { playViz(document.getElementById("mv-viz")); }
       function playTpViz() { playViz(document.getElementById("tp-viz")); }
+      function playOpViz() { playViz(document.getElementById("op-viz")); }
 
       function activate(id) {
         if (!ORDER.includes(id)) id = "01";
@@ -2877,11 +3039,12 @@ void run() {
         if (id === "10") requestAnimationFrame(() => playMemViz());
         if (id === "11") requestAnimationFrame(() => playPtrViz());
         if (id === "12") requestAnimationFrame(() => playObjViz());
-        if (id === "13") requestAnimationFrame(() => playVecViz());
-        if (id === "14") requestAnimationFrame(() => playOwnViz());
-        if (id === "15") requestAnimationFrame(() => playSpViz());
-        if (id === "16") requestAnimationFrame(() => playMvViz());
-        if (id === "17") requestAnimationFrame(() => playTpViz());
+        if (id === "13") requestAnimationFrame(() => playOpViz());
+        if (id === "14") requestAnimationFrame(() => playVecViz());
+        if (id === "15") requestAnimationFrame(() => playOwnViz());
+        if (id === "16") requestAnimationFrame(() => playSpViz());
+        if (id === "17") requestAnimationFrame(() => playMvViz());
+        if (id === "18") requestAnimationFrame(() => playTpViz());
       }
 
       const memReplay = document.getElementById("mem-replay");
@@ -2890,6 +3053,8 @@ void run() {
       if (ptrReplay) ptrReplay.addEventListener("click", playPtrViz);
       const objReplay = document.getElementById("obj-replay");
       if (objReplay) objReplay.addEventListener("click", playObjViz);
+      const opReplay = document.getElementById("op-replay");
+      if (opReplay) opReplay.addEventListener("click", playOpViz);
       const vecReplay = document.getElementById("vec-replay");
       if (vecReplay) vecReplay.addEventListener("click", playVecViz);
       const ownReplay = document.getElementById("own-replay");
