@@ -153,7 +153,7 @@
       box-shadow: var(--shadow);
     }
 
-    /* Main column — 학습 내용 전용 */
+    /* Main column — 학습 내용 전용 (영역 안에서 가운데) */
     .main {
       min-width: 0;
       width: 100%;
@@ -161,8 +161,8 @@
     }
     .main-inner {
       width: 100%;
-      max-width: min(1100px, 100%);
-      margin: 0;
+      max-width: min(920px, 100%);
+      margin: 0 auto; /* 목차 오른쪽 남는 공간의 가로 중앙 */
     }
 
     .panel { display: none; animation: fadeIn .16s ease; }
@@ -376,10 +376,10 @@
       display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
     }
 
-    /* 넓은 화면: 설명 영역 더 넉넉히 */
+    /* 넓은 화면: 본문 폭은 읽기 좋게, 여백으로 중앙 정렬 */
     @media (min-width: 1400px) {
       .main { padding: 32px 48px 80px; }
-      .main-inner { max-width: min(1200px, 100%); }
+      .main-inner { max-width: min(960px, 100%); }
     }
 
     /* Mobile */
@@ -485,7 +485,7 @@
           <span class="n">19</span><span class="t">용어 사전</span>
         </button>
         <button type="button" role="tab" data-tab="20" aria-selected="false">
-          <span class="n">20</span><span class="t">연습 · FAQ</span>
+          <span class="n">20</span><span class="t">활용 예시 · FAQ</span>
         </button>
       </nav>
     </aside>
@@ -501,8 +501,8 @@
             <span class="tag tag-soft">시작</span>
           </div>
           <p class="panel-lead">
-            목표는 문법 백과가 아니라 <strong class="hl">읽기 → 작은 프로그램 → 왜 이렇게 쓰는지</strong>입니다.
-            번호를 따라가면 자연스럽게 쌓입니다. 건너뛰어도 되지만, 막히면 이전 번호로 돌아오세요.
+            목표는 문법 백과가 아니라 <strong class="hl">읽기 → 예시 코드 → 어디에 쓰이는지</strong>입니다.
+            퀴즈·숙제형 미션은 두지 않습니다. 번호를 따라가면 자연스럽게 쌓이고, 막히면 이전 번호로 돌아오면 됩니다.
           </p>
 
           <div class="grid-3" style="margin-bottom:14px">
@@ -581,15 +581,15 @@
               <div class="level-head">
                 <div class="level-icon">19–20</div>
                 <div>
-                  <h3 style="margin:0 0 4px">사전 · 연습</h3>
-                  <span class="tag tag-ok">검색 · 미션 · FAQ</span>
+                  <h3 style="margin:0 0 4px">사전 · 활용</h3>
+                  <span class="tag tag-ok">검색 · 예시 · FAQ</span>
                 </div>
               </div>
               <div class="level-body">
-                <p style="font-size:13.5px">용어를 짧게 풀고, 손으로 확인.</p>
+                <p style="font-size:13.5px">용어를 짧게 풀고, 쓰임새를 코드로 보여 줌.</p>
                 <ul>
                   <li>용어 카드 검색</li>
-                  <li>미니 미션</li>
+                  <li>상황별 활용 예시</li>
                   <li>자주 묻는 질문</li>
                 </ul>
               </div>
@@ -599,15 +599,15 @@
           <div class="path">
             <div class="path-item">
               <div class="lv">오늘</div>
-              <div class="body"><strong>02–04:</strong> Hello 출력까지. 컴파일·실행 성공이 전부입니다.</div>
+              <div class="body"><strong>02–04:</strong> Hello 흐름을 읽고 “컴파일 → 실행” 그림만 잡기.</div>
             </div>
             <div class="path-item">
               <div class="lv">다음</div>
-              <div class="body"><strong>05–09:</strong> 변수·조건·반복·함수. 매일 짧게, 에러 메시지 읽기.</div>
+              <div class="body"><strong>05–09:</strong> 변수·조건·반복·함수 예시. “이런 때 이렇게 쓴다” 위주.</div>
             </div>
             <div class="path-item">
               <div class="lv">그다음</div>
-              <div class="body"><strong>10–14:</strong> 포인터는 그림으로, vector + 클래스 미니 프로젝트.</div>
+              <div class="body"><strong>10–14:</strong> 포인터·vector·클래스 활용 패턴을 코드로 익히기.</div>
             </div>
             <div class="path-item">
               <div class="lv">이후</div>
@@ -615,7 +615,8 @@
             </div>
           </div>
           <div class="callout mint">
-            <strong>원칙:</strong> 한 번에 다 외우지 마세요. 지금 번호의 체크포인트만 손으로 돌리면 다음이 쉽습니다.
+            <strong>원칙:</strong> 한 번에 다 외우지 마세요.
+            각 번호의 <em>짧은 예시</em>를 읽고 “어디에 쓰이나”만 남기면 됩니다. 퀴즈·숙제는 없습니다.
             카드 클릭 → 해당 번호로 이동합니다.
           </div>
         </section>
@@ -709,30 +710,65 @@ int main() {
           <div class="topic-head">
             <h2><span class="num">05</span> 변수와 타입</h2>
           </div>
-          <p class="panel-lead">변수 = 이름 붙인 상자. 타입 = 상자에 넣을 종류의 라벨.</p>
+          <p class="panel-lead">
+            변수 = 이름 붙인 상자. 타입 = 상자에 넣을 종류의 라벨.
+            프로그램은 결국 “값을 담아 두고 → 읽고 → 바꾸는” 일의 반복입니다.
+          </p>
+
           <article class="card">
-            <div class="table-wrap">
+            <h3>자주 쓰는 타입</h3>
+            <div class="table-wrap" style="margin-top:8px">
               <table>
-                <thead><tr><th>타입</th><th>무엇을 담나</th><th>예시</th></tr></thead>
+                <thead><tr><th>타입</th><th>무엇을 담나</th><th>대략 크기*</th><th>예시</th></tr></thead>
                 <tbody>
-                  <tr><td><strong>int</strong></td><td>정수</td><td><code class="inline">int hp = 100;</code></td></tr>
-                  <tr><td><strong>double</strong></td><td>실수</td><td><code class="inline">double speed = 3.5;</code></td></tr>
-                  <tr><td><strong>bool</strong></td><td>참/거짓</td><td><code class="inline">bool alive = true;</code></td></tr>
-                  <tr><td><strong>char</strong></td><td>문자 하나</td><td><code class="inline">char grade = 'A';</code></td></tr>
-                  <tr><td><strong>std::string</strong></td><td>문자열</td><td><code class="inline">std::string name = "Kim";</code></td></tr>
+                  <tr><td><strong>bool</strong></td><td>참/거짓</td><td>1 byte</td><td><code class="inline">bool alive = true;</code></td></tr>
+                  <tr><td><strong>char</strong></td><td>문자 하나</td><td>1 byte</td><td><code class="inline">char key = 'A';</code></td></tr>
+                  <tr><td><strong>int</strong></td><td>정수</td><td>4 byte</td><td><code class="inline">int hp = 100;</code></td></tr>
+                  <tr><td><strong>float</strong></td><td>실수(단정)</td><td>4 byte</td><td><code class="inline">float t = 0.016f;</code></td></tr>
+                  <tr><td><strong>double</strong></td><td>실수(배정)</td><td>8 byte</td><td><code class="inline">double dist = 3.14;</code></td></tr>
+                  <tr><td><strong>std::string</strong></td><td>문자열</td><td>가변</td><td><code class="inline">std::string name = "Kim";</code></td></tr>
                 </tbody>
               </table>
             </div>
+            <p style="margin-top:10px;font-size:13px;color:var(--text-dim)">*크기는 환경·컴파일러에 따라 달라질 수 있습니다. “대략 이 정도”로 기억하면 됩니다.</p>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임</h3>
+            <p><strong class="hl">상황:</strong> 플레이어 이름·레벨·생존 여부를 한 화면에서 다룬다.</p>
             <pre>#include &lt;iostream&gt;
 #include &lt;string&gt;
 
 int main() {
-    int level = 1;
     std::string name = "Hero";
-    std::cout &lt;&lt; name &lt;&lt; " Lv." &lt;&lt; level &lt;&lt; "\n";
+    int level = 1;
+    bool alive = true;
+
+    std::cout &lt;&lt; name &lt;&lt; " Lv." &lt;&lt; level
+              &lt;&lt; (alive ? " (alive)\n" : " (down)\n");
 }</pre>
-            <div class="todo-note">보강 예정: 자료형 대략 크기, signed/unsigned 한 줄 주의</div>
+            <p><strong class="hl">쓰임:</strong> UI 상태, 세이브 데이터 필드, 컴포넌트 멤버 변수 — 전부 “타입 있는 상자”입니다.</p>
           </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>선언과 대입</h3>
+              <pre>int score;      // 선언 (값은 미정일 수 있음)
+score = 0;      // 대입
+int combo = 3;  // 선언 + 초기화 (권장)</pre>
+              <div class="callout mint">
+                <strong>습관:</strong> 만들 때 바로 초기값 넣기. “쓰레기 값” 실수를 줄입니다.
+              </div>
+            </article>
+            <article class="card">
+              <h3>signed / unsigned 한 줄</h3>
+              <ul class="checklist">
+                <li class="yes"><code class="inline">int</code> — 음수·양수 (일반 선택)</li>
+                <li class="tip"><code class="inline">unsigned</code> — 0 이상만 (개수·인덱스 등)</li>
+                <li class="no">섞어 쓰면 비교·뺄셈이 헷갈릴 수 있음 → 처음엔 <code class="inline">int</code>로 통일</li>
+              </ul>
+            </article>
+          </div>
         </section>
 
         <!-- 06 -->
@@ -740,19 +776,58 @@ int main() {
           <div class="topic-head">
             <h2><span class="num">06</span> 연산자</h2>
           </div>
-          <p class="panel-lead">값에 대해 계산·비교·논리를 수행하는 기호입니다.</p>
+          <p class="panel-lead">값에 대해 계산·비교·논리를 수행하는 기호. 게임 로직의 “수식”이 여기 모입니다.</p>
+
           <article class="card">
-            <ul class="checklist">
-              <li class="yes">산술: <code class="inline">+ - * / %</code></li>
-              <li class="yes">비교: <code class="inline">== != &lt; &gt; &lt;= &gt;=</code></li>
-              <li class="yes">논리: <code class="inline">&amp;&amp;</code> 그리고, <code class="inline">||</code> 또는, <code class="inline">!</code> 아님</li>
-              <li class="no"><code class="inline">=</code>(넣기)와 <code class="inline">==</code>(같은지) 혼동 주의</li>
-            </ul>
-            <pre>int a = 10;
-int b = a + 5;        // 15
-bool ok = (b &gt;= 15);  // true</pre>
-            <div class="todo-note">보강 예정: 증감 <code>++</code>, 복합 대입 <code>+=</code>, 정수 나눗셈 함정</div>
+            <h3>종류 한눈에</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>종류</th><th>기호</th><th>한 줄</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>산술</strong></td><td><code class="inline">+ - * / %</code></td><td>더하기·빼기·곱·나누기·나머지</td></tr>
+                  <tr><td><strong>대입</strong></td><td><code class="inline">= += -= *= /=</code></td><td>상자에 넣거나 누적</td></tr>
+                  <tr><td><strong>증감</strong></td><td><code class="inline">++ --</code></td><td>1 늘리기 / 줄이기</td></tr>
+                  <tr><td><strong>비교</strong></td><td><code class="inline">== != &lt; &gt; &lt;= &gt;=</code></td><td>참/거짓 만들기</td></tr>
+                  <tr><td><strong>논리</strong></td><td><code class="inline">&amp;&amp; || !</code></td><td>그리고 / 또는 / 아님</td></tr>
+                </tbody>
+              </table>
+            </div>
           </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임</h3>
+            <p><strong class="hl">상황:</strong> 점수 가산, 쿨다운 감소, “살아 있고 탄약이 남았는지” 판정.</p>
+            <pre>int score = 100;
+score += 50;           // 150  (score = score + 50)
+++score;               // 151
+
+int ammo = 3;
+bool canFire = (ammo &gt; 0) &amp;&amp; alive;
+
+// 함정: 정수 나눗셈
+int a = 5 / 2;         // 2  (소수 버림)
+double b = 5.0 / 2.0;  // 2.5</pre>
+            <p><strong class="hl">쓰임:</strong> 데미지 공식, 이동 속도, 조건 플래그, 타이머 틱.</p>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>자주 하는 실수</h3>
+              <ul class="checklist">
+                <li class="no"><code class="inline">=</code> (넣기) vs <code class="inline">==</code> (같은지)</li>
+                <li class="no"><code class="inline">int / int</code> → 소수 버려짐</li>
+                <li class="tip"><code class="inline">%</code> 는 정수 나머지 (짝/홀, 슬롯 순환)</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>나머지의 쓰임</h3>
+              <pre>// 3칸마다 한 번씩
+if (frame % 3 == 0) {
+    // 스폰 or 깜빡임
+}</pre>
+              <p style="margin-top:8px">주기·그리드·원형 버퍼 인덱스에 자주 등장합니다.</p>
+            </article>
+          </div>
         </section>
 
         <!-- 07 -->
@@ -760,22 +835,64 @@ bool ok = (b &gt;= 15);  // true</pre>
           <div class="topic-head">
             <h2><span class="num">07</span> 조건과 반복</h2>
           </div>
-          <p class="panel-lead"><strong class="hl">if</strong>는 갈림길, <strong class="hl">for / while</strong>은 같은 일을 여러 번.</p>
+          <p class="panel-lead">
+            <strong class="hl">if</strong>는 갈림길, <strong class="hl">for / while</strong>은 같은 일을 여러 번.
+            “언제 갈라지고, 몇 번 도는가”가 프로그램의 흐름입니다.
+          </p>
+
           <article class="card">
+            <h3>if / else — 갈림길</h3>
+            <p><strong class="hl">상황:</strong> HP에 따라 메시지·상태를 바꾼다.</p>
             <pre>int hp = 30;
 if (hp &lt;= 0) {
     std::cout &lt;&lt; "Game Over\n";
+} else if (hp &lt; 30) {
+    std::cout &lt;&lt; "Danger\n";
 } else {
-    std::cout &lt;&lt; "Keep going\n";
-}
-
-for (int i = 0; i &lt; 3; ++i) {
-    std::cout &lt;&lt; "tick " &lt;&lt; i &lt;&lt; "\n";
+    std::cout &lt;&lt; "OK\n";
 }</pre>
-            <div class="callout mint">
-              <strong>체크포인트:</strong> 짝수 판별, 구구단, 점수 등급 — 세 개 다 되면 08로.
+            <p><strong class="hl">쓰임:</strong> 사망 판정, 등급 컷, 버튼 활성/비활성, 충돌 후 반응.</p>
+          </article>
+
+          <article class="card">
+            <h3>for — 횟수가 정해진 반복</h3>
+            <p><strong class="hl">상황:</strong> 3틱 카운트, N명의 적 순회 전 단계.</p>
+            <pre>for (int i = 0; i &lt; 3; ++i) {
+    std::cout &lt;&lt; "tick " &lt;&lt; i &lt;&lt; "\n";
+}
+// i = 0, 1, 2  → 세 번</pre>
+            <p><strong class="hl">쓰임:</strong> 배열/목록 순회, 웨이브 카운트, UI 슬롯 그리기 루프.</p>
+          </article>
+
+          <article class="card">
+            <h3>while — 조건이 참인 동안</h3>
+            <p><strong class="hl">상황:</strong> 체력이 남아 있는 동안 턴을 돌린다.</p>
+            <pre>int hp = 100;
+while (hp &gt; 0) {
+    hp -= 40;
+    std::cout &lt;&lt; "HP " &lt;&lt; hp &lt;&lt; "\n";
+}</pre>
+            <div class="callout warn">
+              <strong>주의:</strong> 조건을 깨는 변화(<code class="inline">hp -= …</code>)가 없으면 무한 루프.
+              엔진 틱에서는 보통 “매 프레임 한 번” 구조라 while보다 for/이벤트 분기가 더 흔합니다.
             </div>
           </article>
+
+          <article class="card">
+            <h3>switch — 여러 갈래 중 하나 (맛보기)</h3>
+            <pre>int state = 1; // 0=Idle, 1=Run, 2=Jump
+switch (state) {
+    case 0: std::cout &lt;&lt; "Idle\n"; break;
+    case 1: std::cout &lt;&lt; "Run\n";  break;
+    case 2: std::cout &lt;&lt; "Jump\n"; break;
+    default: std::cout &lt;&lt; "?\n";   break;
+}</pre>
+            <p><strong class="hl">쓰임:</strong> 상태 머신, 메뉴 번호, 키 입력 분기. <code class="inline">break</code> 빼먹으면 아래 case로 흘러갑니다.</p>
+          </article>
+
+          <div class="callout mint">
+            <strong>다음:</strong> 같은 분기를 여러 곳에서 복붙하게 되면 → <strong>08 · 함수</strong>로 묶습니다.
+          </div>
         </section>
 
         <!-- 08 -->
@@ -783,21 +900,61 @@ for (int i = 0; i &lt; 3; ++i) {
           <div class="topic-head">
             <h2><span class="num">08</span> 함수</h2>
           </div>
-          <p class="panel-lead">일을 묶은 레시피 카드. 복사 대신 이름으로 재사용합니다.</p>
+          <p class="panel-lead">
+            일을 묶은 레시피 카드. <strong class="hl">이름 한 번</strong>으로 같은 처리를 여러 곳에서 호출합니다.
+          </p>
+
           <article class="card">
-            <pre>int add(int a, int b) {
+            <h3>기본 형태</h3>
+            <pre>// 반환타입 이름(매개변수...) { 본문 }
+int add(int a, int b) {
     return a + b;
 }
 
-int main() {
-    std::cout &lt;&lt; add(2, 3) &lt;&lt; "\n";  // 5
+void shout(const std::string&amp; msg) {
+    std::cout &lt;&lt; msg &lt;&lt; "\n";
+    // return 없음 (void)
 }</pre>
             <ul class="checklist">
-              <li class="yes">입력(매개변수) → 처리 → 출력(return)</li>
-              <li class="yes"><code class="inline">void</code> = 돌려줄 값 없음</li>
-              <li class="tip">함수 안 지역 변수는 함수가 끝나면 사라짐 → 10 · 스택</li>
+              <li class="yes">입력(매개변수) → 처리 → 출력(<code class="inline">return</code>)</li>
+              <li class="yes"><code class="inline">void</code> = 돌려줄 값 없음 (출력·상태 변경만)</li>
+              <li class="tip">함수 안 지역 변수는 끝나면 사라짐 → <strong>10 · 스택</strong></li>
             </ul>
           </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임</h3>
+            <p><strong class="hl">상황:</strong> 데미지 계산을 스킬·함정·충돌에서 같이 쓰고 싶다.</p>
+            <pre>int applyDamage(int hp, int dmg) {
+    hp -= dmg;
+    if (hp &lt; 0) hp = 0;
+    return hp;
+}
+
+int main() {
+    int playerHp = 100;
+    playerHp = applyDamage(playerHp, 15);  // 85
+    playerHp = applyDamage(playerHp, 90);  // 0
+    std::cout &lt;&lt; playerHp &lt;&lt; "\n";
+}</pre>
+            <p><strong class="hl">쓰임:</strong> 전투 공식, 아이템 효과, 저장/로드 헬퍼, 엔진 쪽 “유틸 함수”.</p>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>왜 나누나</h3>
+              <ul class="checklist">
+                <li class="yes">복붙 줄이기</li>
+                <li class="yes">이름만 보고 의도 파악</li>
+                <li class="yes">한곳만 고치면 전부에 반영</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>값으로 넘기기 (기본)</h3>
+              <p>인자는 기본적으로 <strong class="hl">복사</strong>되어 들어갑니다. 원본 HP를 바꾸려면 반환값을 다시 대입하거나, 나중에 배우는 참조/포인터(11)를 씁니다.</p>
+              <pre>playerHp = applyDamage(playerHp, 15);</pre>
+            </article>
+          </div>
         </section>
 
         <!-- 09 -->
@@ -805,13 +962,56 @@ int main() {
           <div class="topic-head">
             <h2><span class="num">09</span> 배열과 문자열</h2>
           </div>
-          <p class="panel-lead">같은 종류 여러 개 = 배열, 글자 여러 개 = string을 먼저.</p>
+          <p class="panel-lead">
+            같은 종류 여러 개 = <strong class="hl">배열</strong>, 글자 여러 개 = <strong class="hl">string</strong>.
+            “한 줄로 선 상자” 이미지만 잡으면 됩니다.
+          </p>
+
           <article class="card">
+            <h3>배열 — 연속 상자</h3>
+            <p><strong class="hl">상황:</strong> 최근 점수 3개를 순서대로 보관.</p>
             <pre>int scores[3] = {90, 80, 100};
-std::string title = "cpp-study";</pre>
+//  index:  0    1    2
+
+scores[1] = 85;           // 두 번째 칸 수정
+int sum = scores[0] + scores[1] + scores[2];
+
+for (int i = 0; i &lt; 3; ++i) {
+    std::cout &lt;&lt; scores[i] &lt;&lt; "\n";
+}</pre>
+            <p><strong class="hl">쓰임:</strong> 고정 길이 버퍼, 키보드 키 맵, 작은 룩업 테이블. 인덱스는 <strong>0부터</strong>.</p>
             <div class="callout warn">
-              <strong>권장:</strong> C 스타일 배열보다 곧 나올 <code class="inline">std::vector</code>(13)가 실무에서 더 편합니다.
-              배열은 “연속 상자” 이미지만 잡으세요.
+              <strong>범위:</strong> <code class="inline">scores[3]</code> 은 없는 칸(0..2만 유효). 넘어가면 미정의 동작.
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>std::string — 문자열</h3>
+            <p><strong class="hl">상황:</strong> 캐릭터 이름, UI 문구, 파일 경로.</p>
+            <pre>#include &lt;string&gt;
+#include &lt;iostream&gt;
+
+std::string name = "Hero";
+name += " II";              // "Hero II"
+std::cout &lt;&lt; name.size();  // 글자 수(바이트/구현 주의는 나중)
+std::cout &lt;&lt; name[0];      // 'H'</pre>
+            <p><strong class="hl">쓰임:</strong> 로그 메시지, 세이브 키, 리소스 경로. C 스타일 <code class="inline">char[]</code>보다 일상 코드에선 string이 편합니다.</p>
+          </article>
+
+          <article class="card">
+            <h3>배열 vs 곧 배울 vector</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th></th><th>배열 <code class="inline">T a[N]</code></th><th>vector (13)</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>길이</strong></td><td>컴파일 때 고정인 경우가 많음</td><td>실행 중 <code class="inline">push_back</code>으로 늘어남</td></tr>
+                  <tr><td><strong>편함</strong></td><td>단순·가볍</td><td>목록·스폰·인벤토리에 강함</td></tr>
+                  <tr><td><strong>지금</strong></td><td>“연속 상자 + 인덱스” 감각</td><td>실무 목록은 여기로</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout cyan">
+              <strong>권장 루트:</strong> 09에서 인덱스·string만 익히고, 늘어나는 목록은 <strong>13 · STL · vector</strong>로.
             </div>
           </article>
         </section>
@@ -1033,46 +1233,111 @@ T max2(T a, T b) {
           <div class="todo-note">사전 카드는 학습하면서 계속 추가합니다.</div>
         </section>
 
-        <!-- 20 PRACTICE -->
+        <!-- 20 USAGE EXAMPLES + FAQ -->
         <section class="panel" data-panel="20" role="tabpanel" hidden>
           <div class="topic-head">
-            <h2><span class="num">20</span> 연습 · FAQ</h2>
+            <h2><span class="num">20</span> 활용 예시 · FAQ</h2>
           </div>
-          <p class="panel-lead">영상만 보지 말고, 손으로 돌리고, 에러를 읽습니다.</p>
+          <p class="panel-lead">
+            숙제·퀴즈 대신 <strong class="hl">짧은 완성 예시</strong>를 보여 주고,
+            “이런 상황에 이렇게 붙인다”만 남깁니다. 따라 쳐도 되고, 눈으로만 읽어도 됩니다.
+          </p>
 
           <article class="card">
-            <h3>번호별 미니 미션</h3>
-            <div class="table-wrap" style="margin-top:10px">
-              <table>
-                <thead><tr><th>번호</th><th>미션</th><th>성공 기준</th></tr></thead>
-                <tbody>
-                  <tr><td><strong>04</strong></td><td>Hello + 이름 출력</td><td>컴파일·실행 성공</td></tr>
-                  <tr><td><strong>07</strong></td><td>숫자 맞히기 게임</td><td>입력·반복·조건 동작</td></tr>
-                  <tr><td><strong>12–13</strong></td><td>할 일 목록 (vector + 메뉴)</td><td>추가/삭제/출력</td></tr>
-                  <tr><td><strong>12</strong></td><td>Player 전투 시뮬</td><td>체력·데미지 함수 분리</td></tr>
-                  <tr><td><strong>15</strong></td><td>unique_ptr 수명 관리</td><td>raw new/delete 없이</td></tr>
-                </tbody>
-              </table>
+            <h3>이 가이드의 읽기 방식</h3>
+            <ul class="checklist">
+              <li class="yes"><strong class="hl">상황</strong> — 언제 쓰는지 한 줄</li>
+              <li class="yes"><strong class="hl">코드</strong> — 최소 예시 (복붙해도 되는 크기)</li>
+              <li class="yes"><strong class="hl">쓰임</strong> — 게임/앱에서 어디에 해당하는지</li>
+              <li class="no">퀴즈, 미션 제출, “직접 구현해 보세요” 강요 없음</li>
+            </ul>
+            <div class="callout cyan">
+              <strong>현대인 모드:</strong> 출퇴근·틈새 시간에 번호 하나 = 카드 하나.
+              손이 바쁘면 읽기만, 여유가 있으면 예시를 살짝 바꿔 보며 “아 여기가 바뀌는구나” 정도면 충분합니다.
             </div>
+          </article>
+
+          <article class="card" style="margin-top:12px">
+            <h3>예시 A · 조건 + 반복 (07) — 체력 체크 루프</h3>
+            <p><strong class="hl">상황:</strong> 매 프레임/매 턴마다 HP를 보고, 0 이하면 게임 오버.</p>
+            <pre>int hp = 100;
+while (hp &gt; 0) {
+    // ... 데미지 받는 로직이 있다고 가정
+    hp -= 30;
+    if (hp &lt;= 0) {
+        std::cout &lt;&lt; "Game Over\n";
+    } else {
+        std::cout &lt;&lt; "HP " &lt;&lt; hp &lt;&lt; "\n";
+    }
+}</pre>
+            <p><strong class="hl">쓰임:</strong> 턴제 전투, 웨이브 종료 조건, UI의 “살아 있음” 표시 분기.</p>
+          </article>
+
+          <article class="card" style="margin-top:12px">
+            <h3>예시 B · 함수 (08) — 데미지 계산 한곳에</h3>
+            <p><strong class="hl">상황:</strong> 같은 계산을 여러 몬스터·스킬에 복붙하지 않기.</p>
+            <pre>int applyDamage(int hp, int dmg) {
+    hp -= dmg;
+    if (hp &lt; 0) hp = 0;
+    return hp;
+}
+// playerHp = applyDamage(playerHp, 15);</pre>
+            <p><strong class="hl">쓰임:</strong> 스킬·버프·충돌 데미지를 <em>이름 있는 한 덩어리</em>로 모아 엔진/게임 코드에서 호출.</p>
+          </article>
+
+          <article class="card" style="margin-top:12px">
+            <h3>예시 C · 클래스 + vector (12–13) — 적 목록</h3>
+            <p><strong class="hl">상황:</strong> 적 여러 마리의 HP를 한 리스트로 관리.</p>
+            <pre>struct Enemy {
+    std::string name;
+    int hp;
+};
+
+std::vector&lt;Enemy&gt; enemies = {
+    {"Slime", 30},
+    {"Goblin", 50}
+};
+enemies.push_back({"Orc", 80});  // 스폰
+
+for (const Enemy&amp; e : enemies) {
+    std::cout &lt;&lt; e.name &lt;&lt; " HP=" &lt;&lt; e.hp &lt;&lt; "\n";
+}</pre>
+            <p><strong class="hl">쓰임:</strong> 스폰된 액터 목록, 인벤토리 슬롯, 퀘스트 목록 — “같은 모양의 것 여러 개”.</p>
+          </article>
+
+          <article class="card" style="margin-top:12px">
+            <h3>예시 D · unique_ptr (15) — 소유권 한 곳에</h3>
+            <p><strong class="hl">상황:</strong> 큰 리소스(텍스처·세션)를 누가 지우는지 명확히.</p>
+            <pre>#include &lt;memory&gt;
+
+struct Session {
+    int id;
+};
+
+void run() {
+    auto session = std::make_unique&lt;Session&gt;(Session{1});
+    // session이 스코프를 벗어나면 자동 해제
+}</pre>
+            <p><strong class="hl">쓰임:</strong> “이 객체의 주인은 나 하나”일 때. 엔진/툴 코드에서 raw <code class="inline">new</code> 대신 자주 보는 패턴.</p>
           </article>
 
           <div class="grid-2" style="margin-top:12px">
             <article class="card">
-              <h3>좋은 루틴</h3>
+              <h3>읽기 팁</h3>
               <ul class="checklist">
-                <li class="yes">매일 짧게: 예제 1개 타이핑 → 실행 → 한 줄 바꾸기</li>
-                <li class="yes">에러 메시지 읽기 (번역기 OK)</li>
-                <li class="yes">작은 완성품 (메뉴 있는 콘솔)</li>
-                <li class="yes">짧은 코드 읽고 주석 달기</li>
+                <li class="yes">예시는 위에서 아래로 한 번만 훑기</li>
+                <li class="yes">모르는 단어 → <strong>19 · 사전</strong> 검색</li>
+                <li class="yes">관련 번호(07, 08…)로 돌아가 개념 확인</li>
+                <li class="tip">여유 있으면 숫자·이름만 바꿔 보기 (선택)</li>
               </ul>
             </article>
             <article class="card">
-              <h3>피하기</h3>
+              <h3>의도적으로 안 하는 것</h3>
               <ul class="checklist">
-                <li class="no">영상만 보고 손대지 않기</li>
-                <li class="no">05–09 단계에서 템플릿 메타 심연</li>
-                <li class="no">엔진+알고+문법 책 동시 폭격</li>
-                <li class="no">에러 나면 전체 삭제 후 복붙만</li>
+                <li class="no">퀴즈 / 채점형 문제</li>
+                <li class="no">“직접 구현해 제출” 미션</li>
+                <li class="no">처음부터 큰 프로젝트 강요</li>
+                <li class="no">05–09에서 템플릿 메타 심연</li>
               </ul>
             </article>
           </div>
@@ -1093,8 +1358,8 @@ T max2(T a, T b) {
                 <p>05–12 감각이면 입문 가능. 15–17은 엔진과 함께.</p>
               </div>
               <div>
-                <h3 style="font-size:0.95rem">Q. 이 문서만으로?</h3>
-                <p>지도 + 첫 계단 + 사전. <code class="inline">src/</code>·<code class="inline">notes/</code>에 직접 쌓기.</p>
+                <h3 style="font-size:0.95rem">Q. 안 짜도 되나요?</h3>
+                <p>네. 이 문서는 <strong class="hl">읽기용 가이드 사전</strong>입니다. 예시는 “쓰임 감각”용이고, 코딩은 선택입니다.</p>
               </div>
             </div>
           </article>
