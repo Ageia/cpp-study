@@ -1140,6 +1140,154 @@
       .vt-mid { transform: rotate(90deg); padding: 4px 0; }
       .disp-pair { grid-template-columns: 1fr; }
     }
+    /* 29 규칙 오브 파이브 · 순환 참조 */
+    .rule-five {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+    }
+    .rule-chip {
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #0b0e14;
+      padding: 10px 8px;
+      text-align: center;
+      min-width: 0;
+    }
+    .rule-chip .n {
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .rule-chip .t {
+      font-weight: 800;
+      font-size: 12px;
+      color: #a5f3fc;
+      line-height: 1.3;
+    }
+    .rule-chip .s {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--text-dim);
+      line-height: 1.35;
+    }
+    .rule-chip.is-d { border-color: rgba(251, 113, 133, 0.35); }
+    .rule-chip.is-d .t { color: #fda4af; }
+    .rule-chip.is-c { border-color: rgba(110, 231, 183, 0.4); }
+    .rule-chip.is-c .t { color: #a7f3d0; }
+    .rule-chip.is-a { border-color: rgba(103, 232, 249, 0.4); }
+    .rule-chip.is-m { border-color: rgba(196, 181, 253, 0.45); }
+    .rule-chip.is-m .t { color: #e9d5ff; }
+    .cycle-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    .cycle-case {
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: #0b0e14;
+      padding: 12px;
+      min-width: 0;
+    }
+    .cycle-case.bad { border-color: rgba(251, 113, 133, 0.45); }
+    .cycle-case.good { border-color: rgba(110, 231, 183, 0.45); }
+    .cycle-case h4 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .cycle-case.bad h4 { color: #fda4af; }
+    .cycle-case.good h4 { color: #a7f3d0; }
+    .cycle-nodes {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+      gap: 6px;
+      align-items: center;
+    }
+    .cycle-node {
+      border-radius: 10px;
+      border: 1.5px solid rgba(103, 232, 249, 0.4);
+      padding: 10px 8px;
+      text-align: center;
+      min-width: 0;
+    }
+    .cycle-node .k {
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 13px;
+      color: #a5f3fc;
+    }
+    .cycle-node .rc {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--text-dim);
+    }
+    .cycle-node .rc.stuck { color: #fda4af; font-weight: 700; }
+    .cycle-node .rc.ok { color: #a7f3d0; font-weight: 700; }
+    .cycle-arr {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      line-height: 1.25;
+    }
+    .cycle-case.bad .cycle-arr { color: #fda4af; }
+    .cycle-case.good .cycle-arr { color: #a7f3d0; }
+    .cycle-case p {
+      margin: 10px 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .rule-zero {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+    .rule-zero .z {
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: #0b0e14;
+      padding: 12px;
+      min-width: 0;
+    }
+    .rule-zero .z h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #e9d5ff;
+    }
+    .rule-zero .z p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .rule-zero .z.is-0 { border-color: rgba(110, 231, 183, 0.4); }
+    .rule-zero .z.is-0 h4 { color: #a7f3d0; }
+    .rule-zero .z.is-3 { border-color: rgba(251, 191, 36, 0.4); }
+    .rule-zero .z.is-3 h4 { color: #fde68a; }
+    .rule-zero .z.is-5 { border-color: rgba(103, 232, 249, 0.4); }
+    .rule-zero .z.is-5 h4 { color: #a5f3fc; }
+    @media (max-width: 800px) {
+      .rule-five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rule-five .rule-chip:last-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .cycle-pair { grid-template-columns: 1fr; }
+      .rule-zero { grid-template-columns: 1fr; }
+      .rule-five { grid-template-columns: 1fr; }
+      .rule-five .rule-chip:last-child { grid-column: auto; }
+    }
     /* 05 진법 — 카드 전체 폭 기준 HTML 그리드 (max-width 520 금지: 표와 들쭉날쭉) */
     .base-viz.guide-viz {
       width: 100%;
@@ -2062,6 +2210,9 @@
         </button>
         <button type="button" role="tab" data-tab="28" aria-selected="false">
           <span class="n">28</span><span class="t">상속 · vtable</span>
+        </button>
+        <button type="button" role="tab" data-tab="29" aria-selected="false">
+          <span class="n">29</span><span class="t">규칙 5 · 순환</span>
         </button>
       </nav>
     </aside>
@@ -3985,8 +4136,8 @@ void run() {
               <h3>지금은 여기까지</h3>
               <ul class="checklist">
                 <li class="yes">기본: <code class="inline">unique_ptr</code> + <code class="inline">make_unique</code></li>
-                <li class="tip">shared/weak·순환 참조 그림은 심화</li>
-                <li class="tip">규칙 오브 파이브도 나중에</li>
+                <li class="tip">shared/weak·순환 → <a href="#29">29</a></li>
+                <li class="tip">규칙 오브 파이브 → <a href="#29">29</a></li>
               </ul>
             </article>
           </div>
