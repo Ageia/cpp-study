@@ -592,6 +592,113 @@
       .vec-viz .vec-grow { opacity: 0.45 !important; }
     }
 
+    /* new/delete (14) + smart pointer (15) */
+    .own-viz {
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse 70% 45% at 25% 25%, rgba(251,191,36,0.08), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 80% 70%, rgba(167,139,250,0.1), transparent 50%),
+        #12151e;
+      padding: 16px 14px 12px;
+      overflow: hidden;
+    }
+    .own-svg {
+      display: block; width: 100%; height: auto;
+      max-width: 520px; margin: 0 auto;
+    }
+    .own-svg .own-hide { opacity: 0; }
+    .own-viz.play .own-stack { animation: objPop 0.35s 0.1s cubic-bezier(.2,.9,.2,1) forwards; }
+    .own-viz.play .own-heap { animation: objPop 0.4s 0.45s cubic-bezier(.2,.9,.2,1) forwards; }
+    .own-viz.play .own-link {
+      animation: ptrLineDraw 0.45s 0.85s ease forwards;
+    }
+    .own-viz.play .own-new-label { animation: ptrFade 0.3s 1.05s ease forwards; }
+    .own-viz.play .own-del {
+      animation: ownFadeOut 0.5s 1.7s ease forwards;
+    }
+    .own-viz.play .own-dang { animation: ptrFade 0.35s 2.15s ease forwards; }
+    .own-viz.play .own-warn { animation: ptrFade 0.35s 2.4s ease forwards; }
+    @keyframes ownFadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+    .own-svg .own-stack,
+    .own-svg .own-heap {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .own-svg .own-link {
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 120;
+      stroke-dashoffset: 120;
+      opacity: 0;
+    }
+
+    .sp-viz {
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse 70% 45% at 70% 20%, rgba(110,231,183,0.1), transparent 55%),
+        radial-gradient(ellipse 55% 40% at 20% 80%, rgba(103,232,249,0.08), transparent 50%),
+        #12151e;
+      padding: 16px 14px 12px;
+      overflow: hidden;
+    }
+    .sp-svg {
+      display: block; width: 100%; height: auto;
+      max-width: 520px; margin: 0 auto;
+    }
+    .sp-svg .sp-hide { opacity: 0; }
+    .sp-viz.play .sp-box { animation: objPop 0.4s 0.1s cubic-bezier(.2,.9,.2,1) forwards; }
+    .sp-viz.play .sp-obj { animation: objPop 0.4s 0.45s cubic-bezier(.2,.9,.2,1) forwards; }
+    .sp-viz.play .sp-link {
+      animation: ptrLineDraw 0.45s 0.8s ease forwards;
+    }
+    .sp-viz.play .sp-scope { animation: ptrFade 0.35s 1.2s ease forwards; }
+    .sp-viz.play .sp-auto {
+      animation: ownFadeOut 0.55s 1.85s ease forwards;
+    }
+    .sp-viz.play .sp-done { animation: ptrFade 0.4s 2.25s ease forwards; }
+    .sp-svg .sp-box,
+    .sp-svg .sp-obj {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .sp-svg .sp-link {
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 120;
+      stroke-dashoffset: 120;
+      opacity: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .own-viz .own-hide,
+      .own-viz .own-stack,
+      .own-viz .own-heap,
+      .own-viz .own-link,
+      .own-viz .own-new-label,
+      .own-viz .own-del,
+      .own-viz .own-dang,
+      .own-viz .own-warn,
+      .sp-viz .sp-hide,
+      .sp-viz .sp-box,
+      .sp-viz .sp-obj,
+      .sp-viz .sp-link,
+      .sp-viz .sp-scope,
+      .sp-viz .sp-auto,
+      .sp-viz .sp-done {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        stroke-dashoffset: 0 !important;
+      }
+      .own-viz .own-del { opacity: 0.35 !important; }
+    }
+
     .nav-row {
       display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px;
       margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border);
@@ -1813,7 +1920,8 @@ int main() {
             <h2><span class="num">13</span> STL · vector</h2>
           </div>
           <p class="panel-lead">
-            <strong class="hl">STL</strong> = 표준이 주는 자료구조·알고리즘 도구 상자.
+            <strong class="hl">STL</strong>(Standard Template Library, 표준 템플릿 라이브러리) =
+            표준이 주는 자료구조·알고리즘 도구 상자.
             그중 목록의 기본 선택은 <code class="inline">std::vector</code> 입니다.
           </p>
 
@@ -1952,17 +2060,103 @@ int main() {
           <div class="topic-head">
             <h2><span class="num">14</span> new 와 delete</h2>
           </div>
-          <p class="panel-lead">힙을 빌리고 반납하는 감각. 남용은 금물.</p>
+          <p class="panel-lead">
+            힙에 자리를 <strong class="hl">빌리고(<code class="inline">new</code>)</strong>
+            다 쓰면 <strong class="hl">반납(<code class="inline">delete</code>)</strong>하는 옛 방식.
+            감각만 잡고, 실무 기본은 15로 넘어갑니다.
+          </p>
+
           <article class="card">
-            <pre>int* p = new int(42);
-std::cout &lt;&lt; *p &lt;&lt; "\n";
-delete p;
-p = nullptr;  // 습관</pre>
-            <div class="callout warn">
-              <strong>현대 습관:</strong> raw <code class="inline">new</code> 대신 <code class="inline">vector</code>(13) /
-              스마트 포인터(15). 여기서는 “힙과 스택이 다르다”만 확실히.
+            <h3>한 줄로</h3>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">new T</code> → 힙에 T 하나, 주소를 돌려줌</li>
+              <li class="yes"><code class="inline">delete p</code> → 그 자리 반납</li>
+              <li class="no">반납 안 함 → <strong class="hl">누수</strong> / 반납 후 또 씀 → <strong class="hl">댕글링</strong></li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>한눈에 보기 — 빌리고 반납</h3>
+            <p>포인터 <code class="inline">p</code>는 스택에, 실제 값은 힙에. <code class="inline">delete</code> 뒤에도 주소 숫자가 남을 수 있어 위험합니다.</p>
+
+            <div class="own-viz" id="own-viz" aria-label="new delete 소유권 애니메이션">
+              <div class="mem-viz-toolbar">
+                <p>new → 연결 → delete 후 약해진 힙 · 댕글링 주의</p>
+                <button type="button" id="own-replay">다시 보기</button>
+              </div>
+              <svg class="own-svg" viewBox="0 0 480 230" role="img" aria-labelledby="own-title">
+                <title id="own-title">new와 delete</title>
+                <defs>
+                  <marker id="mOwnArrow" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#fbbf24"/>
+                  </marker>
+                </defs>
+
+                <text x="24" y="22" fill="#9aa3b8" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">STACK</text>
+                <text x="280" y="22" fill="#9aa3b8" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">HEAP</text>
+
+                <g class="own-stack own-hide">
+                  <rect x="28" y="40" width="120" height="70" rx="12" fill="#0b0e14" stroke="#67e8f9" stroke-width="2"/>
+                  <text x="88" y="68" text-anchor="middle" fill="#67e8f9" font-size="15" font-weight="800" font-family="Segoe UI, sans-serif">p</text>
+                  <text x="88" y="90" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Consolas, monospace">int*</text>
+                </g>
+
+                <line class="own-link" x1="154" y1="75" x2="250" y2="75"
+                  stroke="#fbbf24" stroke-width="2.5" marker-end="url(#mOwnArrow)"/>
+                <text class="own-hide own-new-label" x="200" y="64" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700" font-family="Consolas, monospace">new</text>
+
+                <g class="own-heap own-hide own-del">
+                  <rect x="260" y="40" width="120" height="70" rx="12" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                  <text x="320" y="68" text-anchor="middle" fill="#e9d5ff" font-size="14" font-weight="800" font-family="Segoe UI, sans-serif">int</text>
+                  <text x="320" y="90" text-anchor="middle" fill="#fde68a" font-size="18" font-weight="800" font-family="Consolas, monospace">42</text>
+                </g>
+
+                <g class="own-hide own-dang">
+                  <rect x="28" y="140" width="352" height="56" rx="12" fill="rgba(251,113,133,0.08)" stroke="rgba(251,113,133,0.35)"/>
+                  <text x="204" y="164" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">delete 이후 p 가 가리키던 곳은 더 이상 유효하지 않을 수 있음</text>
+                  <text x="204" y="182" text-anchor="middle" fill="#9aa3b8" font-size="11" font-family="Consolas, monospace">p = nullptr;  습관 추천</text>
+                </g>
+
+                <text class="own-hide own-warn" x="400" y="78" fill="#fb7185" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">반납!</text>
+              </svg>
+              <div class="mem-legend">
+                <span><i class="c-code"></i>포인터 (스택)</span>
+                <span><i class="c-heap"></i>실제 값 (힙)</span>
+                <span><i style="background:#fbbf24;width:12px;height:12px;border-radius:3px;display:inline-block"></i>new 연결</span>
+              </div>
             </div>
           </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임</h3>
+            <p><strong class="hl">상황:</strong> 실행 중에 크기를 정한 한 칸을 힙에 두고 싶다. (개념 학습용)</p>
+            <pre>int* p = new int(42);   // 힙에 int, p가 주소 보관
+std::cout &lt;&lt; *p &lt;&lt; "\n";
+delete p;               // 반납
+p = nullptr;            // 잘못된 재사용 방지 습관</pre>
+            <p><strong class="hl">쓰임:</strong> 레거시 API, 엔진 내부 일부, “직접 수명 관리”를 이해하는 데.
+            목록이면 <code class="inline">vector</code>(13), 소유 객체면 <strong>15 · 스마트 포인터</strong>가 기본.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>배열 형태</h3>
+              <pre>int* a = new int[100];
+// ...
+delete[] a;   // 배열은 delete[]</pre>
+              <p style="margin-top:8px;margin-bottom:0"><code class="inline">new</code>/<code class="inline">delete</code> 짝을 맞출 것.</p>
+            </article>
+            <article class="card">
+              <h3>현대 습관</h3>
+              <ul class="checklist">
+                <li class="no">초보 코드에 raw new 남발</li>
+                <li class="yes">목록 → vector</li>
+                <li class="yes">단일 소유 객체 → unique_ptr</li>
+                <li class="tip">여기는 “왜 위험한지” 감각용</li>
+              </ul>
+            </article>
+          </div>
         </section>
 
         <!-- 15 -->
@@ -1970,18 +2164,121 @@ p = nullptr;  // 습관</pre>
           <div class="topic-head">
             <h2><span class="num">15</span> 스마트 포인터</h2>
           </div>
-          <p class="panel-lead">메모리를 객체 수명에 묶어 자동 정리 (RAII).</p>
+          <p class="panel-lead">
+            포인터처럼 쓰되, <strong class="hl">수명이 끝나면 자동으로 반납</strong>하는 객체입니다.
+            핵심 습관이 <strong class="hl">RAII</strong>(Resource Acquisition Is Initialization:
+            자원을 객체 생성·소멸에 묶기) 입니다.
+          </p>
+
           <article class="card">
-            <ul class="checklist">
-              <li class="yes"><code class="inline">unique_ptr</code> — 소유자 하나 (기본 선택)</li>
-              <li class="yes"><code class="inline">shared_ptr</code> — 공유 소유 (남용 주의)</li>
-              <li class="tip"><code class="inline">weak_ptr</code> — 순환 참조 끊기</li>
-            </ul>
-            <pre>#include &lt;memory&gt;
-auto p = std::make_unique&lt;int&gt;(42);
-// 스코프 끝에서 자동 해제</pre>
-            <div class="todo-note">보강 예정: 규칙 오브 파이브, 순환 참조 그림</div>
+            <h3>세 종류 (역할만)</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>타입</th><th>한 줄</th><th>언제</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><code class="inline">unique_ptr</code></td>
+                    <td>소유자 <strong>하나</strong></td>
+                    <td>기본 선택 (거의 여기)</td>
+                  </tr>
+                  <tr>
+                    <td><code class="inline">shared_ptr</code></td>
+                    <td>여러 곳이 <strong>공유</strong> 소유</td>
+                    <td>정말 공유할 때만 (남용 주의)</td>
+                  </tr>
+                  <tr>
+                    <td><code class="inline">weak_ptr</code></td>
+                    <td>소유 없이 관찰</td>
+                    <td>shared 순환 끊기</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </article>
+
+          <article class="card">
+            <h3>한눈에 보기 — 스코프 끝 자동 해제</h3>
+            <p><code class="inline">unique_ptr</code>가 스코프를 벗어나면 가리키던 힙 객체도 함께 정리됩니다. <code class="inline">delete</code>를 손으로 안 씀.</p>
+
+            <div class="sp-viz" id="sp-viz" aria-label="unique_ptr 자동 해제 애니메이션">
+              <div class="mem-viz-toolbar">
+                <p>unique_ptr 생성 → 소유 → 스코프 종료 시 자동 delete</p>
+                <button type="button" id="sp-replay">다시 보기</button>
+              </div>
+              <svg class="sp-svg" viewBox="0 0 480 230" role="img" aria-labelledby="sp-title">
+                <title id="sp-title">unique_ptr RAII</title>
+                <defs>
+                  <marker id="mSpArrow" viewBox="0 0 10 10" refX="9" refY="5"
+                    markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#6ee7b7"/>
+                  </marker>
+                </defs>
+
+                <text x="24" y="22" fill="#9aa3b8" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">unique_ptr</text>
+                <text x="120" y="22" fill="#6b7389" font-size="11" font-family="Consolas, monospace">make_unique&lt;T&gt;(…)</text>
+
+                <g class="sp-box sp-hide sp-auto">
+                  <rect x="28" y="44" width="150" height="72" rx="12" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                  <text x="103" y="72" text-anchor="middle" fill="#a7f3d0" font-size="13" font-weight="800" font-family="Segoe UI, sans-serif">unique_ptr</text>
+                  <text x="103" y="94" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Consolas, monospace">소유권 1명</text>
+                </g>
+
+                <line class="sp-link" x1="184" y1="80" x2="268" y2="80"
+                  stroke="#6ee7b7" stroke-width="2.5" marker-end="url(#mSpArrow)"/>
+
+                <g class="sp-obj sp-hide sp-auto">
+                  <rect x="278" y="44" width="130" height="72" rx="12" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                  <text x="343" y="72" text-anchor="middle" fill="#e9d5ff" font-size="14" font-weight="800" font-family="Segoe UI, sans-serif">T 객체</text>
+                  <text x="343" y="94" text-anchor="middle" fill="#fde68a" font-size="12" font-family="Consolas, monospace">힙</text>
+                </g>
+
+                <g class="sp-hide sp-scope">
+                  <rect x="28" y="140" width="380" height="28" rx="8" fill="rgba(103,232,249,0.1)" stroke="rgba(103,232,249,0.3)"/>
+                  <text x="218" y="159" text-anchor="middle" fill="#a5f3fc" font-size="12" font-family="Segoe UI, sans-serif">&#123; … 스코프 … &#125;  끝 → 소멸자 실행</text>
+                </g>
+
+                <g class="sp-hide sp-done">
+                  <rect x="28" y="180" width="380" height="32" rx="8" fill="rgba(110,231,183,0.1)" stroke="rgba(110,231,183,0.35)"/>
+                  <text x="218" y="201" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">자동 해제 완료 · delete 직접 호출 없음</text>
+                </g>
+              </svg>
+              <div class="mem-legend">
+                <span><i class="c-stack"></i>unique_ptr (스택 객체)</span>
+                <span><i class="c-heap"></i>소유 대상 (힙)</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임</h3>
+            <p><strong class="hl">상황:</strong> 세션·리소스 하나를 이 함수/이 객체가 단독 소유.</p>
+            <pre>#include &lt;memory&gt;
+
+void run() {
+    auto session = std::make_unique&lt;int&gt;(42);
+    // *session 또는 session.get() 로 접근
+} // 여기서 자동 해제</pre>
+            <p><strong class="hl">쓰임:</strong> 엔진/툴에서 “이 모듈의 주인 하나”, 팩토리가 넘긴 뒤 소유권 이전(<code class="inline">std::move</code> → 16).</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>raw new 와의 차이</h3>
+              <ul class="checklist">
+                <li class="yes">예외가 나도 스택 풀리며 소멸 → 반납 기회</li>
+                <li class="yes">소유자가 코드에 드러남</li>
+                <li class="no">shared_ptr 남용 → 수명 추적 어려움</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>지금은 여기까지</h3>
+              <ul class="checklist">
+                <li class="yes">기본: <code class="inline">unique_ptr</code> + <code class="inline">make_unique</code></li>
+                <li class="tip">shared/weak·순환 참조 그림은 심화</li>
+                <li class="tip">규칙 오브 파이브도 나중에</li>
+              </ul>
+            </article>
+          </div>
         </section>
 
         <!-- 16 -->
@@ -2245,7 +2542,7 @@ void run() {
         { term: "참조", en: "reference", g: "C", def: "이미 있는 변수에 붙인 별명. 복사 없이 같은 대상.", ref: "11" },
         { term: "클래스", en: "class", g: "C", def: "상태(데이터)와 행동(함수)을 한 타입으로 묶는 틀.", ref: "12" },
         { term: "구조체", en: "struct", g: "C", def: "관련 데이터를 묶는 타입. class와 비슷.", ref: "12" },
-        { term: "STL", en: "Standard Template Library", g: "C", def: "vector, map, algorithm 등 표준 자료구조·알고리즘 모음.", ref: "13" },
+        { term: "STL", en: "Standard Template Library", g: "C", def: "표준 템플릿 라이브러리. vector, map, algorithm 등 표준 자료구조·알고리즘 모음.", ref: "13" },
         { term: "vector", en: "std::vector", g: "C", def: "크기가 늘어날 수 있는 동적 배열. 최우선 도구.", ref: "13" },
         { term: "new / delete", en: "dynamic allocation", g: "C", def: "힙 메모리를 빌리고 반납하는 방식. 남용 지양.", ref: "14" },
         { term: "메모리 누수", en: "memory leak", g: "C", def: "빌린 메모리를 반납하지 않아 사용 가능 영역이 줄어드는 문제.", ref: "14" },
@@ -2299,6 +2596,8 @@ void run() {
       function playPtrViz() { playViz(document.getElementById("ptr-viz")); }
       function playObjViz() { playViz(document.getElementById("obj-viz")); }
       function playVecViz() { playViz(document.getElementById("vec-viz")); }
+      function playOwnViz() { playViz(document.getElementById("own-viz")); }
+      function playSpViz() { playViz(document.getElementById("sp-viz")); }
 
       function activate(id) {
         if (!ORDER.includes(id)) id = "01";
@@ -2327,6 +2626,8 @@ void run() {
         if (id === "11") requestAnimationFrame(() => playPtrViz());
         if (id === "12") requestAnimationFrame(() => playObjViz());
         if (id === "13") requestAnimationFrame(() => playVecViz());
+        if (id === "14") requestAnimationFrame(() => playOwnViz());
+        if (id === "15") requestAnimationFrame(() => playSpViz());
       }
 
       const memReplay = document.getElementById("mem-replay");
@@ -2337,6 +2638,10 @@ void run() {
       if (objReplay) objReplay.addEventListener("click", playObjViz);
       const vecReplay = document.getElementById("vec-replay");
       if (vecReplay) vecReplay.addEventListener("click", playVecViz);
+      const ownReplay = document.getElementById("own-replay");
+      if (ownReplay) ownReplay.addEventListener("click", playOwnViz);
+      const spReplay = document.getElementById("sp-replay");
+      if (spReplay) spReplay.addEventListener("click", playSpViz);
 
       navButtons.forEach((btn) => {
         btn.addEventListener("click", () => activate(btn.dataset.tab));
