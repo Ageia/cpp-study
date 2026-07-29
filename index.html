@@ -1237,8 +1237,62 @@
               <strong>팁:</strong> “실행이 안 돼요”의 절반은 <em>컴파일 에러</em>입니다.
               빨간 줄·터미널 메시지를 번역기라도 읽으면 성장이 빨라집니다.
             </div>
-            <div class="todo-note">보강 예정: OS별 설치·한 줄 컴파일 명령 (Windows / macOS / Linux)</div>
           </article>
+
+          <article class="card">
+            <h3>.h 와 .cpp — 약속서와 작업장</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>파일</th><th>비유</th><th>주로 넣는 것</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>.h / .hpp</strong></td>
+                    <td>메뉴판 · 약속서</td>
+                    <td>선언 (이름, 시그니처, 클래스 골격)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>.cpp</strong></td>
+                    <td>주방에서 만드는 과정</td>
+                    <td>정의 (실제 코드 본문)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              프로젝트가 커지면 <strong class="hl">분할 컴파일</strong> —
+              바뀐 .cpp만 다시 컴파일하고, 마지막에 링크해서 실행 파일을 만듭니다.
+            </p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>#include</h3>
+              <pre>#include &lt;iostream&gt;  // 표준 라이브러리 쪽
+#include "Player.h"    // 내 프로젝트 쪽</pre>
+              <ul class="checklist">
+                <li class="yes"><code class="inline">&lt; &gt;</code> — 표준/시스템 경로</li>
+                <li class="yes"><code class="inline">" "</code> — 보통 현재 프로젝트 헤더</li>
+                <li class="tip">전처리 단계에서 파일 내용을 <em>붙인 뒤</em> 컴파일</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>헤더 가드</h3>
+              <pre>// Player.h
+#pragma once   // 한 번만 include (현대 습관)
+
+// 또는 전통 방식
+#ifndef PLAYER_H
+#define PLAYER_H
+// ... 선언 ...
+#endif</pre>
+              <p>같은 헤더가 여러 번 붙으면 중복 정의 에러 → 가드로 막습니다.</p>
+            </article>
+          </div>
+
+          <div class="callout cyan">
+            <strong>지금은 여기까지:</strong> “선언(.h) / 정의(.cpp) / include로 가져오기”.
+            링크·ABI·매크로 심화는 나중에. 설치 한 줄 명령도 OS별로 추후 보강.
+          </div>
         </section>
 
         <!-- 04 -->
@@ -1255,12 +1309,47 @@ int main() {
     return 0;                 // 정상 종료
 }</pre>
             <ul class="checklist">
-              <li class="yes"><code class="inline">#include</code> = 필요한 도구 가져오기</li>
+              <li class="yes"><code class="inline">#include</code> = 필요한 도구 가져오기 (03)</li>
               <li class="yes"><code class="inline">std::cout</code> = 표준 출력(화면)</li>
               <li class="yes"><code class="inline">return 0</code> = “문제 없이 끝났어요”</li>
-              <li class="tip"><code class="inline">std</code> = 표준 라이브러리 네임스페이스 → 사전에서 검색</li>
+              <li class="tip"><code class="inline">std</code> = 표준 네임스페이스 (아래)</li>
               <li class="yes">이 repo의 <code class="inline">src/hello.cpp</code>로 첫 컴파일 확인</li>
             </ul>
+          </article>
+
+          <article class="card">
+            <h3>std 네임스페이스</h3>
+            <p>
+              <strong class="hl">std</strong> = standard namespace.
+              표준 라이브러리 이름(<code class="inline">cout</code>, <code class="inline">string</code>, <code class="inline">vector</code>…)이 모인 구역.
+            </p>
+            <pre>std::cout &lt;&lt; "hi\n";     // 권장: 구역을 밝힘
+// using namespace std;   // 초보 예제에선 편하지만, 이름 충돌 주의</pre>
+          </article>
+
+          <article class="card">
+            <h3>입출력 — cin / cout</h3>
+            <p><strong class="hl">상황:</strong> 화면에 쓰고, 키보드로 값을 받는다.</p>
+            <pre>#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    std::string name;
+    int score = 0;
+
+    std::cout &lt;&lt; "이름: ";   // 출력
+    std::cin &gt;&gt; name;        // 입력 (공백 전까지만)
+    std::cout &lt;&lt; "점수: ";
+    std::cin &gt;&gt; score;
+
+    std::cout &lt;&lt; name &lt;&lt; " = " &lt;&lt; score &lt;&lt; "\n";
+}</pre>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">&lt;&lt;</code> 출력 방향 (객체 → 화면)</li>
+              <li class="yes"><code class="inline">&gt;&gt;</code> 입력 방향 (키보드 → 변수)</li>
+              <li class="tip">공백 포함 한 줄은 나중에 <code class="inline">getline</code> (심화/필요 시)</li>
+            </ul>
+            <p><strong class="hl">쓰임:</strong> 콘솔 도구, 디버그 로그, 간단한 설정 입력. 게임 UI는 엔진이 담당.</p>
           </article>
         </section>
 
@@ -1443,7 +1532,8 @@ while (hp &gt; 0) {
           </article>
 
           <article class="card">
-            <h3>switch — 여러 갈래 중 하나 (맛보기)</h3>
+            <h3>switch — 여러 갈래 중 하나</h3>
+            <p><strong class="hl">상황:</strong> 상태가 0/1/2처럼 <em>이산 값</em>일 때 if 나열 대신 고른다.</p>
             <pre>int state = 1; // 0=Idle, 1=Run, 2=Jump
 switch (state) {
     case 0: std::cout &lt;&lt; "Idle\n"; break;
@@ -1451,7 +1541,34 @@ switch (state) {
     case 2: std::cout &lt;&lt; "Jump\n"; break;
     default: std::cout &lt;&lt; "?\n";   break;
 }</pre>
-            <p><strong class="hl">쓰임:</strong> 상태 머신, 메뉴 번호, 키 입력 분기. <code class="inline">break</code> 빼먹으면 아래 case로 흘러갑니다.</p>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">break</code> — 그 case만 실행하고 빠져나옴</li>
+              <li class="no">break 빠짐 → 아래 case로 <strong class="hl">흘러내림(fall-through)</strong></li>
+              <li class="tip"><code class="inline">default</code> — 나머지 모든 경우</li>
+            </ul>
+            <p><strong class="hl">쓰임:</strong> 상태 머신, 메뉴 번호, 키 코드 분기. 복잡한 범위 비교는 if가 더 낫다.</p>
+          </article>
+
+          <article class="card">
+            <h3>enum — 이름 붙인 정수 집합</h3>
+            <p>
+              <strong class="hl">enum</strong>(enumeration, 열거형) =
+              의미 있는 이름에 숫자를 붙인 타입. “매직 넘버 0,1,2” 대신 읽기 좋게.
+            </p>
+            <pre>enum class State { Idle, Run, Jump };  // 권장: enum class
+
+State s = State::Run;
+switch (s) {
+    case State::Idle: /* ... */ break;
+    case State::Run:  /* ... */ break;
+    case State::Jump: /* ... */ break;
+}</pre>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">enum class</code> — 이름이 구역 안 (<code class="inline">State::Run</code>) · 타입 안전</li>
+              <li class="tip">옛 <code class="inline">enum Direction { Left, Right };</code> 는 전역에 이름이 풀림</li>
+              <li class="yes">switch와 단짝</li>
+            </ul>
+            <p><strong class="hl">쓰임:</strong> 캐릭터 상태, 아이템 종류, AI 모드, UI 탭 인덱스.</p>
           </article>
 
           <div class="callout mint">
@@ -1504,7 +1621,7 @@ int main() {
             <p><strong class="hl">쓰임:</strong> 전투 공식, 아이템 효과, 저장/로드 헬퍼, 엔진 쪽 “유틸 함수”.</p>
           </article>
 
-          <div class="grid-2">
+          <div class="split-cards">
             <article class="card">
               <h3>왜 나누나</h3>
               <ul class="checklist">
@@ -1515,10 +1632,57 @@ int main() {
             </article>
             <article class="card">
               <h3>값으로 넘기기 (기본)</h3>
-              <p>인자는 기본적으로 <strong class="hl">복사</strong>되어 들어갑니다. 원본 HP를 바꾸려면 반환값을 다시 대입하거나, 나중에 배우는 참조/포인터(11)를 씁니다.</p>
+              <p>인자는 기본적으로 <strong class="hl">복사</strong>되어 들어갑니다. 원본 HP를 바꾸려면 반환값을 다시 대입하거나, 참조/포인터(11)를 씁니다.</p>
               <pre>playerHp = applyDamage(playerHp, 15);</pre>
             </article>
           </div>
+
+          <article class="card">
+            <h3>함수 vs 메서드</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th></th><th>함수</th><th>메서드 (멤버 함수)</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>위치</strong></td>
+                    <td>클래스 밖 (또는 자유 함수)</td>
+                    <td>class/struct <em>안</em></td>
+                  </tr>
+                  <tr>
+                    <td><strong>호출</strong></td>
+                    <td><code class="inline">add(1, 2)</code></td>
+                    <td><code class="inline">p.takeDamage(10)</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>대상</strong></td>
+                    <td>인자로 받은 값</td>
+                    <td>그 객체의 상태(멤버)와 밀접</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>C++에선 둘 다 “함수”라고 부르기도 하고, 객체에 붙은 것을 메서드라고 부릅니다. 클래스 쪽은 <strong>12</strong>.</p>
+          </article>
+
+          <article class="card">
+            <h3>const 멤버 함수</h3>
+            <p>
+              멤버 함수 뒤 <code class="inline">const</code> =
+              “이 함수는 객체의 상태를 <strong class="hl">바꾸지 않겠다</strong>” 약속.
+            </p>
+            <pre>class Player {
+public:
+    int getHp() const { return hp; }  // 읽기 전용
+    void takeDamage(int d);           // 상태를 바꿈 → const 아님
+private:
+    int hp = 100;
+};
+
+void print(const Player&amp; p) {
+    std::cout &lt;&lt; p.getHp();  // const 객체에서도 호출 가능
+}</pre>
+            <p><strong class="hl">쓰임:</strong> getter, 조회 API, <code class="inline">const T&amp;</code> 인자로 받을 때 필수에 가깝습니다.</p>
+          </article>
         </section>
 
         <!-- 09 -->
@@ -1557,9 +1721,30 @@ for (int i = 0; i &lt; 3; ++i) {
 
 std::string name = "Hero";
 name += " II";              // "Hero II"
-std::cout &lt;&lt; name.size();  // 글자 수(바이트/구현 주의는 나중)
+std::cout &lt;&lt; name.size();  // 길이
 std::cout &lt;&lt; name[0];      // 'H'</pre>
-            <p><strong class="hl">쓰임:</strong> 로그 메시지, 세이브 키, 리소스 경로. C 스타일 <code class="inline">char[]</code>보다 일상 코드에선 string이 편합니다.</p>
+            <p><strong class="hl">쓰임:</strong> 로그 메시지, 세이브 키, 리소스 경로. C 스타일 배열보다 일상 코드에선 string이 편합니다.</p>
+          </article>
+
+          <article class="card">
+            <h3>'c' 와 "c" — 완전히 다름</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th></th><th><code class="inline">'A'</code></th><th><code class="inline">"A"</code></th></tr></thead>
+                <tbody>
+                  <tr><td><strong>타입</strong></td><td><code class="inline">char</code> (문자 하나)</td><td><code class="inline">const char[]</code> / C 문자열</td></tr>
+                  <tr><td><strong>내용</strong></td><td>코드 한 글자</td><td>글자들 + 끝의 <code class="inline">'\0'</code></td></tr>
+                  <tr><td><strong>일상</strong></td><td>키 입력, 플래그 문자</td><td>문장 → 보통 <code class="inline">std::string</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <pre>char grade = 'A';              // 문자 하나
+const char* legacy = "Hero";     // C 스타일 문자열 (주소)
+std::string name = "Hero";       // C++ 문자열 객체 (권장)</pre>
+            <p>
+              <code class="inline">const char*</code> 는 “글자가 늘어선 곳의 주소”에 가깝고,
+              <code class="inline">std::string</code> 은 길이·추가·비교를 편하게 감싼 타입입니다.
+            </p>
           </article>
 
           <article class="card">
@@ -1715,7 +1900,7 @@ std::cout &lt;&lt; name[0];      // 'H'</pre>
 
             <div class="callout cyan">
               <strong>기억:</strong> 스택은 “함수 끝나면 자동 청소”, 힙은 “빌려 쓴 뒤 반납 규칙이 필요”.
-              반납을 현대적으로 다루는 법은 <strong>15 · 스마트 포인터</strong>.
+              반납을 현대적으로 다루는 법은 <strong>16 · 스마트 포인터</strong>.
             </div>
           </article>
 
@@ -3102,9 +3287,17 @@ void run() {
         { term: "함수", en: "function", g: "B", def: "일을 묶어 이름 붙인 레시피. 입력 → 처리 → 반환.", ref: "08" },
         { term: "조건문", en: "if / else", g: "B", def: "참·거짓에 따라 실행 길을 가르는 문법.", ref: "07" },
         { term: "반복문", en: "for / while", g: "B", def: "같은 일을 여러 번 또는 조건이 참인 동안 반복.", ref: "07" },
+        { term: "switch", en: "switch-case", g: "B", def: "이산 값에 따라 여러 갈래 중 하나를 고르는 분기. break 주의.", ref: "07" },
+        { term: "enum", en: "enumeration", g: "B", def: "열거형. 의미 있는 이름에 숫자를 붙인 타입. enum class 권장.", ref: "07" },
         { term: "배열", en: "array", g: "B", def: "같은 타입 값들을 연속 메모리에 줄 세운 구조.", ref: "09" },
         { term: "string", en: "std::string", g: "B", def: "문자열을 다루는 표준 타입.", ref: "09" },
+        { term: "char vs string", en: "'A' vs \"A\"", g: "B", def: "작은따옴표=문자 하나(char), 큰따옴표=C 문자열. 일상 문장은 std::string.", ref: "09" },
+        { term: "cin / cout", en: "iostream", g: "B", def: "표준 입력(cin)·출력(cout). >> 로 읽고 << 로 씀.", ref: "04" },
         { term: "네임스페이스", en: "namespace", g: "B", def: "이름 충돌을 줄이려고 이름을 구역으로 나눔. 예: std.", ref: "04" },
+        { term: ".h / .cpp", en: "header / source", g: "A", def: "헤더는 선언(약속), cpp는 정의(구현). 분할 컴파일의 기본.", ref: "03" },
+        { term: "#include", en: "include", g: "A", def: "전처리로 다른 파일 내용을 붙임. <> 표준, \"\" 프로젝트.", ref: "03" },
+        { term: "메서드", en: "member function", g: "B", def: "클래스/구조체 안에 있는 함수. 객체의 상태와 함께 동작.", ref: "08" },
+        { term: "const 멤버 함수", en: "const method", g: "C", def: "객체 상태를 바꾸지 않겠다고 약속한 멤버 함수. getter에 자주.", ref: "08" },
         { term: "스택", en: "stack", g: "C", def: "함수 지역 변수가 쌓이는 빠른 영역. 종료 시 자동 정리.", ref: "10" },
         { term: "힙", en: "heap", g: "C", def: "동적 할당 영역. 수명·크기가 자유롭지만 관리 책임이 따름.", ref: "10" },
         { term: "포인터", en: "pointer", g: "C", def: "값이 있는 메모리 주소를 담는 변수.", ref: "11" },
