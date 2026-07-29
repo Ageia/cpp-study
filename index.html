@@ -367,6 +367,45 @@
       border-color: rgba(103, 232, 249, 0.4);
     }
 
+    /* Endian diagram (25) */
+    .endian-viz {
+      margin: 12px 0 4px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #12151e;
+      padding: 14px 12px 12px;
+      overflow-x: auto;
+    }
+    .endian-svg {
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      margin: 0 auto;
+    }
+    .endian-row-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin: 10px 0 6px;
+    }
+    .debug-out {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.55;
+      background: #0b0e14;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #a7f3d0;
+      margin: 12px 0 4px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .debug-out .dim { color: #6b7389; }
+    .debug-out .hi { color: #fde68a; }
+    .debug-out .acc { color: #67e8f9; }
+
     .path { display: grid; gap: 8px; }
     .path-item {
       display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: start;
@@ -3512,32 +3551,267 @@ for (int i = 0; i &lt; n; ++i) sum += a[i];</pre>
             <span class="tag tag-soft">심화</span>
           </div>
           <p class="panel-lead">
-            여러 바이트로 된 정수를 메모리에 어떤 <strong class="hl">바이트 순서</strong>로 늘어놓는지.
-            일상 앱 로직보다 <strong class="hl">파일·네트워크·바이너리</strong>에서 중요해집니다.
+            <code class="inline">int</code> 같은 값은 보통 <strong class="hl">여러 바이트</strong>입니다.
+            그 바이트들을 메모리에 <em>어떤 순서로 줄 세울지</em>가
+            <strong class="hl">엔디안</strong>(endianness) 입니다.
+            같은 숫자라도 메모리·파일·네트워크에 찍히는 “바이트 줄”이 달라질 수 있습니다.
           </p>
           <div class="deep-related">
             <span class="label">관련 메인</span>
             <span class="links">
               <a href="#05">05 변수와 타입</a>
               <a href="#10">10 스택과 힙</a>
+              <a href="#11">11 포인터</a>
             </span>
           </div>
+
           <article class="card">
-            <h3>한 줄</h3>
+            <h3>1. 문제를 먼저 잡기</h3>
+            <p>
+              사람이 쓰는 수 <code class="inline">0x12345678</code> 은 “의미”입니다.
+              메모리 주소는 <strong class="hl">한 칸에 1바이트</strong>씩 번호를 매깁니다.
+              4바이트 정수를 쓰려면 주소 4칸이 필요하고, 그때
+              <em>어느 칸에 어느 바이트를 넣을지</em> 규칙이 필요합니다.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>용어</th><th>뜻</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>MSB</strong></td>
+                    <td>Most Significant Byte — 큰 자리 바이트 (예: <code class="inline">0x12</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>LSB</strong></td>
+                    <td>Least Significant Byte — 작은 자리 바이트 (예: <code class="inline">0x78</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>낮은 주소</strong></td>
+                    <td>포인터가 가리키는 시작 쪽 (<code class="inline">&amp;x</code>, <code class="inline">addr+0</code>)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <ul class="checklist">
-              <li class="yes"><strong class="hl">리틀 엔디안</strong> — 낮은 주소에 <em>작은</em> 자리(LSB) 바이트 (x86 등 흔함)</li>
-              <li class="yes"><strong class="hl">빅 엔디안</strong> — 낮은 주소에 <em>큰</em> 자리(MSB) 바이트 (네트워크 바이트 오더로 자주)</li>
+              <li class="yes"><strong class="hl">리틀 엔디안</strong> — 낮은 주소에 <em>LSB</em> (x86 / x64 Windows·대부분의 PC)</li>
+              <li class="yes"><strong class="hl">빅 엔디안</strong> — 낮은 주소에 <em>MSB</em> (전통 네트워크 바이트 오더, 일부 CPU)</li>
             </ul>
-            <p>예: 4바이트 값 <code class="inline">0x12345678</code> 을 메모리에 쓸 때 바이트 줄 세우기 방향이 다름.</p>
           </article>
+
           <article class="card">
-            <h3>언제 신경 쓰나</h3>
+            <h3>2. 같은 값, 다른 메모리 줄 — 그림</h3>
+            <p>
+              값 <code class="inline">uint32_t v = 0x12345678;</code>
+              (MSB=<code class="inline">12</code> … LSB=<code class="inline">78</code>)
+            </p>
+            <div class="endian-viz" aria-label="리틀/빅 엔디안 바이트 배치">
+              <svg class="endian-svg" viewBox="0 0 480 210" role="img">
+                <title>엔디안 바이트 배치 비교</title>
+                <!-- Little -->
+                <text x="16" y="22" fill="#a7f3d0" font-size="13" font-weight="700" font-family="Segoe UI, sans-serif">리틀 엔디안 (little-endian)</text>
+                <text x="16" y="40" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">낮은 주소 ← LSB 먼저</text>
+                <rect x="40" y="52" width="70" height="44" rx="8" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                <rect x="118" y="52" width="70" height="44" rx="8" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                <rect x="196" y="52" width="70" height="44" rx="8" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                <rect x="274" y="52" width="70" height="44" rx="8" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
+                <text x="75" y="72" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Consolas, monospace">+0</text>
+                <text x="153" y="72" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Consolas, monospace">+1</text>
+                <text x="231" y="72" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Consolas, monospace">+2</text>
+                <text x="309" y="72" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Consolas, monospace">+3</text>
+                <text x="75" y="88" text-anchor="middle" fill="#fde68a" font-size="14" font-weight="800" font-family="Consolas, monospace">78</text>
+                <text x="153" y="88" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="800" font-family="Consolas, monospace">56</text>
+                <text x="231" y="88" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="800" font-family="Consolas, monospace">34</text>
+                <text x="309" y="88" text-anchor="middle" fill="#67e8f9" font-size="14" font-weight="800" font-family="Consolas, monospace">12</text>
+                <text x="370" y="72" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">LSB</text>
+                <text x="430" y="88" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">MSB</text>
+                <path d="M70 100 L70 108 L310 108 L310 100" fill="none" stroke="rgba(110,231,183,0.35)" stroke-width="1.5"/>
+                <text x="190" y="122" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">주소 증가 →</text>
+
+                <!-- Big -->
+                <text x="16" y="148" fill="#c4b5fd" font-size="13" font-weight="700" font-family="Segoe UI, sans-serif">빅 엔디안 (big-endian)</text>
+                <text x="16" y="166" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">낮은 주소 ← MSB 먼저</text>
+                <rect x="40" y="176" width="70" height="28" rx="6" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                <rect x="118" y="176" width="70" height="28" rx="6" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                <rect x="196" y="176" width="70" height="28" rx="6" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                <rect x="274" y="176" width="70" height="28" rx="6" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
+                <text x="75" y="195" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="800" font-family="Consolas, monospace">12</text>
+                <text x="153" y="195" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="800" font-family="Consolas, monospace">34</text>
+                <text x="231" y="195" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="800" font-family="Consolas, monospace">56</text>
+                <text x="309" y="195" text-anchor="middle" fill="#fde68a" font-size="13" font-weight="800" font-family="Consolas, monospace">78</text>
+              </svg>
+            </div>
+            <p style="margin-top:12px;margin-bottom:0">
+              사람이 hex로 읽을 때 익숙한 순서(<code class="inline">12 34 56 78</code>)는
+              <strong class="hl">빅</strong> 쪽과 비슷하고,
+              지금 PC(Windows x64) 메모리를 바이트로 까보면 보통
+              <strong class="hl">리틀</strong>(<code class="inline">78 56 34 12</code>)이 나옵니다.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>3. 왜 이렇게 설계됐을까?</h3>
+            <p>역사적으로 CPU·칩 설계마다 “편리한 쪽”이 달랐고, 표준이 하나로 굳지 않았습니다.</p>
+            <div class="split-cards">
+              <article class="card" style="box-shadow:none;margin:0">
+                <h3>리틀이 편한 점 (하드웨어 관점)</h3>
+                <ul class="checklist">
+                  <li class="yes">여러 바이트 덧셈은 <em>낮은 자리(LSB)부터</em> 올림을 처리 → 낮은 주소부터 읽으면 자연스러움</li>
+                  <li class="yes">같은 시작 주소에서 1바이트만 읽으면 “가장 작은 자리”를 바로 얻음</li>
+                  <li class="tip">Intel x86 계열이 리틀을 널리 퍼뜨림 → 오늘날 PC·노트북 대부분</li>
+                </ul>
+              </article>
+              <article class="card" style="box-shadow:none;margin:0">
+                <h3>빅이 편한 점 (사람·통신 관점)</h3>
+                <ul class="checklist">
+                  <li class="yes">메모리 덤프를 왼쪽→오른쪽으로 보면 사람이 쓰는 hex 순서와 비슷</li>
+                  <li class="yes">인터넷 초창기 프로토콜이 “네트워크 바이트 오더 = 빅”으로 관례화</li>
+                  <li class="tip">그래서 소켓 API에 <code class="inline">htonl</code> / <code class="inline">ntohl</code> 같은 변환이 있음</li>
+                </ul>
+              </article>
+            </div>
+            <div class="callout warn" style="margin-top:12px">
+              <strong>핵심:</strong> “어느 쪽이 절대적으로 우월”해서가 아니라,
+              <em>같은 규칙으로 쓰고 읽기만 하면</em> 됩니다.
+              문제가 되는 경우는 <strong class="hl">규칙이 다른 세계가 만날 때</strong> (파일·다른 CPU·네트워크).
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>4. 예시 코드 — 내 PC에서 바이트 까보기</h3>
+            <p>
+              값을 “숫자”로 보지 말고, 그 주소의 바이트 배열로 해석해 봅니다.
+              (대부분의 Windows PC = 리틀 엔디안)
+            </p>
+            <pre>#include &lt;cstdint&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+
+int main() {
+    std::uint32_t v = 0x12345678u;
+
+    // 방법 1: 주소를 unsigned char* 로 해석 (바이트 단위)
+    auto* p = reinterpret_cast&lt;unsigned char*&gt;(&amp;v);
+
+    std::printf("value = 0x%08X\n", v);
+    std::printf("&amp;v    = %p\n", static_cast&lt;void*&gt;(&amp;v));
+    for (int i = 0; i &lt; 4; ++i) {
+        std::printf("  addr+%d : 0x%02X\n", i, p[i]);
+    }
+
+    // 방법 2: memcpy 로 안전하게 복사
+    unsigned char bytes[4];
+    std::memcpy(bytes, &amp;v, sizeof v);
+    std::printf("memcpy bytes: %02X %02X %02X %02X\n",
+                bytes[0], bytes[1], bytes[2], bytes[3]);
+}</pre>
+            <p><strong class="hl">리틀 엔디안 PC에서 전형적인 출력:</strong></p>
+            <div class="debug-out"><span class="dim">// 실행 결과 예시 (Windows x64 · 리틀 엔디안)</span>
+value = <span class="hi">0x12345678</span>
+&amp;v    = 0000005A3E0FFA14   <span class="dim">// 주소는 매번 다름</span>
+  addr+0 : <span class="acc">0x78</span>   <span class="dim">// LSB · 낮은 주소</span>
+  addr+1 : 0x56
+  addr+2 : 0x34
+  addr+3 : <span class="hi">0x12</span>   <span class="dim">// MSB · 높은 주소</span>
+memcpy bytes: <span class="acc">78 56 34 12</span></div>
+            <p>
+              디버거(Visual Studio 등)의 <em>Memory</em> 창에서
+              <code class="inline">&amp;v</code> 를 보면 같은 줄이 보입니다.
+              Watch에 <code class="inline">v</code> 만 보면 <code class="inline">0x12345678</code> 으로
+              “의미 있는 숫자”로 보여 주므로, <strong class="hl">바이트 순서 착시</strong>가 안 납니다.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>5. 디버그/메모리 뷰로 보면</h3>
+            <div class="debug-out"><span class="dim">// Watch 창 (논리적 값)</span>
+v                 = <span class="hi">305419896</span>   <span class="dim">// 10진</span>
+v                 = <span class="hi">0x12345678</span>  <span class="dim">// 16진 · 의미</span>
+
+<span class="dim">// Memory 창 (주소 오름차순, 리틀 엔디안 PC)</span>
+0x...FA14  <span class="acc">78 56 34 12</span>  .. .. .. ..
+           <span class="dim">^-- &amp;v 시작</span>
+
+<span class="dim">// 만약 빅 엔디안 머신 메모리라면 (같은 v)</span>
+0x...FA14  <span class="hi">12 34 56 78</span>  .. .. .. ..</div>
+            <p>
+              디버거가 Watch에서 값을 예쁘게 보여주는 것과,
+              메모리를 바이트 단위로 까보는 것은 <strong class="hl">다른 층</strong>입니다.
+              엔디안은 후자의 규칙입니다.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>6. 실제로 사고가 나는 순간</h3>
+            <p><strong class="hl">상황:</strong> 리틀 엔디안 PC에서 파일에 4바이트를 “그대로” 쓰고,
+            빅 엔디안(또는 “네트워크 오더로 쓴” 파일)으로 해석하면 숫자가 달라집니다.</p>
+            <pre>// 위험 패턴 감각 (의사 코드)
+uint32_t v = 0x12345678;
+write(file, &amp;v, 4);          // 호스트 엔디안 그대로 덤프
+
+// 다른 쪽이 "빅 엔디안 정수"로 읽으면
+// 바이트 12 34 56 78 을 기대한 자리에
+// 78 56 34 12 가 들어가 있음 → 값이 0x78563412 처럼 보임</pre>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>상황</th><th>엔디안을 안 맞추면</th></tr></thead>
+                <tbody>
+                  <tr><td>바이너리 세이브/로드</td><td>HP·좌표가 엉뚱한 큰 수</td></tr>
+                  <tr><td>소켓으로 int 전송</td><td>수신 측 숫자가 뒤바뀜</td></tr>
+                  <tr><td>같은 프로세스 안 변수 연산</td><td>보통 문제 없음 (CPU가 규칙을 앎)</td></tr>
+                  <tr><td>문자 배열·UTF-8 텍스트</td><td>바이트 단위 약속이라 엔디안과 별개</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>7. 실무에서 쓰는 대응 감각</h3>
             <ul class="checklist">
-              <li class="yes">바이너리 파일 읽기/쓰기</li>
-              <li class="yes">소켓으로 정수 전송</li>
-              <li class="tip">같은 머신 안 일반 변수 연산만 하면 거의 안 보임</li>
+              <li class="yes"><strong class="hl">같은 머신·같은 컴파일러 안</strong> — 변수 연산만 하면 신경 거의 안 씀</li>
+              <li class="yes"><strong class="hl">파일/네트워크 포맷</strong> — “이 필드는 리틀/빅 고정”을 스펙에 적고, 읽고 쓸 때 변환</li>
+              <li class="yes">네트워크: 전통적으로 <strong class="hl">빅 엔디안 = network byte order</strong></li>
+              <li class="tip">C API 예: <code class="inline">htonl</code> / <code class="inline">ntohl</code> (host ↔ network long)</li>
+              <li class="tip">C++20 근처: <code class="inline">std::endian</code> 으로 컴파일 타임 확인 가능</li>
             </ul>
-            <p><strong class="hl">지금은:</strong> 이름과 “순서가 있다”는 사실만. 직렬화·호스트/네트워크 변환 함수는 실전 때.</p>
+            <pre>#include &lt;bit&gt;   // C++20
+// std::endian::native == std::endian::little  인지 확인 가능
+
+// 수동으로 바이트 스왑 감각 (교육용)
+std::uint32_t bswap32(std::uint32_t x) {
+    return (x &gt;&gt; 24) | ((x &gt;&gt; 8) &amp; 0x0000FF00u)
+         | ((x &lt;&lt; 8) &amp; 0x00FF0000u) | (x &lt;&lt; 24);
+}</pre>
+          </article>
+
+          <article class="card">
+            <h3>8. 정리</h3>
+            <div class="path">
+              <div class="path-item">
+                <div class="lv">무엇</div>
+                <div class="body">멀티바이트 값을 메모리에 놓는 <strong>바이트 순서 규칙</strong></div>
+              </div>
+              <div class="path-item">
+                <div class="lv">리틀</div>
+                <div class="body">낮은 주소 = LSB · PC에서 흔함 · 덤프가 <code class="inline">78 56 34 12</code></div>
+              </div>
+              <div class="path-item">
+                <div class="lv">빅</div>
+                <div class="body">낮은 주소 = MSB · 네트워크 관례 · 덤프가 <code class="inline">12 34 56 78</code></div>
+              </div>
+              <div class="path-item">
+                <div class="lv">언제</div>
+                <div class="body">파일·소켓·다른 아키텍처와 <strong>바이트를 주고받을 때</strong></div>
+              </div>
+              <div class="path-item">
+                <div class="lv">비유</div>
+                <div class="body">책을 “왼쪽부터 / 오른쪽부터” 꽂는 규칙 — 서가(메모리)는 같고 꽂는 방향만 다름</div>
+              </div>
+            </div>
+            <div class="callout cyan" style="margin-top:12px">
+              <strong>심화 한 줄:</strong> 엔디안은 “정답이 하나”가 아니라
+              <em>쓰기 쪽과 읽기 쪽이 같은 약속을 쓰느냐</em>의 문제입니다.
+              디버거 Watch의 예쁜 숫자와 Memory 창의 바이트 줄을 구분해서 보면 헷갈림이 줄어듭니다.
+            </div>
           </article>
         </section>
 
