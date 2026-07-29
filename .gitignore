@@ -1,0 +1,30 @@
+# Build outputs
+*.exe
+*.out
+*.o
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.exp
+*.lib
+*.dll
+*.so
+*.dylib
+a.out
+
+# IDE / OS
+.vs/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# CMake
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
