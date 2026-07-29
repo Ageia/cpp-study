@@ -1187,65 +1187,112 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 12px;
       width: 100%;
+      align-items: stretch;
     }
     .cycle-case {
       border-radius: 12px;
       border: 1.5px solid var(--border);
       background: #0b0e14;
-      padding: 12px;
+      padding: 14px 12px;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
     }
     .cycle-case.bad { border-color: rgba(251, 113, 133, 0.45); }
     .cycle-case.good { border-color: rgba(110, 231, 183, 0.45); }
     .cycle-case h4 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       font-size: 13px;
       font-weight: 800;
     }
     .cycle-case.bad h4 { color: #fda4af; }
     .cycle-case.good h4 { color: #a7f3d0; }
+    /* 노드 2개 + 관계 라벨: 중간 열에 충분한 최소 폭 (28px 금지 → 쏠림) */
     .cycle-nodes {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
-      gap: 6px;
-      align-items: center;
+      grid-template-columns: minmax(0, 1fr) minmax(88px, auto) minmax(0, 1fr);
+      gap: 10px;
+      align-items: stretch;
+      width: 100%;
     }
     .cycle-node {
       border-radius: 10px;
       border: 1.5px solid rgba(103, 232, 249, 0.4);
-      padding: 10px 8px;
+      padding: 12px 10px;
       text-align: center;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      box-sizing: border-box;
     }
     .cycle-node .k {
       font-family: var(--mono);
       font-weight: 800;
       font-size: 13px;
       color: #a5f3fc;
+      line-height: 1.25;
     }
     .cycle-node .rc {
       display: block;
-      margin-top: 4px;
       font-size: 11px;
       font-family: var(--mono);
       color: var(--text-dim);
+      line-height: 1.3;
+      word-break: keep-all;
     }
     .cycle-node .rc.stuck { color: #fda4af; font-weight: 700; }
     .cycle-node .rc.ok { color: #a7f3d0; font-weight: 700; }
     .cycle-arr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-width: 88px;
+      max-width: 120px;
+      margin: 0 auto;
+      padding: 8px 6px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
       text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-dim);
-      line-height: 1.25;
+      line-height: 1.3;
     }
-    .cycle-case.bad .cycle-arr { color: #fda4af; }
-    .cycle-case.good .cycle-arr { color: #a7f3d0; }
-    .cycle-case p {
-      margin: 10px 0 0;
+    .cycle-arr .sym {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .cycle-arr .tag {
+      font-size: 10px;
+      font-weight: 800;
+      font-family: var(--mono);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .cycle-case.bad .cycle-arr {
+      border-color: rgba(251, 113, 133, 0.35);
+      background: rgba(251, 113, 133, 0.06);
+    }
+    .cycle-case.bad .cycle-arr .sym,
+    .cycle-case.bad .cycle-arr .tag { color: #fda4af; }
+    .cycle-case.good .cycle-arr {
+      border-color: rgba(110, 231, 183, 0.35);
+      background: rgba(110, 231, 183, 0.06);
+    }
+    .cycle-case.good .cycle-arr .sym,
+    .cycle-case.good .cycle-arr .tag { color: #a7f3d0; }
+    .cycle-case.good .cycle-arr .tag.is-weak { color: #67e8f9; }
+    .cycle-case > p {
+      margin: 12px 0 0;
       font-size: 12px;
       color: var(--text-muted);
       line-height: 1.45;
+      flex: 1;
     }
     .rule-zero {
       display: grid;
@@ -1282,11 +1329,26 @@
       .rule-five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .rule-five .rule-chip:last-child { grid-column: 1 / -1; }
     }
-    @media (max-width: 640px) {
+    @media (max-width: 900px) {
+      /* 카드 안 가로 3열이 좁아지면 한 열로 — 중간 shared 라벨 압착 방지 */
       .cycle-pair { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
       .rule-zero { grid-template-columns: 1fr; }
       .rule-five { grid-template-columns: 1fr; }
       .rule-five .rule-chip:last-child { grid-column: auto; }
+      .cycle-nodes {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .cycle-arr {
+        max-width: none;
+        width: 100%;
+        min-width: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
     }
     /* 05 진법 — 카드 전체 폭 기준 HTML 그리드 (max-width 520 금지: 표와 들쭉날쭉) */
     .base-viz.guide-viz {
@@ -5906,12 +5968,16 @@ struct Goblin : Enemy {
                   <div class="cycle-nodes">
                     <div class="cycle-node">
                       <span class="k">Node A</span>
-                      <span class="rc stuck">use_count ≈ 1+</span>
+                      <span class="rc stuck">use_count ≥ 1</span>
                     </div>
-                    <div class="cycle-arr">shared<br>↔</div>
+                    <div class="cycle-arr" aria-hidden="true">
+                      <span class="tag">shared</span>
+                      <span class="sym">↔</span>
+                      <span class="tag">shared</span>
+                    </div>
                     <div class="cycle-node">
                       <span class="k">Node B</span>
-                      <span class="rc stuck">use_count ≈ 1+</span>
+                      <span class="rc stuck">use_count ≥ 1</span>
                     </div>
                   </div>
                   <p>외부 핸들을 버려도 서로가 붙잡고 있어 소멸자 안 불림.</p>
@@ -5923,7 +5989,11 @@ struct Goblin : Enemy {
                       <span class="k">Parent</span>
                       <span class="rc ok">소유 shared</span>
                     </div>
-                    <div class="cycle-arr">shared →<br>← weak</div>
+                    <div class="cycle-arr" aria-hidden="true">
+                      <span class="tag">shared →</span>
+                      <span class="sym">·</span>
+                      <span class="tag is-weak">← weak</span>
+                    </div>
                     <div class="cycle-node">
                       <span class="k">Child</span>
                       <span class="rc ok">관찰 weak</span>
