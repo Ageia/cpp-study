@@ -308,7 +308,8 @@
 
     .callout {
       border-radius: var(--radius-sm); padding: 13px 15px; border: 1px solid var(--border);
-      background: rgba(167,139,250,0.08); font-size: 13.5px; color: var(--text-muted); margin-top: 12px;
+      background: rgba(167,139,250,0.08); font-size: 13.5px; color: var(--text-muted);
+      margin: 12px 0 0; line-height: 1.55;
     }
     .callout strong { color: #e9d5ff; }
     .callout.mint { background: rgba(110,231,183,0.08); border-color: rgba(110,231,183,0.2); }
@@ -317,6 +318,54 @@
     .callout.warn strong { color: #fde68a; }
     .callout.cyan { background: rgba(103,232,249,0.08); border-color: rgba(103,232,249,0.2); }
     .callout.cyan strong { color: #a5f3fc; }
+    /* 심화 패널: 관련 메인 링크 바 */
+    .deep-related {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 12px;
+      margin: 0 0 18px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(110, 231, 183, 0.22);
+      background: rgba(110, 231, 183, 0.07);
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .panel-lead + .deep-related { margin-top: -6px; }
+    .deep-related .label {
+      font-weight: 700;
+      color: #a7f3d0;
+      flex-shrink: 0;
+      letter-spacing: -0.01em;
+    }
+    .deep-related .links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .deep-related a {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-strong);
+      color: var(--accent-2);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 650;
+      white-space: nowrap;
+      transition: background .12s, border-color .12s;
+    }
+    .deep-related a:hover {
+      text-decoration: none;
+      background: rgba(103, 232, 249, 0.12);
+      border-color: rgba(103, 232, 249, 0.4);
+    }
 
     .path { display: grid; gap: 8px; }
     .path-item {
@@ -3344,8 +3393,12 @@ void tick(State s) {
             메인 <strong>10 · 스택과 힙</strong>의 확장.
             프로그램이 메모리에 올라갈 때 “구역”이 더 나뉩니다.
           </p>
-          <div class="callout mint">
-            <strong>관련 메인:</strong> <a href="#10">10 스택과 힙</a> · <a href="#03">03 컴파일</a>
+          <div class="deep-related">
+            <span class="label">관련 메인</span>
+            <span class="links">
+              <a href="#10">10 스택과 힙</a>
+              <a href="#03">03 컴파일</a>
+            </span>
           </div>
           <article class="card">
             <h3>한눈에</h3>
@@ -3381,8 +3434,12 @@ int ready = 1;         // 초기값 있음 → DATA 쪽</pre>
             프로그램이 보는 주소(가상)와 RAM 칩의 실제 칸(물리)은 다를 수 있습니다.
             OS가 가운데에서 매핑합니다.
           </p>
-          <div class="callout mint">
-            <strong>관련 메인:</strong> <a href="#10">10 스택과 힙</a> · <a href="#11">11 포인터</a>
+          <div class="deep-related">
+            <span class="label">관련 메인</span>
+            <span class="links">
+              <a href="#10">10 스택과 힙</a>
+              <a href="#11">11 포인터</a>
+            </span>
           </div>
           <article class="card">
             <h3>한 줄 비유</h3>
@@ -3413,8 +3470,12 @@ int* p = new int[1000];
             CPU는 RAM보다 훨씬 빠른 <strong class="hl">캐시</strong>에 자주 쓰는 데이터를 둡니다.
             코드 작성 습관이 캐시 적중률에 영향을 줍니다.
           </p>
-          <div class="callout mint">
-            <strong>관련 메인:</strong> <a href="#10">10 스택과 힙</a> · <a href="#14">14 vector</a>
+          <div class="deep-related">
+            <span class="label">관련 메인</span>
+            <span class="links">
+              <a href="#10">10 스택과 힙</a>
+              <a href="#14">14 vector</a>
+            </span>
           </div>
           <article class="card">
             <h3>속도 감각 (대략)</h3>
@@ -3454,8 +3515,12 @@ for (int i = 0; i &lt; n; ++i) sum += a[i];</pre>
             여러 바이트로 된 정수를 메모리에 어떤 <strong class="hl">바이트 순서</strong>로 늘어놓는지.
             일상 앱 로직보다 <strong class="hl">파일·네트워크·바이너리</strong>에서 중요해집니다.
           </p>
-          <div class="callout mint">
-            <strong>관련 메인:</strong> <a href="#05">05 변수와 타입</a> · <a href="#10">10 메모리</a>
+          <div class="deep-related">
+            <span class="label">관련 메인</span>
+            <span class="links">
+              <a href="#05">05 변수와 타입</a>
+              <a href="#10">10 스택과 힙</a>
+            </span>
           </div>
           <article class="card">
             <h3>한 줄</h3>
