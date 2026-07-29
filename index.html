@@ -710,6 +710,134 @@
       .cache-tier.t2 { width: 80%; }
       .cache-tier.t3 { width: 92%; }
     }
+    /* 26 스택 프레임 */
+    .frame-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .frame-stack .addr-lab {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--text-dim);
+      padding: 0 4px;
+    }
+    .frame-block {
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #0b0e14;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .frame-block .fh {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .frame-block .fh .fn {
+      font-family: var(--mono);
+    }
+    .frame-block .fh .tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-dim);
+      font-family: var(--sans, "Segoe UI", system-ui, sans-serif);
+    }
+    .frame-block .slots {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .frame-slot {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 8px;
+      padding: 7px 12px;
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      min-width: 0;
+    }
+    .frame-slot:first-child { border-top: none; }
+    .frame-slot .k {
+      color: var(--text-dim);
+      font-weight: 600;
+      min-width: 0;
+    }
+    .frame-slot .v {
+      font-family: var(--mono);
+      font-weight: 700;
+      text-align: right;
+      color: var(--text-muted);
+      min-width: 0;
+      word-break: break-all;
+    }
+    .frame-block.is-main { border-color: #6ee7b7; }
+    .frame-block.is-main .fh .fn { color: #a7f3d0; }
+    .frame-block.is-a { border-color: #67e8f9; }
+    .frame-block.is-a .fh .fn { color: #a5f3fc; }
+    .frame-block.is-b { border-color: #c4b5fd; }
+    .frame-block.is-b .fh .fn { color: #e9d5ff; }
+    .frame-block.is-b .frame-slot .v.hl { color: #e9d5ff; }
+    .frame-block.is-a .frame-slot .v.hl { color: #a5f3fc; }
+    .frame-block.is-main .frame-slot .v.hl { color: #a7f3d0; }
+    .frame-grow {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 2px 0;
+    }
+    .call-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+    .call-step {
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: #0b0e14;
+      padding: 12px 12px 14px;
+      min-width: 0;
+    }
+    .call-step .n {
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .call-step .t {
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .call-step p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .call-step.is-1 { border-color: rgba(110, 231, 183, 0.4); }
+    .call-step.is-1 .t { color: #a7f3d0; }
+    .call-step.is-2 { border-color: rgba(103, 232, 249, 0.4); }
+    .call-step.is-2 .t { color: #a5f3fc; }
+    .call-step.is-3 { border-color: rgba(196, 181, 253, 0.4); }
+    .call-step.is-3 .t { color: #e9d5ff; }
+    @media (max-width: 700px) {
+      .call-steps { grid-template-columns: 1fr; }
+    }
     /* 05 진법 — 카드 전체 폭 기준 HTML 그리드 (max-width 520 금지: 표와 들쭉날쭉) */
     .base-viz.guide-viz {
       width: 100%;
@@ -1624,6 +1752,9 @@
         <button type="button" role="tab" data-tab="25" aria-selected="false">
           <span class="n">25</span><span class="t">엔디안</span>
         </button>
+        <button type="button" role="tab" data-tab="26" aria-selected="false">
+          <span class="n">26</span><span class="t">스택 프레임</span>
+        </button>
       </nav>
     </aside>
 
@@ -2295,7 +2426,7 @@ void shout(const std::string&amp; msg) {
             <ul class="checklist">
               <li class="yes">입력(매개변수) → 처리 → 출력(<code class="inline">return</code>)</li>
               <li class="yes"><code class="inline">void</code> = 돌려줄 값 없음 (출력·상태 변경만)</li>
-              <li class="tip">함수 안 지역 변수는 끝나면 사라짐 → <strong>10 · 스택</strong></li>
+              <li class="tip">함수 안 지역 변수는 끝나면 사라짐 → <strong>10 · 스택</strong> · 깊게는 <a href="#26">26 프레임</a></li>
             </ul>
           </article>
 
@@ -2597,7 +2728,7 @@ std::string name = "Hero";       // C++ 문자열 객체 (권장)</pre>
             <div class="callout cyan">
               <strong>기억:</strong> 스택은 “함수 끝나면 자동 청소”, 힙은 “빌려 쓴 뒤 반납 규칙이 필요”.
               반납을 현대적으로 다루는 법은 <strong>16 · 스마트 포인터</strong>.
-              세그먼트·가상 메모리·캐시 → <a href="#22">심화 22+</a>.
+              세그먼트·가상 메모리·캐시·스택 프레임 → <a href="#22">심화 22+</a> · <a href="#26">26 프레임</a>.
             </div>
           </article>
 
@@ -3778,7 +3909,7 @@ max2(1.5, 0.2);   // T = double</pre>
             <ul class="checklist">
               <li class="tip"><strong class="hl">알고리즘:</strong> 복잡도, STL 알고리즘, 문제 풀이</li>
               <li class="tip"><strong class="hl">시스템·성능:</strong> 스레드, 락, 캐시 지역성, 프로파일</li>
-              <li class="tip"><strong class="hl">심화:</strong> 사이드바 <em>심화</em> 그룹 (22–25부터) — 가상 메모리, 엔디안 등</li>
+              <li class="tip"><strong class="hl">심화:</strong> 사이드바 <em>심화</em> 그룹 (22–26…) — 가상 메모리, 엔디안, 스택 프레임 등</li>
               <li class="yes">공통: 짧은 코드 읽기 + 측정 전 추측 금지</li>
             </ul>
             <div class="callout">
@@ -3790,7 +3921,8 @@ max2(1.5, 0.2);   // T = double</pre>
               <a href="#22">22 세그먼트</a> ·
               <a href="#23">23 가상·물리 메모리</a> ·
               <a href="#24">24 캐시</a> ·
-              <a href="#25">25 엔디안</a>
+              <a href="#25">25 엔디안</a> ·
+              <a href="#26">26 스택 프레임</a>
             </div>
           </article>
         </section>
@@ -3996,7 +4128,7 @@ void tick(State s) {
               </div>
               <div>
                 <h3 style="font-size:0.95rem">Q. 심화는 어디에?</h3>
-                <p>사이드바 <strong class="hl">심화 22–25</strong>. 메인과 분리되어 있습니다.</p>
+                <p>사이드바 <strong class="hl">심화 22–26…</strong>. 메인과 분리되어 있습니다.</p>
               </div>
             </div>
           </article>
@@ -4642,6 +4774,172 @@ std::uint32_t bswap32(std::uint32_t x) {
           </article>
         </section>
 
+        <section class="panel" data-panel="26" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">26</span> 스택 프레임 · 호출 규약</h2>
+            <span class="tag tag-soft">심화</span>
+          </div>
+          <p class="panel-lead">
+            함수를 호출할 때마다 스택에 <strong class="hl">한 칸의 작업 공간</strong>이 쌓입니다.
+            그걸 <strong class="hl">스택 프레임</strong>(stack frame)이라 부릅니다.
+            메인 <a href="#10">10 스택</a>·<a href="#08">08 함수</a>의 “왜 지역 변수가 끝나면 사라지나”를 한 단계 깊게 봅니다.
+          </p>
+          <div class="deep-related">
+            <span class="label">관련 메인</span>
+            <span class="links">
+              <a href="#08">08 함수</a>
+              <a href="#10">10 스택과 힙</a>
+              <a href="#11">11 포인터</a>
+              <a href="#22">22 세그먼트</a>
+            </span>
+          </div>
+
+          <article class="card">
+            <h3>1. 호출이 쌓이면 — 그림</h3>
+            <p>
+              예: <code class="inline">main → attack → roll</code>.
+              스택은 보통 <strong class="hl">높은 주소 → 낮은 주소</strong>로 자라고,
+              <em>지금 실행 중인 함수</em> 프레임이 맨 아래(최신)에 있습니다.
+            </p>
+            <div class="guide-viz" aria-label="스택 프레임 쌓임">
+              <div class="frame-stack">
+                <div class="addr-lab"><span>높은 주소 (예전에 쌓임)</span><span>↑</span></div>
+                <div class="frame-block is-main">
+                  <div class="fh"><span class="fn">main</span><span class="tag">호출자</span></div>
+                  <div class="slots">
+                    <div class="frame-slot"><span class="k">지역</span><span class="v hl">hp = 100</span></div>
+                    <div class="frame-slot"><span class="k">돌아갈 곳</span><span class="v">… (OS/런타임)</span></div>
+                  </div>
+                </div>
+                <div class="frame-grow">호출 ↓ 프레임 추가</div>
+                <div class="frame-block is-a">
+                  <div class="fh"><span class="fn">attack</span><span class="tag">중간</span></div>
+                  <div class="slots">
+                    <div class="frame-slot"><span class="k">인자</span><span class="v hl">dmg = 15</span></div>
+                    <div class="frame-slot"><span class="k">지역</span><span class="v">bonus = 2</span></div>
+                    <div class="frame-slot"><span class="k">복귀 주소</span><span class="v">→ main 안</span></div>
+                  </div>
+                </div>
+                <div class="frame-grow">호출 ↓</div>
+                <div class="frame-block is-b">
+                  <div class="fh"><span class="fn">roll</span><span class="tag">현재 실행</span></div>
+                  <div class="slots">
+                    <div class="frame-slot"><span class="k">인자</span><span class="v hl">n = 6</span></div>
+                    <div class="frame-slot"><span class="k">지역</span><span class="v">r = …</span></div>
+                    <div class="frame-slot"><span class="k">복귀 주소</span><span class="v hl">→ attack 안</span></div>
+                  </div>
+                </div>
+                <div class="addr-lab"><span>낮은 주소 (스택 성장 방향 ↘)</span><span>↓</span></div>
+              </div>
+              <p class="viz-cap">return 하면 맨 아래 프레임이 사라지고, 복귀 주소로 점프 · 배치·이름은 CPU/ABI마다 단순화</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>2. 프레임 안에 뭐가 들어가나 (감각)</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>요소</th><th>한 줄</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>복귀 주소</strong></td><td>이 함수가 끝나면 <em>어디로 돌아갈지</em> (호출한 쪽의 다음 명령)</td></tr>
+                  <tr><td><strong>인자</strong></td><td>넘겨받은 값. 레지스터에만 있을 수도, 스택에도 있을 수도 있음</td></tr>
+                  <tr><td><strong>지역 변수</strong></td><td>함수 안에서 만든 상자. 프레임과 함께 사라짐</td></tr>
+                  <tr><td><strong>저장 레지스터 등</strong></td><td>호출 규약에 따라 백업해 두는 자리 (세부 ABI)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:10px;margin-bottom:0;font-size:13px;color:var(--text-dim)">
+              “스택에 전부 있다”가 아니라, <strong class="hl">논리적으로 한 호출의 작업 공간</strong>이 프레임입니다.
+              최적화되면 일부는 레지스터에만 살고 스택 슬롯이 없을 수도 있습니다.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>3. 호출 → 실행 → 복귀</h3>
+            <div class="guide-viz" aria-label="함수 호출 세 단계">
+              <div class="call-steps">
+                <div class="call-step is-1">
+                  <div class="n">STEP 1</div>
+                  <div class="t">call</div>
+                  <p>인자 준비 · 복귀 주소 기록 · 새 프레임 공간 · 점프</p>
+                </div>
+                <div class="call-step is-2">
+                  <div class="n">STEP 2</div>
+                  <div class="t">본문</div>
+                  <p>지역 변수 쓰고 계산. 또 다른 함수를 부르면 프레임이 더 쌓임</p>
+                </div>
+                <div class="call-step is-3">
+                  <div class="n">STEP 3</div>
+                  <div class="t">return</div>
+                  <p>결과 전달 · 프레임 정리 · 복귀 주소로 되돌아감</p>
+                </div>
+              </div>
+              <p class="viz-cap">디버거의 Call Stack 창 = 지금 쌓여 있는 프레임 목록</p>
+            </div>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>4. 상황 · 코드 · 쓰임</h3>
+              <p><strong class="hl">상황:</strong> 데미지 계산이 함수 두 겹으로 나뉜다.</p>
+              <pre>int roll(int n) {
+    int r = n;          // roll 프레임 지역
+    return r;
+}
+int attack(int base) {
+    int bonus = 2;      // attack 프레임
+    return base + roll(6) + bonus;
+}
+int main() {
+    int hp = 100;       // main 프레임
+    hp -= attack(15);
+}</pre>
+              <p style="margin-bottom:0">
+                <strong class="hl">쓰임:</strong> 브레이크포인트 걸면 Call Stack에
+                <code class="inline">roll ← attack ← main</code> 이 보입니다.
+              </p>
+            </article>
+            <article class="card">
+              <h3>5. 호출 규약 (맛보기)</h3>
+              <ul class="checklist">
+                <li class="yes"><strong class="hl">calling convention</strong> — 인자·반환값을 <em>어디서</em> 주고받는지 약속</li>
+                <li class="yes">현대 x64는 인자를 <strong class="hl">레지스터</strong>에 많이 넣음 (스택만은 아님)</li>
+                <li class="tip">Windows x64 / System V(Linux·mac) 규약이 다름 → 라이브러리 경계에서 중요</li>
+                <li class="no">초보가 손으로 ABI 표를 외울 필요는 없음</li>
+              </ul>
+              <p style="margin-top:10px;margin-bottom:0;font-size:13px;color:var(--text-dim)">
+                C++ 이름 맹글링·예외 테이블은 더 깊은 주제. 지금은
+                “호출마다 프레임 + 약속된 전달 방식”만.
+              </p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>6. 재귀 · 스택 오버플로</h3>
+            <p>
+              재귀는 <strong class="hl">같은 함수 프레임이 여러 겹</strong> 쌓입니다.
+              깊이가 너무 크면 스택 공간이 바닥나서
+              <strong class="hl">스택 오버플로</strong>(stack overflow)가 납니다.
+            </p>
+            <pre>int sum(int n) {
+    if (n &lt;= 0) return 0;
+    return n + sum(n - 1);  // 호출마다 프레임 +1
+}
+// sum(1000000) → 프레임이 백만 겹… 위험할 수 있음</pre>
+            <ul class="checklist">
+              <li class="yes">종료 조건이 없으면 프레임이 끝없이 쌓임</li>
+              <li class="yes">큰 지역 배열(<code class="inline">char buf[1&lt;&lt;20]</code>)도 프레임을 급격히 키움</li>
+              <li class="tip">깊은 재귀·큰 스택 버퍼가 필요하면 설계를 바꾸거나 힙(<a href="#15">15</a>) 검토</li>
+            </ul>
+          </article>
+
+          <div class="callout cyan">
+            <strong>지금은:</strong> 프레임 = 한 호출의 작업 공간 · return 시 사라짐 · Call Stack으로 확인.
+            어셈블리·정확한 x64 레지스터 표는 더 깊게.
+            프로세스 큰 지도 → <a href="#22">22</a> · 가상 주소 → <a href="#23">23</a>
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -4660,7 +4958,7 @@ std::uint32_t bswap32(std::uint32_t x) {
       const ORDER = [
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
-        "22","23","24","25"
+        "22","23","24","25","26"
       ];
 
       const DICT = [
@@ -4736,7 +5034,12 @@ std::uint32_t bswap32(std::uint32_t x) {
         { term: "지역성", en: "locality", g: "E", def: "시간·공간적으로 가까운 데이터 접근이 캐시에 유리한 성질.", ref: "24" },
         { term: "엔디안", en: "endianness", g: "E", def: "멀티바이트 값을 메모리에 늘어놓는 바이트 순서. 리틀/빅.", ref: "25" },
         { term: "리틀 엔디안", en: "little-endian", g: "E", def: "낮은 주소에 하위 바이트. x86 등에서 흔함.", ref: "25" },
-        { term: "빅 엔디안", en: "big-endian", g: "E", def: "낮은 주소에 상위 바이트. 네트워크 바이트 오더로 자주.", ref: "25" }
+        { term: "빅 엔디안", en: "big-endian", g: "E", def: "낮은 주소에 상위 바이트. 네트워크 바이트 오더로 자주.", ref: "25" },
+        { term: "스택 프레임", en: "stack frame", g: "E", def: "함수 호출 한 번의 작업 공간. 지역·복귀 주소 등이 논리적으로 묶임. return 시 사라짐.", ref: "26" },
+        { term: "복귀 주소", en: "return address", g: "E", def: "함수가 끝난 뒤 돌아갈 명령 위치. 호출 시 프레임에 기록.", ref: "26" },
+        { term: "호출 규약", en: "calling convention", g: "E", def: "인자·반환값을 레지스터/스택 어디에 둘지 정한 ABI 약속.", ref: "26" },
+        { term: "콜 스택", en: "call stack", g: "E", def: "지금 쌓여 있는 프레임 목록. 디버거 Call Stack 창.", ref: "26" },
+        { term: "스택 오버플로", en: "stack overflow", g: "E", def: "프레임이 너무 많이/크게 쌓여 스택 공간을 넘는 오류. 깊은 재귀·큰 지역 배열.", ref: "26" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
