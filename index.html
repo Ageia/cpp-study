@@ -1021,21 +1021,93 @@ std::cout &lt;&lt; name[0];      // 'H'</pre>
           <div class="topic-head">
             <h2><span class="num">10</span> 스택과 힙</h2>
           </div>
-          <p class="panel-lead">둘 다 RAM. 차이는 <strong class="hl">누가 관리하고, 얼마나 오래 사느냐</strong>.</p>
+          <p class="panel-lead">
+            둘 다 <strong class="hl">RAM</strong> 안의 작업 공간입니다.
+            차이는 문법 이름보다 <strong class="hl">누가 관리하고, 얼마나 오래 사느냐</strong>에 가깝습니다.
+          </p>
+
           <article class="card">
-            <div class="table-wrap">
+            <h3>한눈에 비교</h3>
+            <div class="table-wrap" style="margin-top:8px">
               <table>
                 <thead><tr><th></th><th>스택 (Stack)</th><th>힙 (Heap)</th></tr></thead>
                 <tbody>
                   <tr><td><strong>관리</strong></td><td>자동 (함수 끝나면 정리)</td><td>프로그래머 / 스마트 포인터</td></tr>
                   <tr><td><strong>속도</strong></td><td>매우 빠름</td><td>상대적으로 느림</td></tr>
                   <tr><td><strong>용도</strong></td><td>지역 변수, 함수 인자</td><td>크기·수명이 자유로운 데이터</td></tr>
-                  <tr><td><strong>비유</strong></td><td>계산용 메모지</td><td>창고 대여 (반납 규칙 필요)</td></tr>
+                  <tr><td><strong>비유</strong></td><td>계산용 메모지 (끝나면 버림)</td><td>창고 대여 (반납 규칙 필요)</td></tr>
+                  <tr><td><strong>수명</strong></td><td>블록/함수와 함께</td><td>직접 끊을 때까지 (또는 스마트 포인터)</td></tr>
                 </tbody>
               </table>
             </div>
-            <div class="todo-note">보강 예정: 메모리 한 줄 도식 (STACK / FREE / HEAP)</div>
           </article>
+
+          <article class="card">
+            <h3>메모리 한 줄 도식 (개념)</h3>
+            <p>물리적으로는 더 복잡하지만, 학습용으로 RAM을 이렇게 나눠 보면 됩니다.</p>
+            <pre>높은 주소
+  ┌─────────────────┐
+  │     STACK       │  ← 함수 호출 시 아래로 쌓임 (지역 변수)
+  │        ↓        │
+  ├─────────────────┤
+  │   (빈 공간)      │
+  ├─────────────────┤
+  │        ↑        │
+  │      HEAP       │  ← new 등으로 위로 늘어남 (동적)
+  ├─────────────────┤
+  │  전역/정적 등    │  (지금은 “있다” 정도만)
+  ├─────────────────┤
+  │   코드 (TEXT)   │
+  └─────────────────┘
+낮은 주소</pre>
+            <div class="callout cyan">
+              <strong>기억:</strong> 스택은 “함수 끝나면 자동 청소”, 힙은 “빌려 쓴 뒤 반납 규칙이 필요”.
+              반납을 현대적으로 다루는 법은 <strong>15 · 스마트 포인터</strong>.
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — 스택</h3>
+            <p><strong class="hl">상황:</strong> 함수 안에서만 쓰는 임시 계산, 작은 상태.</p>
+            <pre>void tick() {
+    int damage = 10;     // 스택 (지역)
+    int shield = 3;      // 스택
+    int net = damage - shield;
+    // tick이 끝나면 damage, shield, net 전부 사라짐
+}</pre>
+            <p><strong class="hl">쓰임:</strong> 매 프레임 임시 값, 루프 카운터, 작은 구조체 값 — 기본은 스택이 안전하고 빠름.</p>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — 힙이 필요한 때</h3>
+            <p><strong class="hl">상황:</strong> “함수가 끝나도” 살아 있어야 하거나, 크기를 실행 중에 정해야 할 때.</p>
+            <pre>// 개념만 (raw new는 나중에 스마트 포인터로 대체)
+int* big = new int[1000];  // 힙에 1000칸
+// ... 여러 함수에서 big을 넘기며 사용 ...
+delete[] big;              // 반납 (안 하면 누수)</pre>
+            <p><strong class="hl">쓰임:</strong> 긴 수명의 리소스, 큰 버퍼, 엔진 객체가 “월드에 남아 있는” 느낌.
+            일상 목록은 보통 <code class="inline">vector</code>(13)가 힙을 대신 관리해 줍니다.</p>
+            <div class="callout warn">
+              <strong>지금 목표:</strong> raw <code class="inline">new</code> 숙달이 아니라
+              “스택 = 자동 / 힙 = 수명 설계” 감각. 상세 할당은 <strong>14</strong>, 안전한 소유는 <strong>15</strong>.
+            </div>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>선택 가이드</h3>
+              <ul class="checklist">
+                <li class="yes">작다 + 함수 안에서만 → 스택 (일반 변수)</li>
+                <li class="yes">목록이 늘어난다 → vector (13)</li>
+                <li class="tip">소유·수명이 복잡 → 스마트 포인터 (15)</li>
+                <li class="no">초보 구간에서 raw new 남발</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>다음 연결</h3>
+              <p>힙·객체를 <em>가리키려면</em> 주소가 필요합니다. 그 주소 이야기가 바로 <strong>11 · 포인터와 참조</strong>입니다.</p>
+            </article>
+          </div>
         </section>
 
         <!-- 11 -->
@@ -1043,22 +1115,96 @@ std::cout &lt;&lt; name[0];      // 'H'</pre>
           <div class="topic-head">
             <h2><span class="num">11</span> 포인터와 참조</h2>
           </div>
-          <p class="panel-lead">값 vs 그 값이 있는 곳. 화살표 그림이 목표입니다.</p>
-          <article class="card">
-            <p>
-              <strong class="hl">포인터</strong>는 주소를 담는 변수,
-              <strong class="hl">참조</strong>는 이미 있는 변수에 붙인 별명에 가깝습니다.
-            </p>
-            <pre>int x = 10;
-int* p = &amp;x;   // p는 x의 주소
-*p = 20;       // 찾아가서 x를 20으로
+          <p class="panel-lead">
+            <strong class="hl">값</strong> vs <strong class="hl">그 값이 있는 곳(주소)</strong>.
+            목표는 100% 숙달이 아니라, 머리속에 <em>화살표 그림</em>이 그려지는 것입니다.
+          </p>
 
-int&amp; r = x;    // r은 x의 별명
-r = 30;        // x도 30</pre>
-            <div class="callout warn">
-              <strong>왜 배우나:</strong> 배열·객체·엔진 API가 “주소로 연결”되는 경우가 많습니다.
+          <article class="card">
+            <h3>한 줄 정의</h3>
+            <ul class="checklist">
+              <li class="yes"><strong class="hl">포인터</strong> — 주소를 담는 변수. 화살표를 들고 다님.</li>
+              <li class="yes"><strong class="hl">참조</strong> — 이미 있는 변수에 붙인 <em>별명</em>. 문법상 값처럼 씀.</li>
+              <li class="tip">둘 다 “복사본이 아니라 원본을 건드리고 싶을 때” 등장</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>포인터 — 주소와 역참조</h3>
+            <p><strong class="hl">상황:</strong> 변수 <code class="inline">x</code>가 있는 위치를 다른 이름으로 찾아가 수정.</p>
+            <pre>int x = 10;
+int* p = &amp;x;   // &amp;x = x의 주소, p가 그 화살표를 보관
+*p = 20;       // * = 따라가서 값 쓰기 → x도 20
+
+// 그림:
+//   p  ──────►  x [ 20 ]</pre>
+            <div class="table-wrap" style="margin-top:12px">
+              <table>
+                <thead><tr><th>기호</th><th>읽는 법</th></tr></thead>
+                <tbody>
+                  <tr><td><code class="inline">int* p</code></td><td>p는 “int가 있는 곳”을 가리킴</td></tr>
+                  <tr><td><code class="inline">&amp;x</code></td><td>x의 주소 (화살표 만들기)</td></tr>
+                  <tr><td><code class="inline">*p</code></td><td>p가 가리키는 그 값 (따라가기)</td></tr>
+                  <tr><td><code class="inline">nullptr</code></td><td>아무 데도 안 가리킴 (빈 화살표)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong class="hl">쓰임:</strong> 배열 Decay, C API, 엔진에서 “이 액터 포인터”, 선택적 대상(있을 수도/없을 수도).</p>
+          </article>
+
+          <article class="card">
+            <h3>참조 — 별명</h3>
+            <p><strong class="hl">상황:</strong> 함수에 넘길 때 복사 없이 원본 HP를 바꾸고 싶다.</p>
+            <pre>void hurt(int&amp; hp, int dmg) {
+    hp -= dmg;          // 원본이 바뀜
+    if (hp &lt; 0) hp = 0;
+}
+
+int main() {
+    int playerHp = 100;
+    hurt(playerHp, 30); // playerHp == 70
+}</pre>
+            <p>참조는 선언 시 반드시 누군가를 가리켜야 하고, 보통 다시 “다른 대상”으로 갈아끼우지 않습니다.</p>
+            <p><strong class="hl">쓰임:</strong> 함수 인자(<code class="inline">T&amp;</code>, <code class="inline">const T&amp;</code>), 큰 객체 읽기, 범위 for (<code class="inline">for (auto&amp; e : list)</code>).</p>
+          </article>
+
+          <article class="card">
+            <h3>포인터 vs 참조 (실무 감각)</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th></th><th>포인터 <code class="inline">T*</code></th><th>참조 <code class="inline">T&amp;</code></th></tr></thead>
+                <tbody>
+                  <tr><td><strong>빈 상태</strong></td><td><code class="inline">nullptr</code> 가능</td><td>보통 “항상 유효한 별명”</td></tr>
+                  <tr><td><strong>재지정</strong></td><td>다른 주소를 다시 담을 수 있음</td><td>처음 묶인 대상이 기본</td></tr>
+                  <tr><td><strong>문법</strong></td><td><code class="inline">*</code>, <code class="inline">-&gt;</code></td><td>일반 변수처럼 <code class="inline">.</code></td></tr>
+                  <tr><td><strong>선택</strong></td><td>“없을 수 있음” / C 스타일 API</td><td>함수 인자로 원본 공유 (아주 흔함)</td></tr>
+                </tbody>
+              </table>
             </div>
           </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>const 참조 (읽기 전용 별명)</h3>
+              <pre>void printName(const std::string&amp; s) {
+    std::cout &lt;&lt; s;  // 수정 안 함, 복사 비용↓
+}</pre>
+              <p>큰 <code class="inline">string</code>·구조체를 함수에 넘길 때 기본 패턴에 가깝습니다.</p>
+            </article>
+            <article class="card">
+              <h3>위험 신호 (이름만)</h3>
+              <ul class="checklist">
+                <li class="no">댕글링 — 사라진 대상을 가리킴</li>
+                <li class="no">널 역참조 — <code class="inline">nullptr</code>에 <code class="inline">*</code></li>
+                <li class="tip">현대 코드는 소유를 unique_ptr 등으로 (15)</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout mint">
+            <strong>다음에 이어짐:</strong> 데이터+행동을 묶으면 <strong>12 · 구조체와 클래스</strong>,
+            같은 종류 여러 개는 <strong>13 · vector</strong> (내부적으로 힙+연속 저장).
+          </div>
         </section>
 
         <!-- 12 -->
