@@ -3663,8 +3663,8 @@ private:
 
           <div class="callout cyan">
             <strong>지금은 여기까지:</strong> 묶기 · 열고 닫기(public/private) · 생김/사라짐(생성/소멸) · this.
-            규칙 오브 파이브는 <em>심화</em>.
-            멤버 패딩 → <a href="#27">27</a> · 상속·가상 함수 → <a href="#28">28</a>.
+            멤버 패딩 → <a href="#27">27</a> · 상속·가상 → <a href="#28">28</a> ·
+            소멸/복사/이동 규칙 → <a href="#29">29</a>.
             타입에 <code class="inline">+</code>·<code class="inline">==</code> → <strong>13</strong>.
           </div>
         </section>
@@ -4244,7 +4244,7 @@ auto b = std::move(a);  // 소유권이 b로
 
           <div class="callout cyan">
             <strong>지금은 여기까지:</strong> “비싸면 복사 대신 이동을 생각”.
-            이동 생성자 직접 구현·규칙 오브 파이브 전체는 심화.
+            이동 생성자 직접 구현·규칙 오브 파이브 전체 → <a href="#29">29</a>.
           </div>
         </section>
 
@@ -4369,7 +4369,7 @@ max2(1.5, 0.2);   // T = double</pre>
             <ul class="checklist">
               <li class="tip"><strong class="hl">알고리즘:</strong> 복잡도, STL 알고리즘, 문제 풀이</li>
               <li class="tip"><strong class="hl">시스템·성능:</strong> 스레드, 락, 캐시 지역성, 프로파일</li>
-              <li class="tip"><strong class="hl">심화:</strong> 사이드바 <em>심화</em> 그룹 (22–28…) — 메모리, 패딩, 상속·vtable 등</li>
+              <li class="tip"><strong class="hl">심화:</strong> 사이드바 <em>심화</em> 그룹 (22–29…) — 메모리, vtable, 규칙 5 등</li>
               <li class="yes">공통: 짧은 코드 읽기 + 측정 전 추측 금지</li>
             </ul>
             <div class="callout">
@@ -4384,7 +4384,8 @@ max2(1.5, 0.2);   // T = double</pre>
               <a href="#25">25 엔디안</a> ·
               <a href="#26">26 스택 프레임</a> ·
               <a href="#27">27 패딩</a> ·
-              <a href="#28">28 상속·vtable</a>
+              <a href="#28">28 상속·vtable</a> ·
+              <a href="#29">29 규칙 5</a>
             </div>
           </article>
         </section>
@@ -4590,7 +4591,7 @@ void tick(State s) {
               </div>
               <div>
                 <h3 style="font-size:0.95rem">Q. 심화는 어디에?</h3>
-                <p>사이드바 <strong class="hl">심화 22–28…</strong>. 메인과 분리되어 있습니다.</p>
+                <p>사이드바 <strong class="hl">심화 22–29…</strong>. 메인과 분리되어 있습니다.</p>
               </div>
             </div>
           </article>
@@ -5761,8 +5762,217 @@ struct Goblin : Enemy {
 
           <div class="callout cyan">
             <strong>지금은:</strong> 상속 = is-a · virtual = 실제 타입으로 호출 · vptr/vtable 모델 · 가상 소멸자.
-            소유권과 함께 쓰려면 <a href="#16">16 unique_ptr</a> ·
-            규칙 오브 파이브는 이후 심화.
+            소유권 → <a href="#16">16</a> · 소멸/복사/이동 특수 멤버 → <a href="#29">29</a>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="29" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">29</span> 규칙 오브 파이브 · shared 순환</h2>
+            <span class="tag tag-soft">심화</span>
+          </div>
+          <p class="panel-lead">
+            자원을 <em>직접</em> 소유하는 타입은 소멸·복사·이동을 한 세트로 맞춰야 합니다.
+            그게 <strong class="hl">규칙 오브 파이브</strong>(Rule of Five) 쪽 이야기입니다.
+            또 <code class="inline">shared_ptr</code> 끼리 서로를 가리키면
+            <strong class="hl">참조 카운트가 안 내려가</strong> 누수가 납니다 → <code class="inline">weak_ptr</code>.
+          </p>
+          <div class="deep-related">
+            <span class="label">관련 메인</span>
+            <span class="links">
+              <a href="#12">12 클래스</a>
+              <a href="#15">15 new</a>
+              <a href="#16">16 스마트 포인터</a>
+              <a href="#17">17 move</a>
+            </span>
+          </div>
+
+          <article class="card">
+            <h3>1. 특수 멤버 다섯</h3>
+            <p>클래스가 “직접 다루는 자원”이 있을 때 손대는 특수 함수들입니다.</p>
+            <div class="guide-viz" aria-label="규칙 오브 파이브 다섯 멤버">
+              <div class="rule-five">
+                <div class="rule-chip is-d">
+                  <div class="n">1</div>
+                  <div class="t">소멸자</div>
+                  <span class="s">~T()</span>
+                </div>
+                <div class="rule-chip is-c">
+                  <div class="n">2</div>
+                  <div class="t">복사 생성</div>
+                  <span class="s">T(const T&amp;)</span>
+                </div>
+                <div class="rule-chip is-c">
+                  <div class="n">3</div>
+                  <div class="t">복사 대입</div>
+                  <span class="s">operator=</span>
+                </div>
+                <div class="rule-chip is-m">
+                  <div class="n">4</div>
+                  <div class="t">이동 생성</div>
+                  <span class="s">T(T&amp;&amp;)</span>
+                </div>
+                <div class="rule-chip is-m">
+                  <div class="n">5</div>
+                  <div class="t">이동 대입</div>
+                  <span class="s">operator= &amp;&amp;</span>
+                </div>
+              </div>
+              <p class="viz-cap">복사 3종(소멸+복사생성+복사대입)이 규칙 오브 쓰리 · 이동까지 포함하면 파이브</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>2. 0 · 3 · 5 — 언제 뭘 쓰나</h3>
+            <div class="guide-viz" aria-label="Rule of Zero Three Five">
+              <div class="rule-zero">
+                <div class="z is-0">
+                  <h4>Rule of Zero (권장 기본)</h4>
+                  <p>
+                    자원을 <code class="inline">unique_ptr</code> / <code class="inline">vector</code> 등에 맡김.
+                    특수 멤버를 <em>직접 안 씀</em> — 컴파일러 기본이 충분.
+                  </p>
+                </div>
+                <div class="z is-3">
+                  <h4>Rule of Three</h4>
+                  <p>
+                    raw 소유(예: <code class="inline">new</code>한 포인터 멤버)를
+                    직접 다루면 소멸·복사생성·복사대입을 <strong class="hl">같이</strong> 맞출 것.
+                  </p>
+                </div>
+                <div class="z is-5">
+                  <h4>Rule of Five</h4>
+                  <p>
+                    C++11+ 이동까지 쓰려면 이동 생성·이동 대입도 세트로.
+                    복사를 막을 거면 <code class="inline">= delete</code>.
+                  </p>
+                </div>
+              </div>
+              <p class="viz-cap">실무 기본선: Zero를 목표 · raw 소유를 직접 쓰기 전에 16·17을 먼저</p>
+            </div>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>3. 상황 · 코드 (자원 소유)</h3>
+              <p><strong class="hl">상황:</strong> 버퍼를 raw로 들고 있던 옛날 스타일 (교육용).</p>
+              <pre>struct Buf {
+    int* p;
+    int n;
+    explicit Buf(int n) : p(new int[n]), n(n) {}
+    ~Buf() { delete[] p; }           // 1 소멸
+
+    Buf(const Buf&amp; o)                // 2 복사 생성
+      : p(new int[o.n]), n(o.n) {
+        for (int i = 0; i &lt; n; ++i) p[i] = o.p[i];
+    }
+    Buf&amp; operator=(const Buf&amp; o);    // 3 복사 대입 (생략 가능 아님)
+
+    Buf(Buf&amp;&amp; o) noexcept            // 4 이동 생성
+      : p(o.p), n(o.n) { o.p = nullptr; o.n = 0; }
+    Buf&amp; operator=(Buf&amp;&amp; o) noexcept;// 5 이동 대입
+};</pre>
+              <p style="margin-bottom:0;font-size:13px;color:var(--text-dim)">
+                한 개만 손대면 기본 생성 규칙이 꼬일 수 있음 →
+                쓰리/파이브를 <em>의식적으로</em> 맞추거나, Zero로 피하기.
+              </p>
+            </article>
+            <article class="card">
+              <h3>4. Zero로 바꾸는 감각</h3>
+              <pre>struct Buf {
+    std::vector&lt;int&gt; data;  // 소유·복사·이동을 vector가
+    explicit Buf(int n) : data(n) {}
+    // 특수 멤버 직접 정의 안 함 → Rule of Zero
+};</pre>
+              <ul class="checklist">
+                <li class="yes"><code class="inline">unique_ptr</code> 멤버 → 복사 불가, 이동 가능 (의도에 맞으면 OK)</li>
+                <li class="yes">복사가 필요 없으면 <code class="inline">= delete</code> 로 명시</li>
+                <li class="tip">“직접 new한 멤버”를 없애는 쪽이 버그가 적음 → <a href="#16">16</a></li>
+              </ul>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>5. shared_ptr 순환 — 그림</h3>
+            <p>
+              A가 B를 <code class="inline">shared_ptr</code>로, B가 A를 다시
+              <code class="inline">shared_ptr</code>로 잡으면
+              서로 refcount가 1 이하로 안 떨어져 <strong class="hl">영원히 안 지워짐</strong>.
+            </p>
+            <div class="guide-viz" aria-label="shared_ptr 순환과 weak_ptr">
+              <div class="cycle-pair">
+                <div class="cycle-case bad">
+                  <h4>순환 (누수)</h4>
+                  <div class="cycle-nodes">
+                    <div class="cycle-node">
+                      <span class="k">Node A</span>
+                      <span class="rc stuck">use_count ≈ 1+</span>
+                    </div>
+                    <div class="cycle-arr">shared<br>↔</div>
+                    <div class="cycle-node">
+                      <span class="k">Node B</span>
+                      <span class="rc stuck">use_count ≈ 1+</span>
+                    </div>
+                  </div>
+                  <p>외부 핸들을 버려도 서로가 붙잡고 있어 소멸자 안 불림.</p>
+                </div>
+                <div class="cycle-case good">
+                  <h4>한쪽 weak (해결 감각)</h4>
+                  <div class="cycle-nodes">
+                    <div class="cycle-node">
+                      <span class="k">Parent</span>
+                      <span class="rc ok">소유 shared</span>
+                    </div>
+                    <div class="cycle-arr">shared →<br>← weak</div>
+                    <div class="cycle-node">
+                      <span class="k">Child</span>
+                      <span class="rc ok">관찰 weak</span>
+                    </div>
+                  </div>
+                  <p>부모→자식은 소유, 자식→부모는 <code class="inline">weak_ptr</code>로 관찰만.</p>
+                </div>
+              </div>
+              <p class="viz-cap">부모-자식·양방향 그래프·캐시 콜백에서 자주 등장</p>
+            </div>
+          </article>
+
+          <div class="grid-2">
+            <article class="card">
+              <h3>6. 상황 · 코드 (순환 끊기)</h3>
+              <p><strong class="hl">상황:</strong> 트리 노드가 부모를 다시 가리킨다.</p>
+              <pre>struct Node {
+    std::shared_ptr&lt;Node&gt; child;   // 소유
+    std::weak_ptr&lt;Node&gt; parent;  // 비소유 관찰
+};
+
+auto p = std::make_shared&lt;Node&gt;();
+auto c = std::make_shared&lt;Node&gt;();
+p-&gt;child = c;
+c-&gt;parent = p;   // weak — 순환 끊김
+
+// parent.lock() 으로 잠시 shared 확보 가능
+if (auto up = c-&gt;parent.lock()) {
+    // up 사용…
+}</pre>
+              <p style="margin-bottom:0">
+                <strong class="hl">쓰임:</strong> UI 위젯 트리, 씬 그래프, 옵저버가 subject를 약하게 붙들 때.
+              </p>
+            </article>
+            <article class="card">
+              <h3>7. 실무 체크</h3>
+              <ul class="checklist">
+                <li class="yes">기본 소유: <code class="inline">unique_ptr</code> (<a href="#16">16</a>)</li>
+                <li class="yes">공유가 진짜 필요할 때만 <code class="inline">shared_ptr</code></li>
+                <li class="yes">역방향·캐시·“있을 수도” → <code class="inline">weak_ptr</code></li>
+                <li class="tip">특수 멤버를 하나 쓰면 나머지도 의도를 밝혀라 (<code class="inline">= default</code> / <code class="inline">= delete</code>)</li>
+                <li class="no">복사 생성만 대충 만들고 대입·소멸을 잊기</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout cyan">
+            <strong>지금은:</strong> Zero 우선 · raw 소유 시 3/5 세트 · shared 양방향은 weak로 끊기.
+            이동 감각 → <a href="#17">17</a> · 가상 소멸자 → <a href="#28">28</a>
           </div>
         </section>
 
@@ -5784,7 +5994,7 @@ struct Goblin : Enemy {
       const ORDER = [
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
-        "22","23","24","25","26","27","28"
+        "22","23","24","25","26","27","28","29"
       ];
 
       const DICT = [
@@ -5877,7 +6087,12 @@ struct Goblin : Enemy {
         { term: "vptr", en: "virtual table pointer", g: "E", def: "객체가 들고 있는 vtable 포인터. virtual이 있는 타입에 붙는 경우가 많음.", ref: "28" },
         { term: "override", en: "override", g: "E", def: "베이스 virtual을 덮어쓴다고 명시. 시그니처 오타를 컴파일 타임에 잡음.", ref: "28" },
         { term: "다형성", en: "polymorphism", g: "E", def: "같은 인터페이스로 다른 실제 동작을 호출. virtual + 베이스 포인터/참조.", ref: "28" },
-        { term: "객체 슬라이싱", en: "object slicing", g: "E", def: "파생 객체를 베이스 값으로 복사해 파생 부분이 잘리는 현상. 포인터/참조로 다룰 것.", ref: "28" }
+        { term: "객체 슬라이싱", en: "object slicing", g: "E", def: "파생 객체를 베이스 값으로 복사해 파생 부분이 잘리는 현상. 포인터/참조로 다룰 것.", ref: "28" },
+        { term: "규칙 오브 파이브", en: "Rule of Five", g: "E", def: "소멸·복사생성·복사대입·이동생성·이동대입을 자원 소유 타입에서 한 세트로 맞추는 지침.", ref: "29" },
+        { term: "규칙 오브 제로", en: "Rule of Zero", g: "E", def: "특수 멤버를 직접 안 쓰고 vector/unique_ptr 등에 자원을 맡기는 현대 기본 전략.", ref: "29" },
+        { term: "규칙 오브 쓰리", en: "Rule of Three", g: "E", def: "소멸·복사생성·복사대입을 함께 다루는 고전 규칙. 이동 이전 C++ 감각.", ref: "29" },
+        { term: "순환 참조", en: "circular reference", g: "E", def: "shared_ptr가 서로를 가리켜 refcount가 안 내려가 객체가 안 죽는 문제.", ref: "29" },
+        { term: "use_count", en: "shared_ptr use_count", g: "E", def: "shared_ptr이 가리키는 객체를 소유하는 핸들 개수. 0이 되면 삭제.", ref: "29" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
