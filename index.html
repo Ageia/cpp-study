@@ -200,17 +200,25 @@
     .card {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
       padding: 22px 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      min-width: 0; /* grid 자식 넘침 방지 */
     }
+    /* 세로 스택 카드만 간격. grid/split 안에서는 margin 금지(우측만 내려가는 버그) */
     .card + .card { margin-top: 14px; }
+    .grid-2 > .card,
+    .grid-3 > .card,
+    .split-cards > .card { margin-top: 0; }
     .card > h3 { margin: 0 0 10px; }
     .card > p { margin: 0 0 12px; }
     .card > p:last-child { margin-bottom: 0; }
     .card > pre { margin: 10px 0 12px; }
     .card > pre:last-child { margin-bottom: 0; }
     .card > .checklist { margin-top: 4px; }
-    .card > .table-wrap { margin-top: 8px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .card > .table-wrap {
+      margin-top: 8px;
+      box-shadow: none; /* 카드 안 이중 그림자 방지 */
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
     @media (max-width: 900px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
     }
@@ -389,21 +397,157 @@
       color: var(--text-muted);
       margin: 10px 0 6px;
     }
-    /* Number bases diagram (05) */
-    .base-viz {
+    /* 공통 다이어그램 박스 (SVG·HTML 공통) */
+    .guide-viz {
       margin: 12px 0 4px;
       border-radius: 14px;
       border: 1px solid var(--border);
       background: #12151e;
-      padding: 14px 12px 12px;
+      padding: 16px 14px 14px;
       overflow-x: auto;
     }
-    .base-svg {
+    .guide-svg {
       display: block;
       width: 100%;
       max-width: 520px;
       height: auto;
       margin: 0 auto;
+    }
+    /* 05 진법 — HTML 그리드 (긴 0b… 은 SVG text 금지, flex/grid) */
+    .base-head {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin: 0 0 12px;
+      letter-spacing: 0.02em;
+    }
+    .base-trio {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: stretch;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .base-eq {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 0 2px;
+      user-select: none;
+    }
+    .base-chip {
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: #0b0e14;
+      padding: 12px 10px 14px;
+      text-align: center;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: center;
+    }
+    .base-chip .lbl {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.3;
+    }
+    .base-chip .val {
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1.2;
+      word-break: break-all;
+    }
+    .base-chip.is-dec { border-color: #6ee7b7; }
+    .base-chip.is-dec .val { color: #a7f3d0; font-size: 22px; }
+    .base-chip.is-hex { border-color: #67e8f9; }
+    .base-chip.is-hex .val { color: #67e8f9; font-size: 22px; }
+    .base-chip.is-bin { border-color: #c4b5fd; }
+    .base-chip.is-bin .val { color: #c4b5fd; font-size: 14px; }
+    .base-bits-block {
+      max-width: 520px;
+      margin: 16px auto 0;
+    }
+    .base-bits-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin: 0 0 8px;
+    }
+    .base-bits {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) 10px repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      align-items: center;
+    }
+    .base-bits .gap {
+      width: 100%;
+      height: 1px;
+    }
+    .base-bit {
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: #0b0e14;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+    .base-bit.on-hi {
+      border-color: #c4b5fd;
+      color: #e9d5ff;
+    }
+    .base-bit.on-lo {
+      border-color: #67e8f9;
+      color: #a5f3fc;
+    }
+    .base-nibbles {
+      display: grid;
+      grid-template-columns: 1fr 10px 1fr;
+      gap: 6px;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .base-nibbles .n {
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+    .base-nibbles .n.hi { color: #c4b5fd; }
+    .base-nibbles .n.lo { color: #67e8f9; }
+    .base-nibbles .sub {
+      display: block;
+      font-family: var(--sans, "Segoe UI", system-ui, sans-serif);
+      font-weight: 600;
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .base-foot {
+      margin: 12px 0 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+    @media (max-width: 560px) {
+      .base-trio {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .base-eq { padding: 2px 0; transform: rotate(90deg); }
+      .base-chip.is-bin .val { font-size: 16px; }
     }
     .debug-out {
       font-family: var(--mono);
@@ -1543,60 +1687,44 @@ int combo = 3;  // 선언 + 초기화 (권장)</pre>
               같은 수를 <em>쓰기만 다르게</em> 할 수 있고, C++ 코드·메모리 덤프·색상 코드에서
               표기가 섞여 나옵니다.
             </p>
-            <div class="base-viz" aria-label="같은 값의 10진 16진 2진 표기">
-              <svg class="base-svg" viewBox="0 0 400 268" role="img">
-                <title>같은 값 120 — 10진 · 16진 · 2진</title>
-                <text x="200" y="20" text-anchor="middle" fill="#9aa3b8" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">같은 값 · 세 가지 쓰기</text>
-
-                <!-- decimal -->
-                <rect x="16" y="36" width="112" height="72" rx="12" fill="#0b0e14" stroke="#6ee7b7" stroke-width="2"/>
-                <text x="72" y="58" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">10진 (decimal)</text>
-                <text x="72" y="86" text-anchor="middle" fill="#a7f3d0" font-size="22" font-weight="800" font-family="Consolas, monospace">120</text>
-
-                <!-- hex -->
-                <rect x="144" y="36" width="112" height="72" rx="12" fill="#0b0e14" stroke="#67e8f9" stroke-width="2"/>
-                <text x="200" y="58" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">16진 (hex)</text>
-                <text x="200" y="86" text-anchor="middle" fill="#67e8f9" font-size="22" font-weight="800" font-family="Consolas, monospace">0x78</text>
-
-                <!-- binary -->
-                <rect x="272" y="36" width="112" height="72" rx="12" fill="#0b0e14" stroke="#c4b5fd" stroke-width="2"/>
-                <text x="328" y="58" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">2진 (binary)</text>
-                <text x="328" y="86" text-anchor="middle" fill="#c4b5fd" font-size="15" font-weight="800" font-family="Consolas, monospace">0b01111000</text>
-
-                <!-- equals hints -->
-                <text x="132" y="76" text-anchor="middle" fill="#6b7389" font-size="14" font-weight="700">=</text>
-                <text x="260" y="76" text-anchor="middle" fill="#6b7389" font-size="14" font-weight="700">=</text>
-
-                <!-- bit row: 8 bits of 0x78 -->
-                <text x="16" y="136" fill="#9aa3b8" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">비트 8개 = 1바이트 · 16진 2자리</text>
-                <!-- bits: 0 1 1 1 | 1 0 0 0 -->
-                <g font-family="Consolas, monospace" font-weight="800" font-size="14" text-anchor="middle">
-                  <rect x="16" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(196,181,253,0.45)" stroke-width="1.5"/>
-                  <text x="34" y="174" fill="#6b7389">0</text>
-                  <rect x="56" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.5"/>
-                  <text x="74" y="174" fill="#e9d5ff">1</text>
-                  <rect x="96" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.5"/>
-                  <text x="114" y="174" fill="#e9d5ff">1</text>
-                  <rect x="136" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.5"/>
-                  <text x="154" y="174" fill="#e9d5ff">1</text>
-                  <rect x="192" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="#67e8f9" stroke-width="1.5"/>
-                  <text x="210" y="174" fill="#a5f3fc">1</text>
-                  <rect x="232" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(103,232,249,0.45)" stroke-width="1.5"/>
-                  <text x="250" y="174" fill="#6b7389">0</text>
-                  <rect x="272" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(103,232,249,0.45)" stroke-width="1.5"/>
-                  <text x="290" y="174" fill="#6b7389">0</text>
-                  <rect x="312" y="148" width="36" height="40" rx="8" fill="#0b0e14" stroke="rgba(103,232,249,0.45)" stroke-width="1.5"/>
-                  <text x="330" y="174" fill="#6b7389">0</text>
-                </g>
-                <!-- nibble braces -->
-                <text x="94" y="210" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="700" font-family="Consolas, monospace">7</text>
-                <text x="94" y="226" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">상위 4비트</text>
-                <text x="262" y="210" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="700" font-family="Consolas, monospace">8</text>
-                <text x="262" y="226" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">하위 4비트</text>
-                <path d="M16 194 H172" stroke="rgba(196,181,253,0.35)" stroke-width="1.5" fill="none"/>
-                <path d="M192 194 H348" stroke="rgba(103,232,249,0.35)" stroke-width="1.5" fill="none"/>
-                <text x="200" y="254" text-anchor="middle" fill="#6b7389" font-size="11" font-family="Segoe UI, sans-serif">16진 한 자리 = 비트 4개 (니블) · 그래서 0x78 ↔ 0111 1000</text>
-              </svg>
+            <div class="guide-viz base-viz" aria-label="같은 값의 10진 16진 2진 표기">
+              <p class="base-head">같은 값 · 세 가지 쓰기</p>
+              <div class="base-trio">
+                <div class="base-chip is-dec">
+                  <span class="lbl">10진 (decimal)</span>
+                  <span class="val">120</span>
+                </div>
+                <span class="base-eq" aria-hidden="true">=</span>
+                <div class="base-chip is-hex">
+                  <span class="lbl">16진 (hex)</span>
+                  <span class="val">0x78</span>
+                </div>
+                <span class="base-eq" aria-hidden="true">=</span>
+                <div class="base-chip is-bin">
+                  <span class="lbl">2진 (binary)</span>
+                  <span class="val">0b01111000</span>
+                </div>
+              </div>
+              <div class="base-bits-block">
+                <p class="base-bits-title">비트 8개 = 1바이트 · 16진 2자리</p>
+                <div class="base-bits" aria-hidden="true">
+                  <span class="base-bit">0</span>
+                  <span class="base-bit on-hi">1</span>
+                  <span class="base-bit on-hi">1</span>
+                  <span class="base-bit on-hi">1</span>
+                  <span class="gap"></span>
+                  <span class="base-bit on-lo">1</span>
+                  <span class="base-bit">0</span>
+                  <span class="base-bit">0</span>
+                  <span class="base-bit">0</span>
+                </div>
+                <div class="base-nibbles">
+                  <div class="n hi">7<span class="sub">상위 4비트</span></div>
+                  <span class="gap"></span>
+                  <div class="n lo">8<span class="sub">하위 4비트</span></div>
+                </div>
+              </div>
+              <p class="base-foot">16진 한 자리 = 비트 4개 (니블) · 그래서 0x78 ↔ 0111 1000</p>
             </div>
 
             <div class="table-wrap" style="margin-top:14px">
