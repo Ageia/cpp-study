@@ -1,51 +1,50 @@
 # AGENTS.md — cpp-study
 
-새 세션·AI가 **채팅 없이** 이 repo만으로 C++ 공부 작업을 이어갈 때 읽는 문서입니다.
-
 ## 한 줄 정의
 
-개인 **C++ / 컴퓨터 기초 학습** repo.  
-예제 코드(`src/`), 메모(`notes/`), 백로그(`docs/TODO.md`).
+**C++ 초보→중급→고급 학습용 단일 HTML 가이드** repo.  
+`icon-format-guide`의 “한눈에 예쁜 설명서” 포맷을 C++에 적용.
 
 - GitHub: https://github.com/Ageia/cpp-study  
+- Pages: https://ageia.github.io/cpp-study/  
 - 로컬: `C:\Users\User\Desktop\cpp-study`  
-- **관련 없음:** `icon-format-guide` (가이드 허브) — 섞지 말 것
+- **분리:** `icon-format-guide` (게임/UE 가이드 허브)와 섞지 말 것
+
+## 핵심 파일
+
+| 파일 | 역할 |
+|------|------|
+| **`index.html`** | 메인 산출물. 단계별 C++ 가이드 (한국어, 다크 UI) |
+| `src/` | 가이드와 맞춘 연습 코드 (선택) |
+| `notes/` | 사용자 학습 메모 |
+| `docs/TODO.md` | 보강 아이디어·학습 백로그 |
+| `README.md` | 사람용 소개·링크 |
+
+빌드 도구 없음. **정적 HTML** push → Pages.
+
+## 콘텐츠 컨벤션
+
+- 언어: **한국어**. 쉬운 비유 우선, 전문 용어는 풀어서.
+- 구조: 목차 + 카드 + 표 + 짧은 코드 + FAQ (format-guide 톤).
+- 단계 색: 초보 mint / 중급 cyan / 고급 purple.
+- 코드는 **최소 예시**. 장황한 프로젝트 코드는 `src/`로.
+- 한/영 토글은 나중. 지금은 한국어만.
 
 ## 새 세션 체크리스트
 
 1. `AGENTS.md` + `docs/TODO.md` + `README.md`  
-2. `git log -10 --oneline` / `git status`  
-3. `src/`, `notes/` 현재 내용 확인  
-4. 작업 후 커밋·push (`main`)
-
-## 폴더 규칙
-
-| 경로 | 용도 |
-|------|------|
-| `src/` | `.cpp` / `.h` 연습·예제. 작은 프로그램 단위 파일 또는 하위 폴더 |
-| `notes/` | 개념 정리 마크다운 |
-| `docs/TODO.md` | 하고 싶은 학습·연습 백로그 |
-| 루트 | README, AGENTS, `.gitignore` 정도만 |
-
-## 컨벤션
-
-- 언어: 메모·주석은 **한국어** 가능. 코드 식별자는 관례적으로 영어.
-- 커밋: 짧게 (`Add hello example`, `notes: pointers summary`).
-- 빌드: 우선 **단일 파일 g++/cl** 로 돌아가게. 큰 CMake는 필요할 때만.
-- 비밀·과제 답안 무단 공개 주의.
+2. `index.html` 읽고 보강 포인트 확인  
+3. 수정 후 `main` push → Pages 1~2분  
+4. TODO 체크 갱신  
 
 ## 하지 말 것
 
-- `icon-format-guide` 내용과 병합하지 말 것  
-- PAT/비밀번호 커밋 금지  
-- `src/`에 빌드 산출물(`.exe`, `.obj`, `.pdb`) 올리지 말 것 (`.gitignore` 참고)
-
-## 백로그
-
-소스 오브 트루스: **`docs/TODO.md`** (Now ≤ 3).
+- 가이드를 “코드 덤프 저장소”로만 바꾸지 말 것 (설명서가 본문)  
+- PAT 커밋 금지  
+- `icon-format-guide`와 내용 병합 금지  
+- raw `new` 남용을 초보 섹션에서 권장하지 말 것 (중급 주의 → 고급 스마트 포인터)
 
 ## 배포
 
-- 원격: `origin` → `https://github.com/Ageia/cpp-study.git`  
-- 브랜치: `main`  
-- Pages 없음 (학습 repo). 필요 시 나중에.
+- `origin` → `https://github.com/Ageia/cpp-study.git`  
+- 브랜치 `main`, Pages: `/` (root `index.html`)

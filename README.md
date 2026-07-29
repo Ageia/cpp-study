@@ -1,31 +1,35 @@
 # cpp-study
 
-컴퓨터 / **C++ 공부**용 저장소입니다.  
-(게임·언리얼 가이드 허브 [`icon-format-guide`](https://github.com/Ageia/icon-format-guide) 와 분리)
+누구나 읽기 쉬운 **C++ 단계별 학습 가이드** (초보 → 중급 → 고급)  
+한 페이지 HTML로 정리했습니다. (`icon-format-guide` 스타일의 설명서)
 
-## 구조
+## 가이드 보기
 
-```
-cpp-study/
-  src/       # 예제·연습 코드
-  notes/     # 학습 메모 (마크다운)
-  docs/      # TODO, 진도 등
-  AGENTS.md  # 새 세션·AI 인수인계
-```
+| 용도 | URL |
+|------|-----|
+| **C++ 학습 가이드 (Pages)** | https://ageia.github.io/cpp-study/ |
+| **저장소** | https://github.com/Ageia/cpp-study |
+| **로컬** | `C:\Users\User\Desktop\cpp-study\index.html` 을 브라우저로 열기 |
 
-## 링크
+## 무엇이 들어 있나
 
-- 저장소: https://github.com/Ageia/cpp-study
-- 로컬(작성자 PC): `C:\Users\User\Desktop\cpp-study`
+| 파일 | 설명 |
+|------|------|
+| `index.html` | **메인 가이드** — C++란?, 학습 지도, 초보/중급/고급, 연습법, FAQ |
+| `src/hello.cpp` | 첫 컴파일 확인용 예제 |
+| `notes/` | 직접 쓰는 학습 메모 |
+| `docs/TODO.md` | 가이드 보강·학습 백로그 |
+| `AGENTS.md` | 새 세션·AI 인수인계 |
 
-## 시작
+## 가이드 구성
 
-```powershell
-cd C:\Users\User\Desktop\cpp-study
-# 예제 컴파일 (g++ 또는 MSVC 환경에 맞게)
-# g++ src/hello.cpp -o hello
-```
+1. C++는 무엇인가 (쉬운 비유)  
+2. 초보 → 중급 → 고급 **전체 지도**  
+3. **초보** — main, 변수, 조건/반복, 함수  
+4. **중급** — 포인터·참조, 클래스, STL, 메모리 감각  
+5. **고급** — 스마트 포인터, move, 템플릿, 이후 갈래  
+6. 다른 언어 비교 · 연습법 · FAQ · 지금 할 일  
 
 ## For next session / AI
 
-`AGENTS.md` → `docs/TODO.md` → `README.md` → `git log` 순으로 읽고 이어서 작업.
+`AGENTS.md` → `docs/TODO.md` → `index.html` 순으로 읽고 작업.
