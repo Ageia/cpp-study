@@ -64,10 +64,13 @@
 
 ### CSS 레이아웃 체크
 
-1. **grid/split 안 `.card`:** `margin-top: 0` 유지 (전역 `.card + .card`가 우측만 밀지 않게 — 이미 예외 있음, 깨지 말 것).
-2. grid 자식: `min-width: 0` (카드에 적용됨).
-3. 카드 **안** `.table-wrap`: 이중 그림자 없음 (`box-shadow: none`).
-4. 새 다이어그램 전용 CSS를 추가할 때 기존 `.endian-viz` 등과 **중복 정의로 덮어쓰지 말 것**.
+1. **패널 간격:** `.panel.active` 는 `flex` + `gap`. `grid-2`가 끼어도 카드 간격이 유지됨. 개별 `margin-top`으로 패널 스택을 다시 짜지 말 것.
+2. **grid/split 안 `.card`:** `margin-top: 0` 유지 (전역 `.card + .card`가 우측만 밀지 않게).
+3. grid 자식: `min-width: 0`. 카드 안 표: `min-width: 0` (전역 table `min-width:520` 덮어씀).
+4. 카드 **안** `.table-wrap`: 이중 그림자 없음.
+5. 다이어그램 `max-width`를 카드보다 좁게 주지 말 것(표·본문과 폭 들쭉날쭉). 전체 폭 또는 의도적 full-bleed만.
+6. 비트/칩 라벨은 **같은 컬럼 묶음**(니블 단위 flex/grid)으로 — 별도 행 좌표 맞추기 금지.
+7. 새 다이어그램 CSS가 기존 `.endian-viz` 등을 **덮어쓰지 말 것**.
 
 ### 심화 추가 시
 
