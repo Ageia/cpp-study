@@ -2018,22 +2018,123 @@ int main() {
               <p style="margin-top:10px;margin-bottom:0">처음엔 <code class="inline">struct</code>로 읽기 쉽게 시작해도 됩니다.</p>
             </article>
             <article class="card">
-              <h3>생성자 맛보기</h3>
-              <pre>struct Player {
-    std::string name;
-    int hp;
-    Player(std::string n, int h)
-        : name(n), hp(h) {}
-};
-// Player p("Hero", 100);</pre>
-              <p style="margin-top:8px;margin-bottom:0">객체가 <strong class="hl">생길 때</strong> 자동 실행. 초기화를 한곳에 모읍니다.</p>
+              <h3>OOP 한 줄</h3>
+              <p><strong class="hl">OOP</strong>(Object-Oriented Programming, 객체지향) =
+              프로그램을 “기능 나열”이 아니라 <em>역할·상태를 가진 객체들의 협력</em>으로 보는 방식.</p>
+              <ul class="checklist">
+                <li class="yes">객체 = 상태 + 행동 (위 박스)</li>
+                <li class="tip">상속·다형성은 나중에 얇게</li>
+              </ul>
             </article>
           </div>
 
+          <article class="card">
+            <h3>public / private — 문을 열까 닫을까</h3>
+            <p>
+              <strong class="hl">public</strong> = 밖에서도 씀 ·
+              <strong class="hl">private</strong> = 타입 안에서만.
+              “함부로 만지면 깨지는 상태”는 감추고, 행동(함수)으로만 다루게 합니다.
+            </p>
+            <pre>class Player {
+public:
+    Player(std::string n, int h) : name(n), hp(h) {}
+
+    void takeDamage(int dmg) {   // 밖에서도 호출 OK
+        hp -= dmg;
+        if (hp &lt; 0) hp = 0;
+    }
+    int getHp() const { return hp; }
+
+private:
+    std::string name;            // 밖에서는 직접 수정 불가
+    int hp;
+};
+
+// p.hp = 999;  // 컴파일 에러 (private)
+// p.takeDamage(10);  // OK</pre>
+            <p><strong class="hl">쓰임:</strong> 엔진/라이브러리 API — “써도 되는 면”과 “내부 구현”을 나눔.</p>
+          </article>
+
+          <article class="card">
+            <h3>생성자 · 멤버 초기화 리스트</h3>
+            <p>
+              <strong class="hl">생성자</strong>(constructor) = 객체가 <em>생길 때</em> 자동 실행되는 특수 함수.
+              이름 = 타입 이름, 반환 타입 없음.
+            </p>
+            <pre>class Player {
+public:
+    // 멤버 초기화 리스트 (: 뒤) — 본문보다 먼저, 권장
+    Player(std::string n, int h)
+        : name(std::move(n)), hp(h) {
+        // 필요하면 추가 작업
+    }
+
+private:
+    std::string name;
+    int hp;
+};
+
+Player a("Hero", 100);     // 생성자 호출
+Player b{ "Mage", 80 };    // 동일 취지 (균일 초기화)</pre>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">: name(...), hp(...)</code> = 멤버를 <em>처음부터</em> 그 값으로</li>
+              <li class="tip">본문 안 <code class="inline">hp = h;</code> 보다 초기화 리스트가 기본 습관</li>
+              <li class="yes">인자 없는 생성자·여러 개 생성자(오버로드) 가능</li>
+            </ul>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>소멸자</h3>
+              <p><strong class="hl">소멸자</strong>(destructor) = 객체가 <em>사라질 때</em> 자동 실행. 이름 <code class="inline">~타입</code>.</p>
+              <pre>class Session {
+public:
+    Session() { /* 열기 */ }
+    ~Session() { /* 닫기·정리 */ }
+};
+// 스코프 끝 → ~Session() 호출</pre>
+              <p style="margin-top:8px;margin-bottom:0">
+                raw 자원이 없으면 기본 소멸자로 충분한 경우가 많음.
+                소유 정리는 보통 <strong>16 · 스마트 포인터</strong> / RAII와 함께.
+              </p>
+            </article>
+            <article class="card">
+              <h3>this 포인터</h3>
+              <p>멤버 함수 안에서 <strong class="hl">나 자신(이 객체)</strong>을 가리키는 포인터.</p>
+              <pre>void Player::setHp(int hp) {
+    this-&gt;hp = hp;  // 멤버 hp = 인자 hp
+}
+// 이름이 안 겹치면 this-&gt; 생략 가능</pre>
+              <p style="margin-top:8px;margin-bottom:0">
+                “인자 이름과 멤버 이름이 같을 때” 자주 보임. 포인터 감각은 <strong>11</strong>.
+              </p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>한 장에 모은 예</h3>
+            <pre>class Player {
+public:
+    Player(std::string n, int h) : name(std::move(n)), hp(h) {}
+    ~Player() = default;   // 특별한 정리 없으면 기본
+
+    void takeDamage(int dmg) {
+        hp -= dmg;
+        if (hp &lt; 0) hp = 0;
+    }
+    int getHp() const { return hp; }  // const: 상태 안 바꿈
+
+private:
+    std::string name;
+    int hp;
+};</pre>
+            <p><strong class="hl">읽기 순서:</strong> private 상태 → public 생성/행동 → 밖에서는 함수로만 건드림.</p>
+          </article>
+
           <div class="callout cyan">
-            <strong>지금은 여기까지:</strong> “상태+행동을 타입으로 묶는다”.
-            가상함수·상속 트리·메모리 레이아웃(패딩)은 <em>나중에 심화</em>로 남겨 둡니다.
-            타입에 <code class="inline">+</code>·<code class="inline">==</code> 를 붙이려면 → <strong>13</strong>.
+            <strong>지금은 여기까지:</strong> 묶기 · 열고 닫기(public/private) · 생김/사라짐(생성/소멸) · this.
+            상속·가상함수·패딩·규칙 오브 파이브는 <em>심화</em>.
+            타입에 <code class="inline">+</code>·<code class="inline">==</code> → <strong>13</strong>.
           </div>
         </section>
 
@@ -2952,6 +3053,11 @@ void run() {
         { term: "참조", en: "reference", g: "C", def: "이미 있는 변수에 붙인 별명. 복사 없이 같은 대상.", ref: "11" },
         { term: "클래스", en: "class", g: "C", def: "상태(데이터)와 행동(함수)을 한 타입으로 묶는 틀.", ref: "12" },
         { term: "구조체", en: "struct", g: "C", def: "관련 데이터를 묶는 타입. class와 비슷.", ref: "12" },
+        { term: "생성자", en: "constructor", g: "C", def: "객체가 생길 때 자동 실행되는 특수 함수. 이름=타입명, 초기화 담당.", ref: "12" },
+        { term: "소멸자", en: "destructor", g: "C", def: "객체가 사라질 때 자동 실행. ~타입 이름. 자원 정리에 사용.", ref: "12" },
+        { term: "public / private", en: "access control", g: "C", def: "멤버를 밖에서도 쓸지(public) 타입 안에서만 쓸지(private).", ref: "12" },
+        { term: "this", en: "this pointer", g: "C", def: "멤버 함수 안에서 현재 객체를 가리키는 포인터.", ref: "12" },
+        { term: "OOP", en: "Object-Oriented Programming", g: "C", def: "객체지향. 상태+행동을 가진 객체들의 협력으로 프로그램을 구성.", ref: "12" },
         { term: "연산자 오버로딩", en: "operator overloading", g: "C", def: "+, == 같은 기호를 사용자 타입에 함수로 정의하는 것. a+b → operator+ 호출.", ref: "13" },
         { term: "STL", en: "Standard Template Library", g: "C", def: "표준 템플릿 라이브러리. vector, map, algorithm 등 표준 자료구조·알고리즘 모음.", ref: "14" },
         { term: "vector", en: "std::vector", g: "C", def: "크기가 늘어날 수 있는 동적 배열. 최우선 도구.", ref: "14" },
