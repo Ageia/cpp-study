@@ -202,8 +202,15 @@
       padding: 22px 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.18);
     }
     .card + .card { margin-top: 14px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .card > h3 { margin: 0 0 10px; }
+    .card > p { margin: 0 0 12px; }
+    .card > p:last-child { margin-bottom: 0; }
+    .card > pre { margin: 10px 0 12px; }
+    .card > pre:last-child { margin-bottom: 0; }
+    .card > .checklist { margin-top: 4px; }
+    .card > .table-wrap { margin-top: 8px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
     @media (max-width: 900px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
     }
@@ -218,27 +225,58 @@
     .tag-purple { background: rgba(167,139,250,0.18); color: #c4b5fd; }
     .tag-ok { background: rgba(96,165,250,0.15); color: var(--blue); }
 
+    .map-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: stretch;
+    }
+    .map-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .map-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 900px) {
+      .map-grid-3, .map-grid-2 { grid-template-columns: 1fr; }
+    }
+
     .level-card {
       border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden;
       background: var(--bg-card); transition: border-color .15s, transform .15s;
+      display: flex; flex-direction: column; min-width: 0; height: 100%;
     }
     .level-card:hover { border-color: rgba(167,139,250,0.35); transform: translateY(-2px); }
     .level-card.clickable { cursor: pointer; }
     .level-head {
-      display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+      display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
     }
+    .level-meta {
+      min-width: 0; flex: 1;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .level-meta h3 {
+      margin: 0; font-size: 1.02rem; font-weight: 700;
+      line-height: 1.3; letter-spacing: -0.01em;
+    }
     .level-icon {
-      width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center;
-      font-family: var(--mono); font-weight: 800; font-size: 12px;
+      min-width: 48px; height: 40px; padding: 0 8px; border-radius: 11px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-weight: 800; font-size: 11px;
       border: 1px solid var(--border-strong); flex-shrink: 0;
       background: rgba(110,231,183,.12); color: var(--mint);
+      white-space: nowrap;
     }
-    .level-body { padding: 14px 16px 16px; }
-    .level-body ul { list-style: none; display: grid; gap: 6px; margin-top: 8px; }
+    .level-body {
+      padding: 14px 16px 16px; flex: 1;
+      display: flex; flex-direction: column;
+    }
+    .level-body p {
+      font-size: 13.5px; color: var(--text-muted);
+      margin: 0 0 8px; line-height: 1.55;
+    }
+    .level-body ul { list-style: none; display: grid; gap: 6px; margin: 0; padding: 0; }
     .level-body li {
       font-size: 13.5px; color: var(--text-muted); padding-left: 18px; position: relative;
+      line-height: 1.45;
     }
     .level-body li::before {
       content: "→"; position: absolute; left: 0; color: var(--accent); font-size: 12px; top: 1px;
@@ -282,13 +320,13 @@
 
     .path { display: grid; gap: 8px; }
     .path-item {
-      display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: start;
+      display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; align-items: start;
       padding: 12px 14px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border);
     }
     .path-item .lv {
       font-family: var(--mono); font-size: 12px; font-weight: 800; padding-top: 2px; color: var(--mint);
     }
-    .path-item .body { font-size: 13.5px; color: var(--text-muted); }
+    .path-item .body { font-size: 13.5px; color: var(--text-muted); line-height: 1.55; min-width: 0; }
     .path-item .body strong { color: var(--text); }
 
     .checklist { list-style: none; display: grid; gap: 7px; margin-top: 8px; }
@@ -491,21 +529,41 @@
       .ptr-viz .ptr-val-old { opacity: 0 !important; }
     }
 
-    /* const / danger cards under 11 */
+    /* side-by-side cards */
     .split-cards {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
-      margin-top: 12px;
+      margin-top: 14px;
+      margin-bottom: 0;
       align-items: stretch;
     }
     .split-cards > .card {
-      margin-top: 0;
-      min-height: 100%;
+      margin-top: 0 !important;
+      min-width: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
+      gap: 0;
     }
-    .split-cards pre { flex: 0 0 auto; }
+    .split-cards > .card > * { min-width: 0; }
+    .split-cards > .card > p { margin-bottom: 10px; }
+    .split-cards > .card > p:last-child { margin-bottom: 0; }
+    .split-cards > .card > pre {
+      margin: 8px 0 10px;
+      flex: 0 0 auto;
+    }
+    .split-cards > .card > .checklist { margin-top: 4px; }
+    .split-cards .table-wrap {
+      margin-top: 8px;
+      width: 100%;
+    }
+    .split-cards table { min-width: 0; width: 100%; }
+    .split-cards th, .split-cards td {
+      padding: 8px 10px;
+      font-size: 13px;
+      word-break: keep-all;
+    }
     @media (max-width: 720px) {
       .split-cards { grid-template-columns: 1fr; }
     }
@@ -1006,17 +1064,17 @@
             퀴즈·숙제형 미션은 두지 않습니다. 번호를 따라가면 자연스럽게 쌓이고, 막히면 이전 번호로 돌아오면 됩니다.
           </p>
 
-          <div class="grid-3" style="margin-bottom:14px">
+          <div class="map-grid map-grid-3">
             <article class="level-card clickable" data-goto="02">
               <div class="level-head">
                 <div class="level-icon">02–04</div>
-                <div>
-                  <h3 style="margin:0 0 4px">시작 블록</h3>
+                <div class="level-meta">
+                  <h3>시작 블록</h3>
                   <span class="tag tag-soft">컴퓨터 · 컴파일 · Hello</span>
                 </div>
               </div>
               <div class="level-body">
-                <p style="font-size:13.5px">프로그램이 돌아가는 큰 그림과 첫 실행.</p>
+                <p>프로그램이 돌아가는 큰 그림과 첫 실행.</p>
                 <ul>
                   <li>입력·처리·출력</li>
                   <li>소스 → 실행 파일</li>
@@ -1027,13 +1085,13 @@
             <article class="level-card clickable" data-goto="05">
               <div class="level-head">
                 <div class="level-icon">05–09</div>
-                <div>
-                  <h3 style="margin:0 0 4px">값과 흐름</h3>
+                <div class="level-meta">
+                  <h3>값과 흐름</h3>
                   <span class="tag tag-mint">변수 · 조건 · 함수</span>
                 </div>
               </div>
               <div class="level-body">
-                <p style="font-size:13.5px">값을 담고, 갈라지고, 반복하고, 묶기.</p>
+                <p>값을 담고, 갈라지고, 반복하고, 묶기.</p>
                 <ul>
                   <li>타입과 연산</li>
                   <li>if / for / while</li>
@@ -1044,33 +1102,33 @@
             <article class="level-card clickable" data-goto="10">
               <div class="level-head">
                 <div class="level-icon">10–15</div>
-                <div>
-                  <h3 style="margin:0 0 4px">메모리와 구조</h3>
+                <div class="level-meta">
+                  <h3>메모리와 구조</h3>
                   <span class="tag tag-cyan">주소 · 객체 · STL</span>
                 </div>
               </div>
               <div class="level-body">
-                <p style="font-size:13.5px">“값이 어디에 있나”와 코드 구조.</p>
+                <p>“값이 어디에 있나”와 코드 구조.</p>
                 <ul>
                   <li>스택·힙 · 포인터</li>
-                  <li>struct / class</li>
+                  <li>struct / class · 연산자</li>
                   <li>vector · new 주의</li>
                 </ul>
               </div>
             </article>
           </div>
 
-          <div class="grid-2" style="margin-bottom:14px">
+          <div class="map-grid map-grid-2">
             <article class="level-card clickable" data-goto="16">
               <div class="level-head">
-                <div class="level-icon"16–19</div>
-                <div>
-                  <h3 style="margin:0 0 4px">현대 C++</h3>
+                <div class="level-icon">16–19</div>
+                <div class="level-meta">
+                  <h3>현대 C++</h3>
                   <span class="tag tag-purple">안전 · 성능 · 재사용</span>
                 </div>
               </div>
               <div class="level-body">
-                <p style="font-size:13.5px">실수를 줄이고 비용을 줄이는 도구.</p>
+                <p>실수를 줄이고 비용을 줄이는 도구.</p>
                 <ul>
                   <li>스마트 포인터 · RAII</li>
                   <li>move · 템플릿</li>
@@ -1080,14 +1138,14 @@
             </article>
             <article class="level-card clickable" data-goto="20">
               <div class="level-head">
-                <div class="level-icon"20–21</div>
-                <div>
-                  <h3 style="margin:0 0 4px">사전 · 활용</h3>
+                <div class="level-icon">20–21</div>
+                <div class="level-meta">
+                  <h3>사전 · 활용</h3>
                   <span class="tag tag-ok">검색 · 예시 · FAQ</span>
                 </div>
               </div>
               <div class="level-body">
-                <p style="font-size:13.5px">용어를 짧게 풀고, 쓰임새를 코드로 보여 줌.</p>
+                <p>용어를 짧게 풀고, 쓰임새를 코드로 보여 줌.</p>
                 <ul>
                   <li>용어 카드 검색</li>
                   <li>상황별 활용 예시</li>
@@ -1112,7 +1170,7 @@
             </div>
             <div class="path-item">
               <div class="lv">이후</div>
-              <div class="body"><strong16–19:</strong> unique_ptr·move 감각 후 관심 분야(게임/알고/시스템)로.</div>
+              <div class="body"><strong>16–19:</strong> unique_ptr·move 감각 후 관심 분야(게임/알고/시스템)로.</div>
             </div>
           </div>
           <div class="callout mint">
@@ -2005,8 +2063,8 @@ int main() {
           <div class="split-cards">
             <article class="card">
               <h3>struct vs class (지금 필요한 만큼)</h3>
-              <div class="table-wrap" style="margin-top:8px">
-                <table style="min-width:0">
+              <div class="table-wrap">
+                <table>
                   <thead><tr><th></th><th>struct</th><th>class</th></tr></thead>
                   <tbody>
                     <tr><td><strong>기본 접근</strong></td><td>public</td><td>private</td></tr>
@@ -2015,7 +2073,7 @@ int main() {
                   </tbody>
                 </table>
               </div>
-              <p style="margin-top:10px;margin-bottom:0">처음엔 <code class="inline">struct</code>로 읽기 쉽게 시작해도 됩니다.</p>
+              <p>처음엔 <code class="inline">struct</code>로 읽기 쉽게 시작해도 됩니다.</p>
             </article>
             <article class="card">
               <h3>OOP 한 줄</h3>
@@ -2093,7 +2151,7 @@ public:
     ~Session() { /* 닫기·정리 */ }
 };
 // 스코프 끝 → ~Session() 호출</pre>
-              <p style="margin-top:8px;margin-bottom:0">
+              <p>
                 raw 자원이 없으면 기본 소멸자로 충분한 경우가 많음.
                 소유 정리는 보통 <strong>16 · 스마트 포인터</strong> / RAII와 함께.
               </p>
@@ -2105,7 +2163,7 @@ public:
     this-&gt;hp = hp;  // 멤버 hp = 인자 hp
 }
 // 이름이 안 겹치면 this-&gt; 생략 가능</pre>
-              <p style="margin-top:8px;margin-bottom:0">
+              <p>
                 “인자 이름과 멤버 이름이 같을 때” 자주 보임. 포인터 감각은 <strong>11</strong>.
               </p>
             </article>
