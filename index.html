@@ -971,7 +971,7 @@
       <div class="side-brand">
         <div class="kicker">cpp-study</div>
         <div class="logo">C++ 가이드 사전</div>
-        <div class="sub">01–21 · 번호 순으로 읽기</div>
+        <div class="sub">01–21 메인 · 22+ 심화</div>
       </div>
       <nav class="side-nav" id="side-nav" role="tablist" aria-label="주제 목록">
         <div class="side-group">시작</div>
@@ -1045,6 +1045,20 @@
         </button>
         <button type="button" role="tab" data-tab="21" aria-selected="false">
           <span class="n">21</span><span class="t">활용 예시 · FAQ</span>
+        </button>
+
+        <div class="side-group">심화</div>
+        <button type="button" role="tab" data-tab="22" aria-selected="false">
+          <span class="n">22</span><span class="t">세그먼트 BSS·DATA</span>
+        </button>
+        <button type="button" role="tab" data-tab="23" aria-selected="false">
+          <span class="n">23</span><span class="t">가상·물리 메모리</span>
+        </button>
+        <button type="button" role="tab" data-tab="24" aria-selected="false">
+          <span class="n">24</span><span class="t">캐시와 지역성</span>
+        </button>
+        <button type="button" role="tab" data-tab="25" aria-selected="false">
+          <span class="n">25</span><span class="t">엔디안</span>
         </button>
       </nav>
     </aside>
@@ -1901,6 +1915,7 @@ std::string name = "Hero";       // C++ 문자열 객체 (권장)</pre>
             <div class="callout cyan">
               <strong>기억:</strong> 스택은 “함수 끝나면 자동 청소”, 힙은 “빌려 쓴 뒤 반납 규칙이 필요”.
               반납을 현대적으로 다루는 법은 <strong>16 · 스마트 포인터</strong>.
+              세그먼트·가상 메모리·캐시 → <a href="#22">심화 22+</a>.
             </div>
           </article>
 
@@ -3081,12 +3096,19 @@ max2(1.5, 0.2);   // T = double</pre>
             <ul class="checklist">
               <li class="tip"><strong class="hl">알고리즘:</strong> 복잡도, STL 알고리즘, 문제 풀이</li>
               <li class="tip"><strong class="hl">시스템·성능:</strong> 스레드, 락, 캐시 지역성, 프로파일</li>
-              <li class="tip"><strong class="hl">심화(이 가이드 안):</strong> 가상 메모리, 엔디안, vtable 등 — 메인 뒤에 붙일 예정</li>
+              <li class="tip"><strong class="hl">심화:</strong> 사이드바 <em>심화</em> 그룹 (22–25부터) — 가상 메모리, 엔디안 등</li>
               <li class="yes">공통: 짧은 코드 읽기 + 측정 전 추측 금지</li>
             </ul>
             <div class="callout">
-              <strong>다음 단계 감각:</strong> 05–12(문법·함수·클래스·포인터) + 14–17(vector·소유·move·템플릿)이면
-              대부분의 C++ 코드 읽기 입문은 가능합니다. 막히면 해당 번호로 돌아오면 됩니다.
+              <strong>다음 단계 감각:</strong> 05–12 + 14–17이면 대부분의 C++ 코드 읽기 입문은 가능합니다.
+              더 깊게 가려면 <strong>22+</strong> 심화로. 막히면 메인 번호로 돌아오면 됩니다.
+            </div>
+            <div class="callout mint" style="margin-top:10px">
+              <strong>심화 바로가기:</strong>
+              <a href="#22">22 세그먼트</a> ·
+              <a href="#23">23 가상·물리 메모리</a> ·
+              <a href="#24">24 캐시</a> ·
+              <a href="#25">25 엔디안</a>
             </div>
           </article>
         </section>
@@ -3100,18 +3122,21 @@ max2(1.5, 0.2);   // T = double</pre>
           <p class="panel-lead">막히는 단어만 짧게 풉니다. 자세한 설명은 해당 번호로 이동하세요.</p>
 
           <div class="dict-tools">
-            <input type="search" id="dict-search" placeholder="검색: 포인터, vector, 스택…" autocomplete="off" />
+            <input type="search" id="dict-search" placeholder="검색: 포인터, RAII, 엔디안…" autocomplete="off" />
             <div class="dict-filters" id="dict-filters">
               <button type="button" class="active" data-filter="all">전체</button>
               <button type="button" data-filter="A">시작</button>
               <button type="button" data-filter="B">값·흐름</button>
               <button type="button" data-filter="C">메모리</button>
               <button type="button" data-filter="D">현대</button>
+              <button type="button" data-filter="E">심화</button>
             </div>
           </div>
           <div class="dict-grid" id="dict-grid"></div>
           <p class="dict-empty" id="dict-empty">검색 결과가 없습니다.</p>
-          <div class="todo-note">사전 카드는 학습하면서 계속 추가합니다.</div>
+          <div class="callout mint" style="margin-top:12px">
+            <strong>팁:</strong> 카드 클릭 시 관련 번호로 이동합니다. 심화 용어는 필터 <em>심화</em>.
+          </div>
         </section>
 
         <!-- 20 USAGE EXAMPLES + FAQ -->
@@ -3186,9 +3211,9 @@ for (const Enemy&amp; e : enemies) {
             <p><strong class="hl">쓰임:</strong> 스폰된 액터 목록, 인벤토리 슬롯, 퀘스트 목록 — “같은 모양의 것 여러 개”.</p>
           </article>
 
-          <article class="card" style="margin-top:12px">
+          <article class="card">
             <h3>예시 D · unique_ptr (16) — 소유권 한 곳에</h3>
-            <p><strong class="hl">상황:</strong> 큰 리소스(텍스처·세션)를 누가 지우는지 명확히.</p>
+            <p><strong class="hl">상황:</strong> 세션·리소스 하나를 누가 지우는지 명확히.</p>
             <pre>#include &lt;memory&gt;
 
 struct Session {
@@ -3202,13 +3227,62 @@ void run() {
             <p><strong class="hl">쓰임:</strong> “이 객체의 주인은 나 하나”일 때. raw <code class="inline">new</code> 대신 자주 보는 패턴.</p>
           </article>
 
-          <div class="grid-2" style="margin-top:12px">
+          <article class="card">
+            <h3>예시 E · class + vector + unique_ptr (12·14·16) — 묶어서</h3>
+            <p><strong class="hl">상황:</strong> 적 목록을 객체로 관리하고, 월드(소유자)가 목록 전체를 들고 있다.</p>
+            <pre>#include &lt;memory&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+struct Enemy {
+    std::string name;
+    int hp;
+    void hit(int d) { hp -= d; if (hp &lt; 0) hp = 0; }
+};
+
+class World {
+public:
+    void spawn(std::string name, int hp) {
+        enemies.push_back(Enemy{std::move(name), hp});
+    }
+    void damageAll(int d) {
+        for (Enemy&amp; e : enemies) e.hit(d);
+    }
+private:
+    std::vector&lt;Enemy&gt; enemies;  // 목록 소유
+};
+
+void demo() {
+    auto world = std::make_unique&lt;World&gt;();
+    world-&gt;spawn("Slime", 30);
+    world-&gt;spawn("Orc", 80);
+    world-&gt;damageAll(10);
+} // world 소멸 → vector·Enemy 전부 정리</pre>
+            <p><strong class="hl">쓰임:</strong> “컨테이너가 여러 객체를 소유 + 상위 객체가 컨테이너를 소유” 패턴의 축소판.</p>
+          </article>
+
+          <article class="card">
+            <h3>예시 F · enum + switch (07) — 상태 이름</h3>
+            <p><strong class="hl">상황:</strong> 캐릭터 상태를 숫자 대신 이름으로.</p>
+            <pre>enum class State { Idle, Run, Jump };
+
+void tick(State s) {
+    switch (s) {
+        case State::Idle: /* 대기 애니 */ break;
+        case State::Run:  /* 이동 */ break;
+        case State::Jump: /* 점프 */ break;
+    }
+}</pre>
+            <p><strong class="hl">쓰임:</strong> AI/애니메이션 상태, UI 모드, 설정 단계.</p>
+          </article>
+
+          <div class="split-cards">
             <article class="card">
               <h3>읽기 팁</h3>
               <ul class="checklist">
                 <li class="yes">예시는 위에서 아래로 한 번만 훑기</li>
-                <li class="yes">모르는 단어 → <strong>19 · 사전</strong> 검색</li>
-                <li class="yes">관련 번호(07, 08…)로 돌아가 개념 확인</li>
+                <li class="yes">모르는 단어 → <strong>20 · 사전</strong></li>
+                <li class="yes">관련 번호로 돌아가 개념 확인</li>
                 <li class="tip">여유 있으면 숫자·이름만 바꿔 보기 (선택)</li>
               </ul>
             </article>
@@ -3223,9 +3297,9 @@ void run() {
             </article>
           </div>
 
-          <article class="card" style="margin-top:12px">
+          <article class="card">
             <h3>FAQ</h3>
-            <div class="grid-2" style="margin-top:8px">
+            <div class="split-cards" style="margin-top:8px">
               <div>
                 <h3 style="font-size:0.95rem">Q. C를 먼저?</h3>
                 <p>필수는 아님. C++로 시작해도 됨. 포인터·배열은 10–11에서 만남.</p>
@@ -3236,18 +3310,18 @@ void run() {
               </div>
               <div>
                 <h3 style="font-size:0.95rem">Q. 안 짜도 되나요?</h3>
-                <p>네. 이 문서는 <strong class="hl">읽기용 가이드 사전</strong>입니다. 예시는 “쓰임 감각”용이고, 코딩은 선택입니다.</p>
+                <p>네. 읽기용 가이드 사전입니다. 예시는 쓰임 감각용, 코딩은 선택.</p>
               </div>
               <div>
                 <h3 style="font-size:0.95rem">Q. 심화는 어디에?</h3>
-                <p>메인 01–18 다음에 붙일 예정입니다. 가상 메모리·엔디안·vtable 등은 흐름을 막지 않게 분리합니다.</p>
+                <p>사이드바 <strong class="hl">심화 22–25</strong>. 메인과 분리되어 있습니다.</p>
               </div>
             </div>
           </article>
 
-          <article class="card" style="margin-top:12px">
+          <article class="card">
             <h3>다른 언어와 한 줄 비교</h3>
-            <div class="table-wrap" style="margin-top:10px">
+            <div class="table-wrap">
               <table>
                 <thead><tr><th>관점</th><th>C++</th><th>파이썬 등</th></tr></thead>
                 <tbody>
@@ -3257,6 +3331,148 @@ void run() {
                 </tbody>
               </table>
             </div>
+          </article>
+        </section>
+
+        <!-- ========== 심화 22+ ========== -->
+        <section class="panel" data-panel="22" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">22</span> 세그먼트 BSS · DATA · TEXT</h2>
+            <span class="tag tag-soft">심화</span>
+          </div>
+          <p class="panel-lead">
+            메인 <strong>10 · 스택과 힙</strong>의 확장.
+            프로그램이 메모리에 올라갈 때 “구역”이 더 나뉩니다.
+          </p>
+          <div class="callout mint">
+            <strong>관련 메인:</strong> <a href="#10">10 스택과 힙</a> · <a href="#03">03 컴파일</a>
+          </div>
+          <article class="card">
+            <h3>한눈에</h3>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>구역</th><th>무엇이 있나</th><th>한 줄</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>TEXT</strong></td><td>기계어 코드</td><td>실행할 명령</td></tr>
+                  <tr><td><strong>DATA</strong></td><td>초기값 있는 전역/정적</td><td>실행 파일에 값이 실림</td></tr>
+                  <tr><td><strong>BSS</strong></td><td>초기값 없는 전역/정적</td><td>크기만 기록, 실행 시 0으로</td></tr>
+                  <tr><td><strong>HEAP</strong></td><td>동적 할당</td><td>new / 컨테이너 버퍼</td></tr>
+                  <tr><td><strong>STACK</strong></td><td>지역·호출</td><td>함수와 함께 생멸</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+          <article class="card">
+            <h3>왜 BSS가 있나</h3>
+            <p>초기값 없는 큰 전역 배열을 DATA에 넣으면 실행 파일에 0이 잔뜩 들어가 파일이 커집니다.
+            BSS는 “크기만” 적고, 실행 때 OS가 0으로 채웁니다.</p>
+            <pre>int buf[1'000'000];  // 초기값 없음 → 대개 BSS 쪽
+int ready = 1;         // 초기값 있음 → DATA 쪽</pre>
+            <p><strong class="hl">지금은:</strong> 이름과 역할만. 링커 맵·세부 ABI는 더 깊은 단계.</p>
+          </article>
+        </section>
+
+        <section class="panel" data-panel="23" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">23</span> 가상 메모리 · 물리 메모리</h2>
+            <span class="tag tag-soft">심화</span>
+          </div>
+          <p class="panel-lead">
+            프로그램이 보는 주소(가상)와 RAM 칩의 실제 칸(물리)은 다를 수 있습니다.
+            OS가 가운데에서 매핑합니다.
+          </p>
+          <div class="callout mint">
+            <strong>관련 메인:</strong> <a href="#10">10 스택과 힙</a> · <a href="#11">11 포인터</a>
+          </div>
+          <article class="card">
+            <h3>한 줄 비유</h3>
+            <ul class="checklist">
+              <li class="yes"><strong class="hl">가상 주소</strong> — 프로그램이 쓰는 “지도 위 좌표”</li>
+              <li class="yes"><strong class="hl">물리 주소</strong> — 실제 RAM 위치</li>
+              <li class="yes"><strong class="hl">MMU</strong> — 지도를 실제 위치로 바꿔 주는 하드웨어</li>
+              <li class="tip">포인터에 적힌 값은 (보통) <em>가상</em> 주소</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>왜 필요한가</h3>
+            <p>프로세스마다 독립된 주소 공간 → 다른 프로세스 메모리를 함부로 못 건드림.
+            물리 RAM보다 큰 것처럼 보이게 할 수도 있음(스왑 등).</p>
+            <pre>// 프로그램 입장: 연속인 것처럼 보이는 주소
+int* p = new int[1000];
+// 실제 물리 프레임은 흩어져 있을 수 있음 (OS·MMU가 매핑)</pre>
+            <p><strong class="hl">지금은:</strong> “포인터 숫자 = 가상 주소일 수 있다” 감각. 페이지 폴트·TLB는 더 깊게.</p>
+          </article>
+        </section>
+
+        <section class="panel" data-panel="24" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">24</span> 캐시와 지역성</h2>
+            <span class="tag tag-soft">심화</span>
+          </div>
+          <p class="panel-lead">
+            CPU는 RAM보다 훨씬 빠른 <strong class="hl">캐시</strong>에 자주 쓰는 데이터를 둡니다.
+            코드 작성 습관이 캐시 적중률에 영향을 줍니다.
+          </p>
+          <div class="callout mint">
+            <strong>관련 메인:</strong> <a href="#10">10 스택과 힙</a> · <a href="#14">14 vector</a>
+          </div>
+          <article class="card">
+            <h3>속도 감각 (대략)</h3>
+            <div class="path">
+              <div class="path-item">
+                <div class="lv">1</div>
+                <div class="body"><strong>레지스터</strong> — CPU 안, 가장 빠름 · 용량 극소</div>
+              </div>
+              <div class="path-item">
+                <div class="lv">2</div>
+                <div class="body"><strong>L1 → L2 → L3 캐시</strong> — 가까울수록 빠름</div>
+              </div>
+              <div class="path-item">
+                <div class="lv">3</div>
+                <div class="body"><strong>RAM</strong> — 크고 상대적으로 느림</div>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <h3>지역성</h3>
+            <ul class="checklist">
+              <li class="yes"><strong class="hl">시간 지역성</strong> — 방금 쓴 값을 다시 쓸 가능성</li>
+              <li class="yes"><strong class="hl">공간 지역성</strong> — 옆 주소도 곧 쓸 가능성 → 연속 배열·vector가 유리한 이유 중 하나</li>
+            </ul>
+            <pre>// 연속 접근: 캐시에 유리한 편
+for (int i = 0; i &lt; n; ++i) sum += a[i];</pre>
+            <p><strong class="hl">지금은:</strong> “흩어진 접근보다 연속 접근이 대체로 낫다”. 캐시 라인·정렬 세부는 더 깊게.</p>
+          </article>
+        </section>
+
+        <section class="panel" data-panel="25" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">25</span> 엔디안 (리틀 / 빅)</h2>
+            <span class="tag tag-soft">심화</span>
+          </div>
+          <p class="panel-lead">
+            여러 바이트로 된 정수를 메모리에 어떤 <strong class="hl">바이트 순서</strong>로 늘어놓는지.
+            일상 앱 로직보다 <strong class="hl">파일·네트워크·바이너리</strong>에서 중요해집니다.
+          </p>
+          <div class="callout mint">
+            <strong>관련 메인:</strong> <a href="#05">05 변수와 타입</a> · <a href="#10">10 메모리</a>
+          </div>
+          <article class="card">
+            <h3>한 줄</h3>
+            <ul class="checklist">
+              <li class="yes"><strong class="hl">리틀 엔디안</strong> — 낮은 주소에 <em>작은</em> 자리(LSB) 바이트 (x86 등 흔함)</li>
+              <li class="yes"><strong class="hl">빅 엔디안</strong> — 낮은 주소에 <em>큰</em> 자리(MSB) 바이트 (네트워크 바이트 오더로 자주)</li>
+            </ul>
+            <p>예: 4바이트 값 <code class="inline">0x12345678</code> 을 메모리에 쓸 때 바이트 줄 세우기 방향이 다름.</p>
+          </article>
+          <article class="card">
+            <h3>언제 신경 쓰나</h3>
+            <ul class="checklist">
+              <li class="yes">바이너리 파일 읽기/쓰기</li>
+              <li class="yes">소켓으로 정수 전송</li>
+              <li class="tip">같은 머신 안 일반 변수 연산만 하면 거의 안 보임</li>
+            </ul>
+            <p><strong class="hl">지금은:</strong> 이름과 “순서가 있다”는 사실만. 직렬화·호스트/네트워크 변환 함수는 실전 때.</p>
           </article>
         </section>
 
@@ -3277,7 +3493,8 @@ void run() {
     (function () {
       const ORDER = [
         "01","02","03","04","05","06","07","08","09","10",
-        "11","12","13","14","15","16","17","18","19","20","21"
+        "11","12","13","14","15","16","17","18","19","20","21",
+        "22","23","24","25"
       ];
 
       const DICT = [
@@ -3285,8 +3502,11 @@ void run() {
         { term: "소스 코드", en: "source code", g: "A", def: "우리가 편집하는 .cpp 같은 텍스트 프로그램 원본.", ref: "03" },
         { term: "CPU", en: "Central Processing Unit", g: "A", def: "명령을 계산·처리하는 두뇌.", ref: "02" },
         { term: "RAM", en: "memory", g: "A", def: "지금 당장 쓰는 작업 공간. 변수·객체가 머무는 곳.", ref: "02" },
+        { term: "GPU", en: "Graphics Processing Unit", g: "A", def: "그래픽·병렬 연산에 강한 처리 장치.", ref: "02" },
         { term: "main", en: "entry point", g: "A", def: "프로그램이 시작되는 함수.", ref: "04" },
         { term: "std", en: "standard namespace", g: "A", def: "C++ 표준 라이브러리 이름들이 모인 네임스페이스.", ref: "04" },
+        { term: "전처리", en: "preprocessing", g: "A", def: "컴파일 전 #include·#define 등을 처리하는 단계.", ref: "03" },
+        { term: "분할 컴파일", en: "separate compilation", g: "A", def: ".cpp를 따로 컴파일한 뒤 링크. 바뀐 파일만 다시 빌드.", ref: "03" },
         { term: "변수", en: "variable", g: "B", def: "값을 담아 두는 이름 붙인 상자.", ref: "05" },
         { term: "타입", en: "type", g: "B", def: "상자에 어떤 종류의 값을 넣을지 정하는 라벨.", ref: "05" },
         { term: "함수", en: "function", g: "B", def: "일을 묶어 이름 붙인 레시피. 입력 → 처리 → 반환.", ref: "08" },
@@ -3301,6 +3521,7 @@ void run() {
         { term: "네임스페이스", en: "namespace", g: "B", def: "이름 충돌을 줄이려고 이름을 구역으로 나눔. 예: std.", ref: "04" },
         { term: ".h / .cpp", en: "header / source", g: "A", def: "헤더는 선언(약속), cpp는 정의(구현). 분할 컴파일의 기본.", ref: "03" },
         { term: "#include", en: "include", g: "A", def: "전처리로 다른 파일 내용을 붙임. <> 표준, \"\" 프로젝트.", ref: "03" },
+        { term: "#pragma once", en: "header guard", g: "A", def: "헤더가 한 번만 포함되게 하는 지시. 중복 정의 방지.", ref: "03" },
         { term: "메서드", en: "member function", g: "B", def: "클래스/구조체 안에 있는 함수. 객체의 상태와 함께 동작.", ref: "08" },
         { term: "const 멤버 함수", en: "const method", g: "C", def: "객체 상태를 바꾸지 않겠다고 약속한 멤버 함수. getter에 자주.", ref: "08" },
         { term: "스택", en: "stack", g: "C", def: "함수 지역 변수가 쌓이는 빠른 영역. 종료 시 자동 정리.", ref: "10" },
@@ -3314,23 +3535,39 @@ void run() {
         { term: "public / private", en: "access control", g: "C", def: "멤버를 밖에서도 쓸지(public) 타입 안에서만 쓸지(private).", ref: "12" },
         { term: "this", en: "this pointer", g: "C", def: "멤버 함수 안에서 현재 객체를 가리키는 포인터.", ref: "12" },
         { term: "OOP", en: "Object-Oriented Programming", g: "C", def: "객체지향. 상태+행동을 가진 객체들의 협력으로 프로그램을 구성.", ref: "12" },
-        { term: "연산자 오버로딩", en: "operator overloading", g: "C", def: "+, == 같은 기호를 사용자 타입에 함수로 정의하는 것. a+b → operator+ 호출.", ref: "13" },
-        { term: "STL", en: "Standard Template Library", g: "C", def: "표준 템플릿 라이브러리. vector, map, algorithm 등 표준 자료구조·알고리즘 모음.", ref: "14" },
+        { term: "멤버 초기화 리스트", en: "member initializer list", g: "C", def: "생성자에서 : 멤버(값) 형태로 본문 전에 멤버를 초기화.", ref: "12" },
+        { term: "연산자 오버로딩", en: "operator overloading", g: "C", def: "+, == 같은 기호를 사용자 타입에 함수로 정의. a+b → operator+ 호출.", ref: "13" },
+        { term: "STL", en: "Standard Template Library", g: "C", def: "표준 템플릿 라이브러리. vector, map, algorithm 등.", ref: "14" },
         { term: "vector", en: "std::vector", g: "C", def: "크기가 늘어날 수 있는 동적 배열. 최우선 도구.", ref: "14" },
+        { term: "size / capacity", en: "vector size/capacity", g: "C", def: "size=사용 개수, capacity=확보 칸. 부족하면 재할당.", ref: "14" },
         { term: "new / delete", en: "dynamic allocation", g: "C", def: "힙 메모리를 빌리고 반납하는 방식. 남용 지양.", ref: "15" },
         { term: "메모리 누수", en: "memory leak", g: "C", def: "빌린 메모리를 반납하지 않아 사용 가능 영역이 줄어드는 문제.", ref: "15" },
+        { term: "댕글링 포인터", en: "dangling pointer", g: "C", def: "이미 해제·소멸한 대상을 가리키는 포인터.", ref: "15" },
         { term: "nullptr", en: "null pointer", g: "C", def: "아무 것도 가리키지 않는다는 의미의 포인터 값.", ref: "11" },
         { term: "헤더", en: "header (.h / .hpp)", g: "C", def: "선언(약속)을 모아 두는 파일. 구현은 보통 .cpp.", ref: "03" },
         { term: "스마트 포인터", en: "smart pointer", g: "D", def: "수명이 끝나면 자동으로 메모리를 정리하는 포인터 객체.", ref: "16" },
         { term: "unique_ptr", en: "std::unique_ptr", g: "D", def: "소유자가 하나인 스마트 포인터. 기본 선택지.", ref: "16" },
         { term: "shared_ptr", en: "std::shared_ptr", g: "D", def: "여러 곳이 공유 소유. 참조 카운트, 남용 주의.", ref: "16" },
+        { term: "weak_ptr", en: "std::weak_ptr", g: "D", def: "소유 없이 shared 대상을 관찰. 순환 참조 끊기에 사용.", ref: "16" },
         { term: "RAII", en: "Resource Acquisition Is Initialization", g: "D", def: "자원을 객체 생성·소멸에 묶어 자동 정리하는 설계 습관.", ref: "16" },
         { term: "move", en: "move semantics", g: "D", def: "복사 대신 소유권을 넘겨 큰 데이터의 비용을 줄이는 기법.", ref: "17" },
-        { term: "템플릿", en: "template", g: "D", def: "타입을 매개변수처럼 써서 코드를 일반화. STL의 기반.", ref: "18" }
+        { term: "std::move", en: "std::move", g: "D", def: "값을 이동 가능으로 표시. 소유권 이전의 신호.", ref: "17" },
+        { term: "템플릿", en: "template", g: "D", def: "타입을 매개변수처럼 써서 코드를 일반화. STL의 기반.", ref: "18" },
+        { term: "BSS", en: "Block Started by Symbol", g: "E", def: "초기값 없는 전역·정적 변수 구역. 실행 시 0으로 채워짐.", ref: "22" },
+        { term: "DATA", en: "data segment", g: "E", def: "초기값이 있는 전역·정적 변수가 모이는 구역.", ref: "22" },
+        { term: "TEXT", en: "text/code segment", g: "E", def: "실행할 기계어 코드가 올라가는 구역.", ref: "22" },
+        { term: "가상 메모리", en: "virtual memory", g: "E", def: "프로그램이 쓰는 주소 공간. 물리 RAM과 OS가 매핑.", ref: "23" },
+        { term: "물리 메모리", en: "physical memory", g: "E", def: "실제 RAM. CPU가 최종적으로 접근하는 저장 공간.", ref: "23" },
+        { term: "MMU", en: "Memory Management Unit", g: "E", def: "가상 주소를 물리 주소로 변환하는 하드웨어.", ref: "23" },
+        { term: "캐시", en: "CPU cache", g: "E", def: "자주 쓰는 데이터를 두는 초고속 메모리 계층 (L1–L3).", ref: "24" },
+        { term: "지역성", en: "locality", g: "E", def: "시간·공간적으로 가까운 데이터 접근이 캐시에 유리한 성질.", ref: "24" },
+        { term: "엔디안", en: "endianness", g: "E", def: "멀티바이트 값을 메모리에 늘어놓는 바이트 순서. 리틀/빅.", ref: "25" },
+        { term: "리틀 엔디안", en: "little-endian", g: "E", def: "낮은 주소에 하위 바이트. x86 등에서 흔함.", ref: "25" },
+        { term: "빅 엔디안", en: "big-endian", g: "E", def: "낮은 주소에 상위 바이트. 네트워크 바이트 오더로 자주.", ref: "25" }
       ];
 
-      const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대" };
-      const gTag = { A: "tag-soft", B: "tag-mint", C: "tag-cyan", D: "tag-purple" };
+      const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
+      const gTag = { A: "tag-soft", B: "tag-mint", C: "tag-cyan", D: "tag-purple", E: "tag-ok" };
 
       const side = document.getElementById("side");
       const sideToggle = document.getElementById("side-toggle");
@@ -3490,6 +3727,21 @@ void run() {
         if (!e.altKey) return;
         if (e.key === "ArrowLeft") { e.preventDefault(); btnPrev.click(); }
         if (e.key === "ArrowRight") { e.preventDefault(); btnNext.click(); }
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const id = (a.getAttribute("href") || "").replace("#", "");
+          if (ORDER.includes(id)) {
+            e.preventDefault();
+            activate(id);
+          }
+        });
+      });
+
+      window.addEventListener("hashchange", () => {
+        const id = (location.hash || "").replace("#", "");
+        if (ORDER.includes(id) && id !== current) activate(id);
       });
 
       const hash = (location.hash || "").replace("#", "");
