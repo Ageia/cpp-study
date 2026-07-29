@@ -1349,7 +1349,7 @@ int main() {
               <li class="yes"><code class="inline">&gt;&gt;</code> 입력 방향 (키보드 → 변수)</li>
               <li class="tip">공백 포함 한 줄은 나중에 <code class="inline">getline</code> (심화/필요 시)</li>
             </ul>
-            <p><strong class="hl">쓰임:</strong> 콘솔 도구, 디버그 로그, 간단한 설정 입력. 게임 UI는 엔진이 담당.</p>
+            <p><strong class="hl">쓰임:</strong> 콘솔 도구, 디버그 로그, 간단한 설정 입력.</p>
           </article>
         </section>
 
@@ -1618,7 +1618,7 @@ int main() {
     playerHp = applyDamage(playerHp, 90);  // 0
     std::cout &lt;&lt; playerHp &lt;&lt; "\n";
 }</pre>
-            <p><strong class="hl">쓰임:</strong> 전투 공식, 아이템 효과, 저장/로드 헬퍼, 엔진 쪽 “유틸 함수”.</p>
+            <p><strong class="hl">쓰임:</strong> 전투 공식, 아이템 효과, 저장/로드 헬퍼, 공통 유틸 함수.</p>
           </article>
 
           <div class="split-cards">
@@ -1923,7 +1923,7 @@ std::string name = "Hero";       // C++ 문자열 객체 (권장)</pre>
 int* big = new int[1000];  // 힙에 1000칸
 // ... 여러 함수에서 big을 넘기며 사용 ...
 delete[] big;              // 반납 (안 하면 누수)</pre>
-            <p><strong class="hl">쓰임:</strong> 긴 수명의 리소스, 큰 버퍼, 엔진 객체가 “월드에 남아 있는” 느낌.
+            <p><strong class="hl">쓰임:</strong> 긴 수명의 리소스, 큰 버퍼, 프로그램이 끝날 때까지 살아 있어야 하는 데이터.
             일상 목록은 보통 <code class="inline">vector</code>(14)가 힙을 대신 관리해 줍니다.</p>
             <div class="callout warn">
               <strong>지금 목표:</strong> raw <code class="inline">new</code> 숙달이 아니라
@@ -2079,7 +2079,7 @@ int* p = &amp;x;   // &amp;x = x의 주소, p가 그 화살표를 보관
                 </tbody>
               </table>
             </div>
-            <p><strong class="hl">쓰임:</strong> 배열 Decay, C API, 엔진에서 “이 액터 포인터”, 선택적 대상(있을 수도/없을 수도).</p>
+            <p><strong class="hl">쓰임:</strong> 배열 Decay, C API, “있을 수도 없는 대상” 핸들, 선택적 객체.</p>
           </article>
 
           <article class="card">
@@ -2121,7 +2121,7 @@ int main() {
     std::cout &lt;&lt; s;  // 수정 안 함
     // s[0] = 'A';  // 불가 (const)
 }</pre>
-              <p style="margin-top:10px;margin-bottom:0"><strong class="hl">쓰임:</strong> 함수 인자로 string/구조체 전달, 엔진의 읽기 전용 핸들 느낌.</p>
+              <p><strong class="hl">쓰임:</strong> 함수 인자로 string/구조체 전달, 읽기 전용 참조 인자.</p>
             </article>
             <article class="card">
               <h3>위험 신호 (이름만)</h3>
@@ -2242,7 +2242,7 @@ int main() {
     Player p{"Hero", 100};
     p.takeDamage(30);   // p.hp == 70
 }</pre>
-            <p><strong class="hl">쓰임:</strong> 캐릭터/몬스터/아이템 데이터, 엔진의 컴포넌트 느낌, UI 상태 묶음.</p>
+            <p><strong class="hl">쓰임:</strong> 캐릭터/몬스터/아이템 데이터, 설정 묶음, UI 상태 묶음.</p>
           </article>
 
           <div class="split-cards">
@@ -2295,7 +2295,7 @@ private:
 
 // p.hp = 999;  // 컴파일 에러 (private)
 // p.takeDamage(10);  // OK</pre>
-            <p><strong class="hl">쓰임:</strong> 엔진/라이브러리 API — “써도 되는 면”과 “내부 구현”을 나눔.</p>
+            <p><strong class="hl">쓰임:</strong> 라이브러리 API — “써도 되는 면”과 “내부 구현”을 나눔.</p>
           </article>
 
           <article class="card">
@@ -2465,7 +2465,7 @@ private:
 
 Point a{1, 2}, b{3, 4};
 Point c = a + b;   // (4, 6)</pre>
-            <p><strong class="hl">쓰임:</strong> 벡터·행렬 수학, 점수/머니 타입, 게임 엔진의 <code class="inline">FVector</code> 같은 “수식처럼 보이는 API”.</p>
+            <p><strong class="hl">쓰임:</strong> 벡터·행렬 수학, 점수/머니 타입, “수식처럼 보이는” 사용자 정의 타입 API.</p>
           </article>
 
           <div class="split-cards">
@@ -2709,8 +2709,8 @@ int main() {
 std::cout &lt;&lt; *p &lt;&lt; "\n";
 delete p;               // 반납
 p = nullptr;            // 잘못된 재사용 방지 습관</pre>
-            <p><strong class="hl">쓰임:</strong> 레거시 API, 엔진 내부 일부, “직접 수명 관리”를 이해하는 데.
-            목록이면 <code class="inline">vector</code>(14), 소유 객체면 <strong>15 · 스마트 포인터</strong>가 기본.</p>
+            <p><strong class="hl">쓰임:</strong> 레거시 API, 저수준 라이브러리, “직접 수명 관리”를 이해하는 데.
+            목록이면 <code class="inline">vector</code>(14), 소유 객체면 <strong>16 · 스마트 포인터</strong>가 기본.</p>
           </article>
 
           <div class="split-cards">
@@ -2832,7 +2832,7 @@ void run() {
     auto session = std::make_unique&lt;int&gt;(42);
     // *session 또는 session.get() 로 접근
 } // 여기서 자동 해제</pre>
-            <p><strong class="hl">쓰임:</strong> 엔진/툴에서 “이 모듈의 주인 하나”, 팩토리가 넘긴 뒤 소유권 이전(<code class="inline">std::move</code> → 16).</p>
+            <p><strong class="hl">쓰임:</strong> “이 모듈의 주인 하나”, 팩토리가 넘긴 뒤 소유권 이전(<code class="inline">std::move</code> → 17).</p>
           </article>
 
           <div class="split-cards">
@@ -3071,17 +3071,22 @@ max2(1.5, 0.2);   // T = double</pre>
           <div class="topic-head">
             <h2><span class="num">19</span> 다음으로 갈 길</h2>
           </div>
-          <p class="panel-lead">뼈대를 잡았다면 관심 분야로 분기합니다.</p>
+          <p class="panel-lead">
+            메인 경로(01–18) 뼈대를 잡았다면, 관심에 따라 더 파거나
+            <strong class="hl">심화</strong>(메모리·성능·동시성 등)로 확장하면 됩니다.
+            이 repo는 C++ 언어 가이드에 집중합니다.
+          </p>
           <article class="card">
+            <h3>갈래 예시</h3>
             <ul class="checklist">
-              <li class="tip"><strong class="hl">게임 / 언리얼:</strong> 객체 수명, UObject, 모듈 빌드</li>
-              <li class="tip"><strong class="hl">알고리즘:</strong> 복잡도, STL 알고리즘</li>
-              <li class="tip"><strong class="hl">시스템:</strong> 스레드, 락, 캐시 지역성</li>
+              <li class="tip"><strong class="hl">알고리즘:</strong> 복잡도, STL 알고리즘, 문제 풀이</li>
+              <li class="tip"><strong class="hl">시스템·성능:</strong> 스레드, 락, 캐시 지역성, 프로파일</li>
+              <li class="tip"><strong class="hl">심화(이 가이드 안):</strong> 가상 메모리, 엔디안, vtable 등 — 메인 뒤에 붙일 예정</li>
               <li class="yes">공통: 짧은 코드 읽기 + 측정 전 추측 금지</li>
             </ul>
             <div class="callout">
-              <strong>엔진 입문 전:</strong> 05–12(문법·함수·클래스·포인터 감각)면 따라 치기는 가능합니다.
-              15–18은 엔진 코드 읽으면서 채워도 됩니다.
+              <strong>다음 단계 감각:</strong> 05–12(문법·함수·클래스·포인터) + 14–17(vector·소유·move·템플릿)이면
+              대부분의 C++ 코드 읽기 입문은 가능합니다. 막히면 해당 번호로 돌아오면 됩니다.
             </div>
           </article>
         </section>
@@ -3158,7 +3163,7 @@ while (hp &gt; 0) {
     return hp;
 }
 // playerHp = applyDamage(playerHp, 15);</pre>
-            <p><strong class="hl">쓰임:</strong> 스킬·버프·충돌 데미지를 <em>이름 있는 한 덩어리</em>로 모아 엔진/게임 코드에서 호출.</p>
+            <p><strong class="hl">쓰임:</strong> 스킬·버프·충돌 데미지를 <em>이름 있는 한 덩어리</em>로 모아 호출.</p>
           </article>
 
           <article class="card" style="margin-top:12px">
@@ -3194,7 +3199,7 @@ void run() {
     auto session = std::make_unique&lt;Session&gt;(Session{1});
     // session이 스코프를 벗어나면 자동 해제
 }</pre>
-            <p><strong class="hl">쓰임:</strong> “이 객체의 주인은 나 하나”일 때. 엔진/툴 코드에서 raw <code class="inline">new</code> 대신 자주 보는 패턴.</p>
+            <p><strong class="hl">쓰임:</strong> “이 객체의 주인은 나 하나”일 때. raw <code class="inline">new</code> 대신 자주 보는 패턴.</p>
           </article>
 
           <div class="grid-2" style="margin-top:12px">
@@ -3230,12 +3235,12 @@ void run() {
                 <p>가능하면 <strong class="hl">C++17 이상</strong>. 오래된 튜토리얼만 피하기.</p>
               </div>
               <div>
-                <h3 style="font-size:0.95rem">Q. 언리얼은?</h3>
-                <p>05–12 감각이면 입문 가능. 15–18은 엔진과 함께.</p>
-              </div>
-              <div>
                 <h3 style="font-size:0.95rem">Q. 안 짜도 되나요?</h3>
                 <p>네. 이 문서는 <strong class="hl">읽기용 가이드 사전</strong>입니다. 예시는 “쓰임 감각”용이고, 코딩은 선택입니다.</p>
+              </div>
+              <div>
+                <h3 style="font-size:0.95rem">Q. 심화는 어디에?</h3>
+                <p>메인 01–18 다음에 붙일 예정입니다. 가상 메모리·엔디안·vtable 등은 흐름을 막지 않게 분리합니다.</p>
               </div>
             </div>
           </article>
@@ -3248,7 +3253,7 @@ void run() {
                 <tbody>
                   <tr><td><strong>실행</strong></td><td>컴파일 후 네이티브 · 빠른 편</td><td>인터프리터/VM · 배우기 쉬움</td></tr>
                   <tr><td><strong>메모리</strong></td><td>직접 다루는 선택권</td><td>자동 관리 비중 큼</td></tr>
-                  <tr><td><strong>쓰임</strong></td><td>엔진, 성능 필수</td><td>스크립트, 데이터, 웹</td></tr>
+                  <tr><td><strong>쓰임</strong></td><td>성능·시스템·도구 체인</td><td>스크립트, 데이터, 웹</td></tr>
                 </tbody>
               </table>
             </div>
