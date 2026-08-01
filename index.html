@@ -4662,6 +4662,24 @@ void tick(State s) {
             <p><strong class="hl">쓰임:</strong> AI/애니메이션 상태, UI 모드, 설정 단계.</p>
           </article>
 
+          <article class="card">
+            <h3>예시 G · 재귀 (08) — 카운트다운 출력</h3>
+            <p><strong class="hl">상황:</strong> n부터 1까지 한 줄씩 찍고 싶다. (교육용 · 실제 UI 타이머는 보통 반복)</p>
+            <pre>void countdown(int n) {
+    if (n &lt;= 0) {
+        std::cout &lt;&lt; "go!\n";
+        return;                 // 종료 조건
+    }
+    std::cout &lt;&lt; n &lt;&lt; "\n";
+    countdown(n - 1);           // 더 작은 n으로 자기 호출
+}
+// countdown(3);  →  3  2  1  go!</pre>
+            <p style="margin-bottom:0">
+              <strong class="hl">쓰임:</strong> “단계가 자기와 같은 모양”일 때 감각 연습.
+              프레임이 쌓이는 그림 → <a href="#26">26</a> · 본문 → <a href="#08">08</a>
+            </p>
+          </article>
+
           <div class="split-cards">
             <article class="card">
               <h3>읽기 팁</h3>
@@ -6135,6 +6153,8 @@ if (auto up = c-&gt;parent.lock()) {
         { term: "바이트", en: "byte", g: "B", def: "보통 8비트. 주소가 한 칸씩 세는 기본 단위. 0x00–0xFF.", ref: "05" },
         { term: "니블", en: "nibble", g: "B", def: "4비트 = 16진 한 자리. 바이트의 반쪽.", ref: "05" },
         { term: "함수", en: "function", g: "B", def: "일을 묶어 이름 붙인 레시피. 입력 → 처리 → 반환.", ref: "08" },
+        { term: "재귀", en: "recursion", g: "B", def: "함수가 자기 자신을 다시 호출하는 것. 종료 조건과 ‘한 걸음 작게’가 필요. 깊으면 스택 주의.", ref: "08" },
+        { term: "베이스 케이스", en: "base case", g: "B", def: "재귀가 더 이상 자신을 부르지 않고 끝나는 조건. 없으면 무한 호출.", ref: "08" },
         { term: "조건문", en: "if / else", g: "B", def: "참·거짓에 따라 실행 길을 가르는 문법.", ref: "07" },
         { term: "반복문", en: "for / while", g: "B", def: "같은 일을 여러 번 또는 조건이 참인 동안 반복.", ref: "07" },
         { term: "switch", en: "switch-case", g: "B", def: "이산 값에 따라 여러 갈래 중 하나를 고르는 분기. break 주의.", ref: "07" },
