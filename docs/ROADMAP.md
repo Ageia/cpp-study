@@ -101,7 +101,7 @@
 - ✅ `async`/`future`/`promise` (70)
 
 ### B9. 시간 · 유틸 라이브러리
-- ⬜ **`chrono`**(시간 측정) · `random` · `filesystem`
+- ✅ **`chrono`**(시간 측정) · `random` · `filesystem` (71)
 - ⬜ 구조적 바인딩 `auto [a,b] = ...` (31에서 사용 중 → 정식 소개)
 
 ### B10. 빌드 · 도구 · 생태계
