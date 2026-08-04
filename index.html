@@ -2378,6 +2378,9 @@
         <button type="button" role="tab" data-tab="55" aria-selected="false">
           <span class="n">55</span><span class="t">초기화 {} · nullptr</span>
         </button>
+        <button type="button" role="tab" data-tab="56" aria-selected="false">
+          <span class="n">56</span><span class="t">RAII</span>
+        </button>
       </nav>
     </aside>
 
@@ -8518,6 +8521,77 @@ if (p == nullptr) { }   // 또는 if (!p)
           </div>
         </section>
 
+        <!-- ===== 56 RAII (C++ 더) ===== -->
+        <section class="panel" data-panel="56" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">56</span> RAII — 자원을 객체 수명에 묶기</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            C++를 관통하는 핵심 관용구. <strong class="hl">RAII</strong>(Resource Acquisition Is Initialization) =
+            “<strong class="hl">얻는 순간이 곧 객체를 만드는 순간, 놓는 순간이 곧 소멸하는 순간</strong>”.
+            그래서 <code class="inline">delete</code>·<code class="inline">unlock</code>·<code class="inline">close</code>를 <em>깜빡할 수 없게</em> 됩니다.
+          </p>
+
+          <article class="card">
+            <h3>핵심 — 생성자에서 얻고, 소멸자에서 놓는다</h3>
+            <p>객체가 <strong class="hl">스코프를 벗어나면</strong> 소멸자가 <em>자동으로</em> 불립니다(스택 <a href="#10">10</a>). 여기에 “정리”를 넣어 두면, 어떤 경로로 나가도 정리가 보장됩니다.</p>
+            <pre>{
+    std::ofstream f("save.txt");   // 생성 = 파일 열기(자원 획득)
+    f &lt;&lt; "score 1200\n";
+    // ...
+}   // 여기서 f 소멸 → 파일 자동 닫힘(flush). close() 불필요</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes">해제 코드를 <strong class="hl">한 곳(소멸자)</strong>에만</li>
+              <li class="yes"><strong class="hl">예외</strong>가 나도 스택 풀리며 소멸자가 불려 정리됨</li>
+              <li class="yes"><code class="inline">return</code>이 여러 개여도 빠짐없이 정리</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>이미 쓰고 있었다 — 표준의 RAII들</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>객체</th><th>획득(생성)</th><th>해제(소멸)</th></tr></thead>
+                <tbody>
+                  <tr><td><code class="inline">std::vector</code> (<a href="#14">14</a>)</td><td>메모리 확보</td><td>메모리 반납</td></tr>
+                  <tr><td><code class="inline">std::unique_ptr</code> (<a href="#16">16</a>)</td><td>객체 소유</td><td><code class="inline">delete</code></td></tr>
+                  <tr><td><code class="inline">std::lock_guard</code> (<a href="#42">42</a>)</td><td><code class="inline">lock</code></td><td><code class="inline">unlock</code></td></tr>
+                  <tr><td><code class="inline">std::ofstream</code> (<a href="#44">44</a>)</td><td>파일 열기</td><td>파일 닫기</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:8px 0 0">이들이 편했던 이유가 전부 RAII입니다. <em>수동 정리</em>가 필요 없던 것.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>왜 좋은가 — raw new와 비교</h3>
+              <pre>// ✗ 수동 관리: 예외/조기 return이면 누수
+Widget* w = new Widget();
+if (fail()) return;   // delete 안 됨 → 누수!
+delete w;
+
+// ✓ RAII: 어떤 경로든 자동 정리
+auto w = std::make_unique&lt;Widget&gt;();
+if (fail()) return;   // w 소멸 → 자동 delete</pre>
+            </article>
+            <article class="card">
+              <h3>직접 만들 때</h3>
+              <ul class="checklist">
+                <li class="yes">생성자에서 획득, 소멸자에서 해제</li>
+                <li class="yes">복사/이동 정책을 정한다 → <strong class="hl">규칙 0/5</strong>(<a href="#29">29</a>)</li>
+                <li class="tip">대개는 직접 만들 필요 없이 <code class="inline">vector</code>·스마트 포인터에 맡기면 끝(규칙 0)</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> “자원을 객체에 담으면, 그 객체가 사라질 때 자원도 사라진다.”
+            이 한 문장이 C++ 메모리·파일·락 안전의 8할입니다. 새 자원이 보이면 <em>“이걸 RAII로 감쌀 수 있나?”</em>를 먼저 떠올리세요.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -8538,7 +8612,7 @@ if (p == nullptr) { }   // 또는 if (!p)
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55"
+        "51","52","53","54","55","56"
       ];
 
       const DICT = [
@@ -8602,7 +8676,7 @@ if (p == nullptr) { }   // 또는 if (!p)
         { term: "unique_ptr", en: "std::unique_ptr", g: "D", def: "소유자가 하나인 스마트 포인터. 기본 선택지.", ref: "16" },
         { term: "shared_ptr", en: "std::shared_ptr", g: "D", def: "여러 곳이 공유 소유. 참조 카운트, 남용 주의.", ref: "16" },
         { term: "weak_ptr", en: "std::weak_ptr", g: "D", def: "소유 없이 shared 대상을 관찰. 순환 참조 끊기에 사용.", ref: "16" },
-        { term: "RAII", en: "Resource Acquisition Is Initialization", g: "D", def: "자원을 객체 생성·소멸에 묶어 자동 정리하는 설계 습관.", ref: "16" },
+        { term: "RAII", en: "Resource Acquisition Is Initialization", g: "D", def: "자원을 객체 생성·소멸에 묶어 자동 정리하는 설계 습관. 예외에도 안전. C++ 핵심 관용구.", ref: "56" },
         { term: "move", en: "move semantics", g: "D", def: "복사 대신 소유권을 넘겨 큰 데이터의 비용을 줄이는 기법.", ref: "17" },
         { term: "std::move", en: "std::move", g: "D", def: "값을 이동 가능으로 표시. 소유권 이전의 신호.", ref: "17" },
         { term: "템플릿", en: "template", g: "D", def: "타입을 매개변수처럼 써서 코드를 일반화. STL의 기반.", ref: "18" },
