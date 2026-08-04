@@ -2396,6 +2396,9 @@
         <button type="button" role="tab" data-tab="61" aria-selected="false">
           <span class="n">61</span><span class="t">constexpr 프로그래밍</span>
         </button>
+        <button type="button" role="tab" data-tab="62" aria-selected="false">
+          <span class="n">62</span><span class="t">optional · variant · tuple</span>
+        </button>
       </nav>
     </aside>
 
@@ -8957,6 +8960,87 @@ auto toText(T v) {
           </div>
         </section>
 
+        <!-- ===== 62 optional · variant · tuple · pair (C++ 더) ===== -->
+        <section class="panel" data-panel="62" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">62</span> optional · variant · tuple · pair</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            “값이 <strong class="hl">있을 수도 없을 수도</strong>”(optional), “여러 타입 <strong class="hl">중 하나</strong>”(variant),
+            “값 <strong class="hl">여러 개를 묶기</strong>”(pair·tuple). 특수한 상황을 <em>타입으로</em> 또렷하게 표현하는 표준 유틸들.
+          </p>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — optional: 없을 수도 있는 값</h3>
+            <p><strong class="hl">상황:</strong> 찾기 함수가 <em>못 찾을 수도</em> 있다. 특수한 “없음” 값(-1 등) 대신 <code class="inline">optional</code>로.</p>
+            <pre>#include &lt;optional&gt;
+
+std::optional&lt;int&gt; findLevel(const std::string&amp; name) {
+    if (name == "hero") return 42;
+    return std::nullopt;         // 못 찾음 = 값 없음
+}
+
+auto lv = findLevel("bob");
+if (lv) std::cout &lt;&lt; *lv;       // 있으면 꺼내 씀
+else    std::cout &lt;&lt; "없음";
+// lv.value_or(0)  // 없으면 기본값</pre>
+            <p><strong class="hl">쓰임:</strong> 조회·파싱 결과, “선택적” 설정값. “-1은 없음” 같은 <em>매직값</em>을 없애 버그를 줄입니다.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>variant — 여러 타입 중 하나</h3>
+              <pre>#include &lt;variant&gt;
+
+std::variant&lt;int, std::string&gt; v;
+v = 42;         // 지금은 int
+v = "hello";   // 이제 string
+
+// 꺼낼 때 어느 타입인지 확인
+if (std::holds_alternative&lt;int&gt;(v))
+    std::cout &lt;&lt; std::get&lt;int&gt;(v);</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> “정수 또는 문자열” 같은 타입 안전한 합집합. C 스타일 union보다 안전.</p>
+            </article>
+            <article class="card">
+              <h3>pair · tuple — 값 묶기</h3>
+              <pre>#include &lt;tuple&gt;
+
+std::pair&lt;int, std::string&gt; p{1, "hi"};
+p.first; p.second;
+
+std::tuple&lt;int, double, char&gt; t{1, 2.0, 'x'};
+std::get&lt;0&gt;(t);   // 1
+
+// 구조적 바인딩으로 풀기
+auto [id, name] = p;   // id=1, name="hi"</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 함수가 값 여러 개 반환, map 원소(<a href="#31">31</a>). 구조적 바인딩은 뒤에서 자세히.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>고르기</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>상황</th><th>도구</th></tr></thead>
+                <tbody>
+                  <tr><td>값이 있을 수도/없을 수도</td><td><code class="inline">std::optional&lt;T&gt;</code></td></tr>
+                  <tr><td>여러 타입 중 하나</td><td><code class="inline">std::variant&lt;A,B&gt;</code></td></tr>
+                  <tr><td>서로 다른 두 값 묶기</td><td><code class="inline">std::pair</code></td></tr>
+                  <tr><td>여러 값 묶기(3개+)</td><td><code class="inline">std::tuple</code></td></tr>
+                  <tr><td>아무 타입이나 담기(드묾)</td><td><code class="inline">std::any</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:8px 0 0"><strong class="hl">쓰임:</strong> 이름 있는 구조체가 더 읽기 좋을 땐 <code class="inline">struct</code>(<a href="#12">12</a>)를. tuple 남발은 <em>“first가 뭐였지?”</em>를 부릅니다.</p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 없을 수 있음=<code class="inline">optional</code>, 여러 타입 중 하나=<code class="inline">variant</code>, 값 묶기=<code class="inline">pair/tuple</code>.
+            매직값·void*·C union을 이 타입들로 바꾸면 의도가 코드에 드러나고 버그가 줄어듭니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -8977,7 +9061,7 @@ auto toText(T v) {
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61"
+        "51","52","53","54","55","56","57","58","59","60","61","62"
       ];
 
       const DICT = [
@@ -9191,7 +9275,10 @@ auto toText(T v) {
         { term: "SFINAE", en: "SFINAE", g: "D", def: "‘치환 실패는 에러가 아니다’를 이용한 옛 제약 기법(enable_if). 이제 concepts로 대체.", ref: "60" },
         { term: "constexpr 함수", en: "constexpr function", g: "D", def: "상수 인자면 컴파일 타임에 접히고, 런타임 인자면 일반 함수처럼 도는 함수. 런타임 0 비용.", ref: "61" },
         { term: "if constexpr", en: "if constexpr", g: "D", def: "컴파일 타임 조건 분기. 조건에 맞는 가지만 컴파일. 템플릿 타입 분기에.", ref: "61" },
-        { term: "consteval / constinit", en: "consteval / constinit", g: "D", def: "C++20. consteval=반드시 컴파일 타임 함수, constinit=정적 변수의 컴파일 타임 초기화.", ref: "61" }
+        { term: "consteval / constinit", en: "consteval / constinit", g: "D", def: "C++20. consteval=반드시 컴파일 타임 함수, constinit=정적 변수의 컴파일 타임 초기화.", ref: "61" },
+        { term: "optional", en: "std::optional", g: "D", def: "값이 있을 수도/없을 수도 있음을 타입으로. nullopt로 ‘없음’. 매직값(-1) 대체.", ref: "62" },
+        { term: "variant", en: "std::variant", g: "D", def: "정해진 여러 타입 중 하나를 담는 타입 안전한 합집합. C union보다 안전.", ref: "62" },
+        { term: "pair / tuple", en: "std::pair / tuple", g: "D", def: "서로 다른 값 여러 개를 묶는 타입. 구조적 바인딩으로 풀기. 이름이 중요하면 struct.", ref: "62" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
