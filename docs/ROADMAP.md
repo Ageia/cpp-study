@@ -63,7 +63,7 @@
 - ✅ **`auto` · 타입 추론 · `decltype`** (53)
 - ✅ 참조 vs 포인터 (10, 11)
 - ✅ **형변환 4종: `static_cast` · `dynamic_cast` · `reinterpret_cast` · `const_cast`** (54)
-- ⬜ 균일 초기화 `{}` · `nullptr` · 리터럴
+- ✅ 균일 초기화 `{}` · `nullptr` · 리터럴 (55)
 
 ### B3. 메모리 관리
 - ✅ 스택/힙 (10) · new·delete·malloc (15)
