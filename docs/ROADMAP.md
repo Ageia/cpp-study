@@ -96,7 +96,7 @@
 - ✅ `assert` · `static_assert` (67)
 
 ### B8. 동시성 (심화 34+ 후보)
-- ⬜ **`std::thread`/`jthread` · `mutex`/`lock_guard`**
+- ✅ **`std::thread`/`jthread` · `mutex`/`lock_guard`** (68)
 - ⬜ `condition_variable` · `atomic` · 메모리 모델
 - ⬜ `async`/`future`/`promise`
 

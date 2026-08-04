@@ -2414,6 +2414,9 @@
         <button type="button" role="tab" data-tab="67" aria-selected="false">
           <span class="n">67</span><span class="t">assert · static_assert</span>
         </button>
+        <button type="button" role="tab" data-tab="68" aria-selected="false">
+          <span class="n">68</span><span class="t">thread · mutex</span>
+        </button>
       </nav>
     </aside>
 
@@ -9423,6 +9426,87 @@ void f() {
           </div>
         </section>
 
+        <!-- ===== 68 thread · mutex (C++ 더) ===== -->
+        <section class="panel" data-panel="68" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">68</span> thread · mutex</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            동시성 개념(<a href="#42">42</a>)을 C++ 코드로. <code class="inline">std::thread</code>로 <strong class="hl">새 실행 흐름</strong>을 만들고,
+            <code class="inline">std::mutex</code>+<code class="inline">lock_guard</code>로 <strong class="hl">공유 데이터를 보호</strong>합니다(RAII <a href="#56">56</a>).
+          </p>
+
+          <article class="card">
+            <h3>std::thread — 함수를 새 스레드로</h3>
+            <pre>#include &lt;thread&gt;
+
+void work(int id) { /* ... */ }
+
+std::thread t1(work, 1);          // 새 스레드에서 work(1)
+std::thread t2([]{ /* 람다도 */ });
+
+t1.join();   // 끝날 때까지 기다림
+t2.join();
+// join(또는 detach) 안 하고 소멸하면 프로그램 종료(terminate)</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes">함수·람다(<a href="#33">33</a>)를 새 흐름으로 실행</li>
+              <li class="no"><strong class="hl">반드시 join 또는 detach</strong> — 안 하면 terminate</li>
+              <li class="tip">스레드 수는 대략 코어 수(<a href="#34">34</a>) 근처가 효율적</li>
+            </ul>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>jthread (C++20) — 자동 join</h3>
+              <pre>#include &lt;thread&gt;
+
+{
+    std::jthread t(work, 1);
+    // ...
+}   // 소멸 시 자동 join (RAII)
+// join 깜빡 걱정 없음</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> <code class="inline">thread</code>의 “join 깜빡” 함정을 없앤 버전. 가능하면 <code class="inline">jthread</code>.</p>
+            </article>
+            <article class="card">
+              <h3>mutex로 보호</h3>
+              <pre>#include &lt;mutex&gt;
+
+std::mutex m;
+int counter = 0;
+
+void inc() {
+    std::lock_guard&lt;std::mutex&gt; g(m);
+    counter++;   // 한 번에 한 스레드만
+}   // g 소멸 → 자동 unlock</pre>
+              <p style="margin-bottom:0">경쟁 상태(<a href="#42">42</a>)를 막는 임계 구역. <code class="inline">lock_guard</code>는 RAII라 <strong class="hl">unlock 자동</strong>.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — 여러 스레드로 합계</h3>
+            <p><strong class="hl">상황:</strong> 큰 작업을 나눠 병렬 처리. 공유 결과는 mutex로 보호(또는 각자 계산 후 합치기).</p>
+            <pre>std::mutex m;
+long total = 0;
+
+auto add_range = [&amp;](int lo, int hi) {
+    long local = 0;
+    for (int i = lo; i &lt; hi; ++i) local += i;  // 각자 지역 합
+    std::lock_guard&lt;std::mutex&gt; g(m);
+    total += local;                             // 합칠 때만 잠금
+};
+
+std::jthread a(add_range, 0, 500);
+std::jthread b(add_range, 500, 1000);</pre>
+            <p><strong class="hl">쓰임:</strong> <em>공유는 최소로, 잠금은 짧게</em>. 지역에서 계산하고 마지막에만 합치면 락 경합이 줄어 빠릅니다.</p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> <code class="inline">thread</code>/<code class="inline">jthread</code>로 흐름을 만들고(꼭 join·jthread 권장),
+            공유 데이터는 <code class="inline">mutex</code>+<code class="inline">lock_guard</code>로. “공유 최소·잠금 짧게”가 성능과 안전의 요령입니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9443,7 +9527,7 @@ void f() {
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68"
       ];
 
       const DICT = [
@@ -9673,7 +9757,10 @@ void f() {
         { term: "에러 코드", en: "error code", g: "D", def: "성공/실패를 반환값으로 알리는 옛 방식. 싸지만 무시되기 쉬움. optional/expected가 대안.", ref: "66" },
         { term: "expected", en: "std::expected", g: "D", def: "C++23. 값 또는 ‘실패 이유’를 담는 반환 타입. 흔한 실패를 예외 없이 표현. unexpected로 에러.", ref: "66" },
         { term: "assert", en: "assert", g: "D", def: "런타임 전제 검사. 거짓이면 즉시 중단. 릴리스(NDEBUG)에선 사라짐 — 부수효과 넣지 말 것.", ref: "67" },
-        { term: "static_assert", en: "static_assert", g: "D", def: "컴파일 타임 전제 검사. 타입·크기 조건이 틀리면 빌드 실패+메시지. type_traits와 짝.", ref: "67" }
+        { term: "static_assert", en: "static_assert", g: "D", def: "컴파일 타임 전제 검사. 타입·크기 조건이 틀리면 빌드 실패+메시지. type_traits와 짝.", ref: "67" },
+        { term: "std::thread", en: "std::thread", g: "E", def: "함수·람다를 새 실행 흐름으로 돌리는 것. 반드시 join 또는 detach. 안 하면 terminate.", ref: "68" },
+        { term: "jthread", en: "std::jthread", g: "E", def: "C++20. 소멸 시 자동 join하는 스레드(RAII). join 깜빡 함정을 없앰.", ref: "68" },
+        { term: "lock_guard", en: "std::lock_guard", g: "E", def: "생성 시 잠그고 소멸 시 자동 unlock하는 RAII 락. mutex와 함께 임계 구역 보호.", ref: "68" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
