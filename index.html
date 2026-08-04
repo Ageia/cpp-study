@@ -2328,6 +2328,9 @@
         <button type="button" role="tab" data-tab="39" aria-selected="false">
           <span class="n">39</span><span class="t">문자 인코딩 · UTF-8</span>
         </button>
+        <button type="button" role="tab" data-tab="40" aria-selected="false">
+          <span class="n">40</span><span class="t">힙 관리 · 단편화</span>
+        </button>
       </nav>
     </aside>
 
@@ -7198,6 +7201,74 @@ e.size();      // 2  (ASCII라 1바이트씩)</pre>
           </div>
         </section>
 
+        <!-- ===== 40 힙 관리 · 단편화 · 할당자 (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="40" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">40</span> 힙 관리 · 단편화 · 할당자</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            <a href="#15">new/delete(15)</a>가 실제로 하는 일. 힙(<a href="#10">10</a>)에는
+            <strong class="hl">할당자(allocator)</strong>가 있어 빈 공간을 관리합니다.
+            반복해 빌리고 반납하다 보면 빈 자리가 <strong class="hl">잘게 흩어지는(단편화)</strong> 문제가 생기고,
+            그래서 힙 할당은 <strong class="hl">공짜가 아닙니다</strong>.
+          </p>
+
+          <article class="card">
+            <h3>할당자 — 빈 조각 목록에서 맞는 걸 찾아줌</h3>
+            <p><code class="inline">new</code>를 부르면 할당자가 <strong class="hl">비어 있는 조각 목록(free list)</strong>에서 요청 크기에 맞는 자리를 찾아 내어 줍니다. <code class="inline">delete</code>는 그 자리를 다시 목록에 되돌리고, 가능하면 옆의 빈 조각과 합칩니다(병합).</p>
+            <ul class="checklist">
+              <li class="yes"><code class="inline">new</code> = 맞는 빈 조각 <strong class="hl">탐색</strong> + 표시</li>
+              <li class="yes"><code class="inline">delete</code> = 반납 + 인접 빈 조각 <strong class="hl">병합</strong></li>
+              <li class="tip">스택(<a href="#10">10</a>)은 그냥 포인터만 올렸다 내리면 끝 — 그래서 힙보다 훨씬 쌈</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>한눈에 보기 — 외부 단편화</h3>
+            <p>빌리고 반납을 섞다 보면 <strong class="hl">전체 빈 공간은 충분한데 연속된 큰 자리가 없어</strong> 할당이 실패할 수 있습니다.</p>
+            <div class="guide-viz" aria-label="힙 외부 단편화">
+              <div style="display:flex;gap:3px;max-width:460px;margin:0 auto;font-family:var(--mono);font-size:11px">
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(103,232,249,0.16);border:1px solid #67e8f9;color:#67e8f9">A</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(148,163,184,0.06);border:1px dashed rgba(148,163,184,0.5);color:#6b7389">빈</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(196,181,253,0.16);border:1px solid #c4b5fd;color:#e9d5ff">B</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(148,163,184,0.06);border:1px dashed rgba(148,163,184,0.5);color:#6b7389">빈</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(52,211,153,0.16);border:1px solid #34d399;color:#34d399">C</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(148,163,184,0.06);border:1px dashed rgba(148,163,184,0.5);color:#6b7389">빈</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(251,191,36,0.16);border:1px solid rgba(251,191,36,0.6);color:#fbbf24">D</div>
+                <div style="flex:1;padding:10px 0;text-align:center;border-radius:6px;background:rgba(148,163,184,0.06);border:1px dashed rgba(148,163,184,0.5);color:#6b7389">빈</div>
+              </div>
+              <p class="viz-cap">빈칸 4개(총 4)여도 <strong style="color:#fda4af">연속 2칸짜리</strong> 요청은 실패 — 흩어져 있어서. 이게 <strong>외부 단편화</strong>.</p>
+            </div>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>왜 힙이 비싼가</h3>
+              <ul class="checklist">
+                <li class="no">빈 조각을 <strong class="hl">탐색</strong>해야 함</li>
+                <li class="no">여러 스레드가 동시에 쓰면 <strong class="hl">락</strong> 필요</li>
+                <li class="no">가끔 OS에 더 달라고 <strong class="hl">시스템 콜</strong></li>
+                <li class="tip">그래서 “작은 객체 수천 개를 new”는 느려질 수 있음</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>실무 완화책</h3>
+              <ul class="checklist">
+                <li class="yes"><code class="inline">vector</code>+<code class="inline">reserve</code>로 한 번에 크게 (<a href="#32">32</a>)</li>
+                <li class="yes"><strong>메모리 풀</strong>: 미리 큰 덩어리를 잡아 잘라 씀(총알·파티클 등)</li>
+                <li class="tip">작은 문자열은 <strong>SSO</strong>로 힙 없이 내부 버퍼에 담기도 함</li>
+                <li class="yes">할당 횟수를 줄이는 게 곧 성능</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 힙 = 할당자가 빈 조각을 관리하는 공간. 반복 할당/해제는 단편화를 부르고
+            할당 자체가 비용이다. <em>덩어리로 잡고 재사용</em>이 핵심 처방 — 스택·<code class="inline">vector</code>·풀을 먼저 떠올리세요.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -7217,7 +7288,7 @@ e.size();      // 2  (ASCII라 1바이트씩)</pre>
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35","36","37","38","39"
+        "30","31","32","33","34","35","36","37","38","39","40"
       ];
 
       const DICT = [
@@ -7358,7 +7429,10 @@ e.size();      // 2  (ASCII라 1바이트씩)</pre>
         { term: "ASCII", en: "ASCII", g: "E", def: "영문·숫자·기호를 0~127번에 1바이트로 담는 오래된 문자 규칙. 'A'=65.", ref: "39" },
         { term: "유니코드", en: "Unicode", g: "E", def: "세상 모든 글자에 번호(코드포인트)를 매긴 표준. '가'=U+AC00.", ref: "39" },
         { term: "UTF-8", en: "UTF-8", g: "E", def: "유니코드 번호를 1~4바이트로 담는 가변 길이 인코딩. ASCII 호환. 한글은 보통 3바이트.", ref: "39" },
-        { term: "코드포인트", en: "code point", g: "E", def: "유니코드가 각 글자에 부여한 번호. U+AC00 같은 표기. 바이트 수와는 다름.", ref: "39" }
+        { term: "코드포인트", en: "code point", g: "E", def: "유니코드가 각 글자에 부여한 번호. U+AC00 같은 표기. 바이트 수와는 다름.", ref: "39" },
+        { term: "힙 할당자", en: "heap allocator", g: "E", def: "힙의 빈 조각 목록을 관리하며 new에 자리를 내주고 delete에 되돌려받는 관리자.", ref: "40" },
+        { term: "단편화", en: "fragmentation", g: "E", def: "빌리고 반납을 반복해 빈 자리가 잘게 흩어지는 현상. 총 공간은 충분해도 연속 큰 할당이 실패.", ref: "40" },
+        { term: "메모리 풀", en: "memory pool", g: "E", def: "미리 큰 덩어리를 잡아 잘라 쓰는 기법. 잦은 new/delete의 비용·단편화를 줄임.", ref: "40" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
