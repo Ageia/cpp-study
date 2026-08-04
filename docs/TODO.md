@@ -49,8 +49,12 @@
 - [x] 31 STL 더 · map
 - [x] 32 재할당 · 이터레이터 무효화 · span
 - [x] 33 람다 · 함수 포인터 · std::function
-- [ ] 34 chrono · 스레드 맛보기
-- [ ] 03 컴파일 파이프라인 SVG (메인 또는 심화)
+- [x] 34–50 컴퓨터 심화 대량 추가 (CPU·저장·폰노이만·데이터표현·힙·OS/동시성·컴파일/링크·복잡도·자료구조·알고리즘·네트워크) — [ROADMAP](ROADMAP.md) 참고
+- [x] 51–76 C++ 심화 대량 추가 (오버로딩·auto·형변환·초기화·RAII·생성자·static/friend·템플릿·STL 유틸·컨테이너·ranges·예외·expected·assert·동시성·chrono·구조적 바인딩·빌드·디버거·테스트/git)
+- [x] chrono 맛보기 (71에 포함)
+- [x] 03 컴파일 파이프라인 SVG (45에 추가)
+
+> **로드맵 전 항목 완료.** 자세한 항목별 상태는 [ROADMAP.md](ROADMAP.md).
 
 ---
 
