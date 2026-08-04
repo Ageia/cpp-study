@@ -2325,6 +2325,9 @@
         <button type="button" role="tab" data-tab="38" aria-selected="false">
           <span class="n">38</span><span class="t">부동소수점 · 오차</span>
         </button>
+        <button type="button" role="tab" data-tab="39" aria-selected="false">
+          <span class="n">39</span><span class="t">문자 인코딩 · UTF-8</span>
+        </button>
       </nav>
     </aside>
 
@@ -7100,6 +7103,101 @@ nearlyEqual(0.1 + 0.2, 0.3);   // true</pre>
           </div>
         </section>
 
+        <!-- ===== 39 문자 인코딩 · ASCII · 유니코드 · UTF-8 (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="39" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">39</span> 문자 인코딩 · ASCII · 유니코드 · UTF-8</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            컴퓨터는 글자도 <strong class="hl">숫자로</strong> 저장합니다. <code class="inline">'A'</code>는 65.
+            영어만 담던 <strong class="hl">ASCII</strong>에서, 세상 모든 글자에 번호를 준 <strong class="hl">유니코드</strong>,
+            그 번호를 바이트로 담는 <strong class="hl">UTF-8</strong>까지의 이야기.
+          </p>
+
+          <article class="card">
+            <h3>ASCII — 영문·기호를 1바이트로</h3>
+            <p>가장 오래된 규칙. 0~127번에 영문 대소문자·숫자·기호를 배치. <code class="inline">char</code>(<a href="#09">09</a>) 한 칸에 딱 들어갑니다.</p>
+            <pre>char c = 'A';
+int  n = c;        // 65  (문자는 사실 숫자)
+char d = 'A' + 1;  // 'B' (66)
+
+// '0'~'9'는 48~57, 'a'는 97 → 소문자/대문자 변환에 이용</pre>
+            <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 문자↔숫자 변환, 대소문자 바꾸기, 파싱. 단 한글·이모지는 못 담음(128칸뿐).</p>
+          </article>
+
+          <article class="card">
+            <h3>유니코드 → UTF-8 — 번호를 바이트로</h3>
+            <p><strong class="hl">유니코드</strong>는 모든 글자에 번호(코드포인트, 예 <code class="inline">U+AC00</code>=‘가’)를 매깁니다.
+              <strong class="hl">UTF-8</strong>은 그 번호를 <em>1~4바이트</em>로 담는 방식 — ASCII는 그대로 1바이트라 <strong class="hl">호환</strong>됩니다.</p>
+            <div class="guide-viz" aria-label="문자에서 코드포인트, UTF-8 바이트로">
+              <div style="display:flex;flex-direction:column;gap:10px;max-width:460px;margin:0 auto;font-family:var(--mono);font-size:12px">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span style="padding:6px 12px;border-radius:8px;background:#0b0e14;border:1px solid #67e8f9;color:#67e8f9;font-size:15px;font-weight:800">A</span>
+                  <span style="color:#6b7389">→</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.5);color:#fbbf24">U+0041</span>
+                  <span style="color:#6b7389">→</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:rgba(52,211,153,0.13);border:1px solid #34d399;color:#34d399">0x41</span>
+                  <span style="color:#6b7389;font-size:11px">1바이트</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span style="padding:6px 12px;border-radius:8px;background:#0b0e14;border:1px solid #c4b5fd;color:#e9d5ff;font-size:15px;font-weight:800">가</span>
+                  <span style="color:#6b7389">→</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.5);color:#fbbf24">U+AC00</span>
+                  <span style="color:#6b7389">→</span>
+                  <span style="padding:6px 10px;border-radius:8px;background:rgba(52,211,153,0.13);border:1px solid #34d399;color:#34d399">EA&nbsp;B0&nbsp;80</span>
+                  <span style="color:#6b7389;font-size:11px">3바이트</span>
+                </div>
+              </div>
+              <p class="viz-cap">영문은 1바이트, 한글은 보통 3바이트, 이모지는 4바이트. 그래서 UTF-8은 <strong>가변 길이</strong>.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — “한글 한 글자가 왜 3?”</h3>
+            <p><strong class="hl">상황:</strong> <code class="inline">std::string</code>은 <em>바이트</em>의 열입니다. 그래서 <code class="inline">.size()</code>는 글자 수가 아니라 바이트 수.</p>
+            <pre>#include &lt;string&gt;
+
+std::string s = "가";
+s.size();      // 3  (글자 1개지만 UTF-8로 3바이트)
+
+std::string e = "Hi";
+e.size();      // 2  (ASCII라 1바이트씩)</pre>
+            <p><strong class="hl">쓰임:</strong> 파일·네트워크는 거의 UTF-8. “글자 수”가 필요하면 바이트가 아니라 코드포인트로 세야 함(라이브러리 사용).
+              소스 파일도 <strong class="hl">UTF-8로 저장</strong>하면 한글 깨짐이 줄어듭니다. 문자 기본 → <a href="#09">09</a></p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>인코딩 한눈 비교</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th>방식</th><th>범위</th><th>글자당 바이트</th></tr></thead>
+                  <tbody>
+                    <tr><td>ASCII</td><td>영문·기호</td><td>1</td></tr>
+                    <tr><td>UTF-8</td><td>모든 글자</td><td>1~4 (가변)</td></tr>
+                    <tr><td>UTF-16</td><td>모든 글자</td><td>2 또는 4</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <h3>흔한 함정</h3>
+              <ul class="checklist">
+                <li class="no">한글 문자열에서 <code class="inline">s.size()</code>를 글자 수로 착각</li>
+                <li class="no">바이트 중간을 잘라 글자 깨뜨리기</li>
+                <li class="tip">콘솔에 한글이 깨지면 인코딩(코드페이지) 설정 확인</li>
+                <li class="yes">파일·소스는 UTF-8 통일</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 글자 = 번호(유니코드) → 바이트(UTF-8). 영문 1, 한글 3, 이모지 4바이트.
+            <code class="inline">std::string</code>은 바이트 열이라는 것만 기억하면 대부분의 “깨짐·길이” 문제가 풀립니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -7119,7 +7217,7 @@ nearlyEqual(0.1 + 0.2, 0.3);   // true</pre>
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35","36","37","38"
+        "30","31","32","33","34","35","36","37","38","39"
       ];
 
       const DICT = [
@@ -7256,7 +7354,11 @@ nearlyEqual(0.1 + 0.2, 0.3);   // true</pre>
         { term: "오버플로우", en: "overflow", g: "E", def: "타입 최대값을 넘어 값이 한 바퀴 돌아 최소값(음수/0)이 되는 현상. 부호 있는 정수 오버플로우는 UB.", ref: "37" },
         { term: "부동소수점", en: "floating point", g: "E", def: "실수를 부호×가수×2^지수 꼴로 저장하는 방식. 대부분 근사값이라 미세 오차가 있음.", ref: "38" },
         { term: "IEEE 754", en: "IEEE 754", g: "E", def: "부동소수점 표준. float=32비트(부호1·지수8·가수23), double=64비트.", ref: "38" },
-        { term: "정밀도 오차", en: "rounding error", g: "E", def: "0.1처럼 2진 무한소수를 유한 비트로 잘라 담을 때 생기는 미세 오차. 0.1+0.2≠0.3의 원인.", ref: "38" }
+        { term: "정밀도 오차", en: "rounding error", g: "E", def: "0.1처럼 2진 무한소수를 유한 비트로 잘라 담을 때 생기는 미세 오차. 0.1+0.2≠0.3의 원인.", ref: "38" },
+        { term: "ASCII", en: "ASCII", g: "E", def: "영문·숫자·기호를 0~127번에 1바이트로 담는 오래된 문자 규칙. 'A'=65.", ref: "39" },
+        { term: "유니코드", en: "Unicode", g: "E", def: "세상 모든 글자에 번호(코드포인트)를 매긴 표준. '가'=U+AC00.", ref: "39" },
+        { term: "UTF-8", en: "UTF-8", g: "E", def: "유니코드 번호를 1~4바이트로 담는 가변 길이 인코딩. ASCII 호환. 한글은 보통 3바이트.", ref: "39" },
+        { term: "코드포인트", en: "code point", g: "E", def: "유니코드가 각 글자에 부여한 번호. U+AC00 같은 표기. 바이트 수와는 다름.", ref: "39" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
