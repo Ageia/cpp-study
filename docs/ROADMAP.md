@@ -98,7 +98,7 @@
 ### B8. 동시성 (심화 34+ 후보)
 - ✅ **`std::thread`/`jthread` · `mutex`/`lock_guard`** (68)
 - ✅ `condition_variable` · `atomic` · 메모리 모델 (69)
-- ⬜ `async`/`future`/`promise`
+- ✅ `async`/`future`/`promise` (70)
 
 ### B9. 시간 · 유틸 라이브러리
 - ⬜ **`chrono`**(시간 측정) · `random` · `filesystem`
