@@ -2358,6 +2358,9 @@
         <button type="button" role="tab" data-tab="49" aria-selected="false">
           <span class="n">49</span><span class="t">알고리즘 · 정렬 · 탐색</span>
         </button>
+        <button type="button" role="tab" data-tab="50" aria-selected="false">
+          <span class="n">50</span><span class="t">네트워크 맛보기</span>
+        </button>
       </nav>
     </aside>
 
@@ -8076,6 +8079,67 @@ sort(구간) {
           </div>
         </section>
 
+        <!-- ===== 50 네트워크 맛보기 · TCP/IP · 소켓 (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="50" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">50</span> 네트워크 맛보기 · TCP/IP · 소켓</h2>
+            <span class="tag tag-cyan">컴퓨터 · 선택</span>
+          </div>
+          <p class="panel-lead">
+            컴퓨터끼리 대화하는 법의 큰 그림. <strong class="hl">IP</strong>가 “어디로”(주소),
+            <strong class="hl">포트</strong>가 “그 집의 어느 창구”, <strong class="hl">TCP</strong>가 “빠짐없이 순서대로”를 맡습니다.
+            프로그램이 잡는 통신 손잡이가 <strong class="hl">소켓</strong>. 실제 전송은 커널(<a href="#43">43</a>)이 처리하죠.
+          </p>
+
+          <article class="card">
+            <h3>한눈에 보기 — 클라이언트 ↔ 서버</h3>
+            <div class="guide-viz" aria-label="클라이언트 서버 소켓 통신">
+              <div style="display:flex;align-items:center;gap:10px;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center;font-size:12px">
+                <div style="flex:1 1 120px;min-width:0;text-align:center;padding:12px 8px;border-radius:10px;background:rgba(103,232,249,0.08);border:1px solid #67e8f9;color:#67e8f9;font-weight:700">클라이언트<br><span style="font-size:10px;color:#9aa3b8;font-weight:400">connect()</span></div>
+                <div style="flex:0 0 auto;text-align:center;color:#6b7389;font-family:var(--mono);font-size:11px">──소켓──▶<br><span style="color:#fbbf24">IP:포트</span><br>◀──응답──</div>
+                <div style="flex:1 1 120px;min-width:0;text-align:center;padding:12px 8px;border-radius:10px;background:rgba(196,181,253,0.08);border:1px solid #c4b5fd;color:#e9d5ff;font-weight:700">서버<br><span style="font-size:10px;color:#9aa3b8;font-weight:400">listen() · accept()</span></div>
+              </div>
+              <p class="viz-cap">서버는 특정 포트에서 기다리고(listen), 클라이언트가 그 <strong>IP:포트</strong>로 연결(connect). 이후 소켓으로 바이트를 주고받음.</p>
+            </div>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>IP · 포트 · 소켓</h3>
+              <ul class="checklist">
+                <li class="yes"><strong class="hl">IP</strong>: 컴퓨터 주소(예 <code class="inline">192.168.0.5</code>)</li>
+                <li class="yes"><strong class="hl">포트</strong>: 그 컴퓨터의 창구 번호(웹 80/443)</li>
+                <li class="yes"><strong class="hl">소켓</strong>: 프로그램이 쥔 통신 끝점(파일처럼 read/write)</li>
+                <li class="tip">소켓은 사실상 파일 디스크립터 — I/O가 <a href="#44">파일(44)</a>과 닮음</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>TCP vs UDP</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th></th><th>TCP</th><th>UDP</th></tr></thead>
+                  <tbody>
+                    <tr><td>보장</td><td class="hl">순서·빠짐없음</td><td>없음(유실 가능)</td></tr>
+                    <tr><td>속도</td><td>약간 느림</td><td>빠름</td></tr>
+                    <tr><td>쓰임</td><td>웹·파일·로그인</td><td>게임·음성·스트림</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>계층으로 보기 — 왜 나눴나</h3>
+            <p>네트워크는 층으로 쌓입니다: <strong class="hl">IP</strong>(어디로 보낼지) 위에 <strong class="hl">TCP</strong>(빠짐없이 순서대로) 위에 <strong class="hl">HTTP</strong> 같은 응용 규약. 각 층이 제 일만 해서, 윗층은 아래를 몰라도 됩니다.</p>
+            <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 멀티플레이·API 호출·채팅. C++ 표준엔 소켓이 없어 OS API나 라이브러리(asio 등)를 씁니다 — 개념만 잡아 두면 충분.</p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> IP=주소, 포트=창구, 소켓=손잡이, TCP=신뢰·UDP=속도. 서버가 듣고 클라이언트가 연결한다.
+            깊은 구현은 필요할 때 — 이 그림이면 대부분의 네트워크 대화를 따라갈 수 있습니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -8095,7 +8159,7 @@ sort(구간) {
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49"
+        "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50"
       ];
 
       const DICT = [
@@ -8272,7 +8336,11 @@ sort(구간) {
         { term: "그래프", en: "graph", g: "E", def: "노드가 엣지로 이어진 구조. 지도·관계·의존성. 인접 리스트/행렬로 표현.", ref: "48" },
         { term: "이진 탐색", en: "binary search", g: "E", def: "정렬된 데이터에서 가운데를 보고 절반을 버려 O(log n)으로 찾기. std::binary_search.", ref: "49" },
         { term: "정렬", en: "sorting", g: "E", def: "값을 순서대로 나열. 좋은 알고리즘은 O(n log n). 직접 짜지 말고 std::sort.", ref: "49" },
-        { term: "분할정복", en: "divide and conquer", g: "E", def: "큰 문제를 작은 같은 문제로 쪼개(재귀) 결과를 합치는 사고법. 병합 정렬·이진 탐색.", ref: "49" }
+        { term: "분할정복", en: "divide and conquer", g: "E", def: "큰 문제를 작은 같은 문제로 쪼개(재귀) 결과를 합치는 사고법. 병합 정렬·이진 탐색.", ref: "49" },
+        { term: "TCP / IP", en: "TCP / IP", g: "E", def: "IP=컴퓨터 주소(어디로), TCP=빠짐없이 순서대로 전달. 그 위에 HTTP 등 응용 규약.", ref: "50" },
+        { term: "소켓", en: "socket", g: "E", def: "프로그램이 쥔 통신 끝점. 파일처럼 read/write. 서버는 listen, 클라이언트는 connect.", ref: "50" },
+        { term: "포트", en: "port", g: "E", def: "한 컴퓨터 안 서비스의 창구 번호. 웹 80/443 등. IP:포트로 대상을 특정.", ref: "50" },
+        { term: "UDP", en: "UDP", g: "E", def: "순서·도착 보장 없이 빠르게 보내는 방식. 게임·음성·스트리밍에.", ref: "50" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
