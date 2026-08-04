@@ -2402,6 +2402,9 @@
         <button type="button" role="tab" data-tab="63" aria-selected="false">
           <span class="n">63</span><span class="t">컨테이너 더</span>
         </button>
+        <button type="button" role="tab" data-tab="64" aria-selected="false">
+          <span class="n">64</span><span class="t">ranges · views</span>
+        </button>
       </nav>
     </aside>
 
@@ -9121,6 +9124,82 @@ m["hp"] = 100;      // 평균 O(1)
           </div>
         </section>
 
+        <!-- ===== 64 ranges · views (C++ 더) ===== -->
+        <section class="panel" data-panel="64" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">64</span> ranges · views</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            C++20이 <code class="inline">&lt;algorithm&gt;</code>(<a href="#31">31</a>)을 더 읽기 좋게 바꾼 것.
+            <code class="inline">begin()/end()</code>를 매번 넘기는 대신 <strong class="hl">컨테이너를 통째로</strong> 주고,
+            <strong class="hl">파이프(<code class="inline">|</code>)</strong>로 변환을 이어 붙입니다.
+          </p>
+
+          <article class="card">
+            <h3>ranges 알고리즘 — begin/end 생략</h3>
+            <pre>#include &lt;algorithm&gt;
+#include &lt;ranges&gt;
+#include &lt;vector&gt;
+
+std::vector&lt;int&gt; v = {3, 1, 2};
+
+std::ranges::sort(v);          // v 통째로! (begin/end 안 넘김)
+auto it = std::ranges::find(v, 2);
+
+// 비교: 예전 방식
+// std::sort(v.begin(), v.end());</pre>
+            <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 기존 알고리즘과 같지만 실수(엉뚱한 begin/end 짝) 여지가 줄고 짧습니다.</p>
+          </article>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — views: 파이프로 변환</h3>
+            <p><strong class="hl">상황:</strong> “짝수만 골라 제곱”. <strong class="hl">뷰(view)</strong>는 원본을 복사하지 않고 <em>지연 변환</em>을 얹습니다(필요할 때 계산).</p>
+            <pre>#include &lt;ranges&gt;
+namespace rv = std::views;
+
+std::vector&lt;int&gt; v = {1, 2, 3, 4, 5, 6};
+
+auto result = v
+    | rv::filter([](int x){ return x % 2 == 0; })  // 짝수만
+    | rv::transform([](int x){ return x * x; });    // 제곱
+
+for (int x : result) std::cout &lt;&lt; x &lt;&lt; ' ';   // 4 16 36</pre>
+            <p><strong class="hl">쓰임:</strong> 필터·변환·자르기를 <strong class="hl">읽는 순서대로</strong> 연결. 람다(<a href="#33">33</a>)와 짝. 중간 컨테이너를 안 만들어 효율적.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>자주 쓰는 view</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th>view</th><th>하는 일</th></tr></thead>
+                  <tbody>
+                    <tr><td><code class="inline">filter</code></td><td>조건 통과만</td></tr>
+                    <tr><td><code class="inline">transform</code></td><td>각 원소 변환</td></tr>
+                    <tr><td><code class="inline">take(n)</code></td><td>앞 n개</td></tr>
+                    <tr><td><code class="inline">drop(n)</code></td><td>앞 n개 건너뜀</td></tr>
+                    <tr><td><code class="inline">reverse</code></td><td>뒤집기</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <h3>지연(lazy)이라는 것</h3>
+              <ul class="checklist">
+                <li class="yes">뷰는 <strong class="hl">훑을 때 비로소</strong> 계산 — 중간 vector 없음</li>
+                <li class="yes">원본을 <strong class="hl">복사 안 함</strong>(span처럼 <a href="#32">32</a>)</li>
+                <li class="no">원본이 바뀌면 뷰도 영향 — 수명·무효화 주의</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> ranges = 컨테이너 통째로 넘기는 알고리즘, views = 파이프(<code class="inline">|</code>)로 잇는 지연 변환.
+            <em>filter → transform</em>을 읽는 순서대로 쓸 수 있어, 반복문 여러 개가 한 줄로 또렷해집니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9141,7 +9220,7 @@ m["hp"] = 100;      // 평균 O(1)
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64"
       ];
 
       const DICT = [
@@ -9361,7 +9440,9 @@ m["hp"] = 100;      // 평균 O(1)
         { term: "pair / tuple", en: "std::pair / tuple", g: "D", def: "서로 다른 값 여러 개를 묶는 타입. 구조적 바인딩으로 풀기. 이름이 중요하면 struct.", ref: "62" },
         { term: "array", en: "std::array", g: "C", def: "크기 고정 배열. C 배열보다 안전(size·범위). 스택에 놓여 빠름.", ref: "63" },
         { term: "deque", en: "std::deque", g: "C", def: "양끝 삽입·삭제가 O(1)인 컨테이너. 큐·덱에. queue의 기본 속.", ref: "63" },
-        { term: "list", en: "std::list", g: "C", def: "이중 연결 리스트. 중간 삽입·삭제 O(1), 인덱스 접근 불가. 실무에선 드묾.", ref: "63" }
+        { term: "list", en: "std::list", g: "C", def: "이중 연결 리스트. 중간 삽입·삭제 O(1), 인덱스 접근 불가. 실무에선 드묾.", ref: "63" },
+        { term: "ranges", en: "std::ranges", g: "D", def: "C++20. 컨테이너를 통째로 넘기는 알고리즘. ranges::sort(v)처럼 begin/end 생략.", ref: "64" },
+        { term: "views", en: "std::views", g: "D", def: "파이프(|)로 잇는 지연 변환. filter·transform 등. 원본 복사 없이 필요할 때 계산.", ref: "64" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
