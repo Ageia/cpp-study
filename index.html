@@ -2417,6 +2417,9 @@
         <button type="button" role="tab" data-tab="68" aria-selected="false">
           <span class="n">68</span><span class="t">thread · mutex</span>
         </button>
+        <button type="button" role="tab" data-tab="69" aria-selected="false">
+          <span class="n">69</span><span class="t">atomic · 조건 변수</span>
+        </button>
       </nav>
     </aside>
 
@@ -9507,6 +9510,71 @@ std::jthread b(add_range, 500, 1000);</pre>
           </div>
         </section>
 
+        <!-- ===== 69 atomic · condition_variable · 메모리 모델 (C++ 더) ===== -->
+        <section class="panel" data-panel="69" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">69</span> atomic · 조건 변수 · 메모리 모델</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            스레드(<a href="#68">68</a>)들이 <strong class="hl">협력</strong>하는 도구. 락 없이 안전한 단순 연산 <code class="inline">atomic</code>,
+            “조건이 될 때까지 기다렸다 깨우는” <code class="inline">condition_variable</code>,
+            그리고 왜 이것들이 필요한지의 바탕인 <strong class="hl">메모리 모델</strong>.
+          </p>
+
+          <article class="card">
+            <h3>atomic — 락 없이 안전한 카운터</h3>
+            <p>단순 값의 증가·교체 정도는 <code class="inline">mutex</code> 없이 <strong class="hl">원자적</strong>으로 처리할 수 있습니다(끊기지 않는 한 번의 연산).</p>
+            <pre>#include &lt;atomic&gt;
+
+std::atomic&lt;int&gt; counter{0};
+
+void inc() {
+    counter++;          // 원자적 — 경쟁 상태 없음(락 불필요)
+}
+int now = counter.load();   // 현재 값</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes">카운터·플래그처럼 <strong class="hl">단순한 공유 값</strong>에 딱</li>
+              <li class="tip">복잡한 자료구조는 여전히 <code class="inline">mutex</code>(<a href="#68">68</a>)</li>
+              <li class="tip">락보다 가볍지만 만능은 아님</li>
+            </ul>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>condition_variable — 기다렸다 깨우기</h3>
+              <pre>#include &lt;condition_variable&gt;
+
+std::mutex m;
+std::condition_variable cv;
+bool ready = false;
+
+// 소비자: 준비될 때까지 대기
+std::unique_lock lk(m);
+cv.wait(lk, []{ return ready; });
+
+// 생산자: 준비 후 깨움
+{ std::lock_guard g(m); ready = true; }
+cv.notify_one();</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 생산자·소비자, 작업 큐. <em>바쁜 대기(빈 루프)</em> 대신 잠들었다 깨워 CPU 절약.</p>
+            </article>
+            <article class="card">
+              <h3>메모리 모델 맛보기</h3>
+              <ul class="checklist">
+                <li class="tip">컴파일러·CPU는 성능을 위해 명령 <strong class="hl">순서를 바꿀 수</strong> 있음</li>
+                <li class="no">그래서 한 스레드의 쓰기가 다른 스레드에 <strong class="hl">순서대로 안 보일</strong> 수 있음</li>
+                <li class="yes"><code class="inline">atomic</code>·<code class="inline">mutex</code>가 <strong class="hl">보이는 순서를 보장</strong>(동기화 지점)</li>
+                <li class="tip">그래서 “그냥 bool 플래그로 신호”는 위험 → atomic으로</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 단순 공유 값은 <code class="inline">atomic</code>, 조건 대기는 <code class="inline">condition_variable</code>,
+            그리고 “순서는 저절로 보장되지 않는다 — 동기화 도구가 보장한다”. 락 없는 정교한 동시성은 전문 영역이니 여기선 <em>있다</em>는 감각까지.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9527,7 +9595,7 @@ std::jthread b(add_range, 500, 1000);</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69"
       ];
 
       const DICT = [
@@ -9760,7 +9828,10 @@ std::jthread b(add_range, 500, 1000);</pre>
         { term: "static_assert", en: "static_assert", g: "D", def: "컴파일 타임 전제 검사. 타입·크기 조건이 틀리면 빌드 실패+메시지. type_traits와 짝.", ref: "67" },
         { term: "std::thread", en: "std::thread", g: "E", def: "함수·람다를 새 실행 흐름으로 돌리는 것. 반드시 join 또는 detach. 안 하면 terminate.", ref: "68" },
         { term: "jthread", en: "std::jthread", g: "E", def: "C++20. 소멸 시 자동 join하는 스레드(RAII). join 깜빡 함정을 없앰.", ref: "68" },
-        { term: "lock_guard", en: "std::lock_guard", g: "E", def: "생성 시 잠그고 소멸 시 자동 unlock하는 RAII 락. mutex와 함께 임계 구역 보호.", ref: "68" }
+        { term: "lock_guard", en: "std::lock_guard", g: "E", def: "생성 시 잠그고 소멸 시 자동 unlock하는 RAII 락. mutex와 함께 임계 구역 보호.", ref: "68" },
+        { term: "atomic", en: "std::atomic", g: "E", def: "락 없이 원자적으로 다루는 값. 카운터·플래그 같은 단순 공유에. 복잡한 건 여전히 mutex.", ref: "69" },
+        { term: "condition_variable", en: "std::condition_variable", g: "E", def: "조건이 될 때까지 잠들었다 깨어나는 대기/알림 도구. 생산자·소비자에. 바쁜 대기 대체.", ref: "69" },
+        { term: "메모리 모델", en: "memory model", g: "E", def: "멀티스레드에서 쓰기가 보이는 순서 규칙. CPU·컴파일러가 순서를 바꿀 수 있어 atomic·mutex가 보장.", ref: "69" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
