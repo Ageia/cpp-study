@@ -2435,6 +2435,9 @@
         <button type="button" role="tab" data-tab="74" aria-selected="false">
           <span class="n">74</span><span class="t">빌드 시스템 · 패키지</span>
         </button>
+        <button type="button" role="tab" data-tab="75" aria-selected="false">
+          <span class="n">75</span><span class="t">디버거 · 새니타이저</span>
+        </button>
       </nav>
     </aside>
 
@@ -9903,6 +9906,61 @@ app: main.o util.o
           </div>
         </section>
 
+        <!-- ===== 75 디버거 · 새니타이저 (C++ 더) ===== -->
+        <section class="panel" data-panel="75" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">75</span> 디버거 · 새니타이저</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            버그를 잡는 두 종류의 도구. <strong class="hl">디버거</strong>는 실행을 <em>멈춰 놓고 들여다보고</em>,
+            <strong class="hl">새니타이저</strong>는 실행 중 <em>잘못을 자동 감시</em>합니다.
+            메모리 오류·댕글링(<a href="#32">32</a>)·누수(<a href="#15">15</a>)를 초기에 잡는 필수 도구들.
+          </p>
+
+          <article class="card">
+            <h3>디버거 — 멈춰서 관찰</h3>
+            <p><code class="inline">-g</code>(<a href="#73">73</a>)로 디버그 정보를 넣고 <strong class="hl">gdb</strong>(GCC)·<strong class="hl">lldb</strong>(Clang)나 IDE로 실행합니다.</p>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>기능</th><th>하는 일</th></tr></thead>
+                <tbody>
+                  <tr><td>브레이크포인트</td><td>특정 줄에서 <strong class="hl">멈춤</strong></td></tr>
+                  <tr><td>스텝(step/next)</td><td>한 줄씩 실행</td></tr>
+                  <tr><td>변수 관찰(watch)</td><td>값 변화 추적</td></tr>
+                  <tr><td>콜 스택(<a href="#26">26</a>)</td><td>어디서 불렸는지</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:8px 0 0"><strong class="hl">쓰임:</strong> <code class="inline">cout</code> 찍기보다 빠르게 “지금 값이 뭔지·왜 여기 왔는지” 확인. 크래시 지점을 바로 짚어 줍니다.</p>
+          </article>
+
+          <article class="card">
+            <h3>새니타이저 — 컴파일에 켜는 감시기</h3>
+            <p>컴파일 옵션 하나로 <strong class="hl">런타임 검사</strong>를 붙입니다. 평소 안 보이던 메모리·미정의 동작을 <em>터지는 순간</em> 잡아 위치를 알려 줍니다.</p>
+            <pre># 주소 새니타이저(ASan) + 미정의 동작(UBSan)
+g++ -g -fsanitize=address,undefined main.cpp -o app
+./app   # 잘못된 접근이 있으면 즉시 상세 리포트</pre>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>도구</th><th>잡는 것</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>ASan</strong></td><td>버퍼 오버런·<strong class="hl">해제 후 사용</strong>·누수</td></tr>
+                  <tr><td><strong>UBSan</strong></td><td>정수 오버플로우(<a href="#37">37</a>)·널 역참조 등 <strong class="hl">미정의 동작</strong></td></tr>
+                  <tr><td><strong>TSan</strong></td><td>경쟁 상태(<a href="#42">42</a>)</td></tr>
+                  <tr><td><strong>valgrind</strong></td><td>누수·잘못된 접근(별도 실행)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:8px 0 0"><strong class="hl">쓰임:</strong> 개발·테스트 빌드에 <code class="inline">-fsanitize</code>를 켜 두면 “가끔 터지는” 메모리 버그를 훨씬 일찍 잡습니다.</p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 재현되는 버그는 <strong class="hl">디버거</strong>로 멈춰 보고, 메모리·UB는 <strong class="hl">새니타이저</strong>(<code class="inline">-fsanitize=address,undefined</code>)로 상시 감시.
+            둘을 습관으로 켜 두면 C++의 어려운 버그 대부분을 초기에 잡을 수 있습니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9923,7 +9981,7 @@ app: main.o util.o
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75"
       ];
 
       const DICT = [
@@ -10170,7 +10228,10 @@ app: main.o util.o
         { term: "-Wall", en: "warnings", g: "E", def: "경고를 켜는 옵션(-Wall -Wextra). 버그가 될 코드를 미리 알려줌. 무시하지 말 것.", ref: "73" },
         { term: "빌드 시스템", en: "build system", g: "E", def: "무엇을 어떻게 컴파일할지 적어 두고 자동 빌드하는 도구. 증분 빌드·의존성 관리. CMake가 표준.", ref: "74" },
         { term: "CMake", en: "CMake", g: "E", def: "CMakeLists.txt에 목표만 적으면 각 플랫폼 빌드를 생성하는 사실상 표준 빌드 시스템.", ref: "74" },
-        { term: "패키지 매니저", en: "package manager", g: "E", def: "라이브러리 설치·버전·링크를 관리. C++는 vcpkg·Conan. CMake와 연결해 씀.", ref: "74" }
+        { term: "패키지 매니저", en: "package manager", g: "E", def: "라이브러리 설치·버전·링크를 관리. C++는 vcpkg·Conan. CMake와 연결해 씀.", ref: "74" },
+        { term: "디버거", en: "debugger", g: "E", def: "실행을 멈춰(브레이크포인트) 변수·콜 스택을 관찰하는 도구. gdb·lldb·IDE. -g로 빌드.", ref: "75" },
+        { term: "새니타이저", en: "sanitizer", g: "E", def: "-fsanitize로 켜는 런타임 감시기. ASan(메모리)·UBSan(미정의 동작)·TSan(경쟁).", ref: "75" },
+        { term: "valgrind", en: "valgrind", g: "E", def: "누수·잘못된 메모리 접근을 검출하는 도구(별도 실행). 새니타이저와 비슷한 목적.", ref: "75" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
