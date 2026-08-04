@@ -2432,6 +2432,9 @@
         <button type="button" role="tab" data-tab="73" aria-selected="false">
           <span class="n">73</span><span class="t">컴파일러 명령</span>
         </button>
+        <button type="button" role="tab" data-tab="74" aria-selected="false">
+          <span class="n">74</span><span class="t">빌드 시스템 · 패키지</span>
+        </button>
       </nav>
     </aside>
 
@@ -9839,6 +9842,67 @@ g++ -std=c++20 -Wall -Wextra -Werror main.cpp -o app</pre>
           </div>
         </section>
 
+        <!-- ===== 74 빌드 시스템 · 패키지 (C++ 더) ===== -->
+        <section class="panel" data-panel="74" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">74</span> 빌드 시스템 · 패키지 매니저</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            파일이 수십 개가 되면 <code class="inline">g++</code>(<a href="#73">73</a>)을 손으로 치기 어렵습니다.
+            <strong class="hl">빌드 시스템</strong>이 “무엇을 어떻게 컴파일할지”를 적어 두면 자동으로 빌드해 주고,
+            <strong class="hl">패키지 매니저</strong>가 남의 라이브러리를 가져다 줍니다.
+          </p>
+
+          <article class="card">
+            <h3>왜 필요한가</h3>
+            <ul class="checklist">
+              <li class="yes"><strong class="hl">증분 빌드</strong>: 바뀐 파일만 다시 컴파일(분할 컴파일 <a href="#03">03</a>)</li>
+              <li class="yes"><strong class="hl">의존성</strong>·컴파일 순서·라이브러리 링크(<a href="#46">46</a>) 관리</li>
+              <li class="yes">플랫폼·컴파일러 차이를 <strong class="hl">한 설정</strong>으로 흡수</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>CMake — 사실상 표준</h3>
+            <p><code class="inline">CMakeLists.txt</code>에 <em>무엇을 만들지</em>만 적으면, CMake가 각 플랫폼의 실제 빌드(Make·MSVC 등)를 생성합니다.</p>
+            <pre># CMakeLists.txt
+cmake_minimum_required(VERSION 3.20)
+project(MyGame)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_executable(app main.cpp util.cpp)   # 실행파일 정의</pre>
+            <pre># 빌드 (터미널)
+cmake -B build       # 빌드 파일 생성
+cmake --build build  # 실제 컴파일</pre>
+            <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 대부분의 오픈소스·IDE가 CMake를 지원. “C++ 프로젝트의 공용어”.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>Make (개념)</h3>
+              <pre># Makefile: 규칙 = 목표: 재료 + 명령
+app: main.o util.o
+	g++ main.o util.o -o app</pre>
+              <p style="margin-bottom:0">더 저수준. 요즘은 CMake가 이런 걸 대신 <strong class="hl">생성</strong>해 줍니다.</p>
+            </article>
+            <article class="card">
+              <h3>패키지 매니저</h3>
+              <ul class="checklist">
+                <li class="yes"><strong>vcpkg</strong>·<strong>Conan</strong>: 라이브러리 설치·버전 관리</li>
+                <li class="yes">헤더·링크 설정을 자동으로 CMake에 연결</li>
+                <li class="tip">“이 라이브러리 어떻게 설치하지” 고민을 줄여 줌</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 파일이 많아지면 <strong class="hl">CMake</strong>로 빌드를 자동화하고, 남의 라이브러리는 <strong class="hl">vcpkg/Conan</strong>으로.
+            처음엔 위 <code class="inline">CMakeLists.txt</code> 5줄이면 충분 — 필요할 때 조금씩 늘리면 됩니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9859,7 +9923,7 @@ g++ -std=c++20 -Wall -Wextra -Werror main.cpp -o app</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74"
       ];
 
       const DICT = [
@@ -10103,7 +10167,10 @@ g++ -std=c++20 -Wall -Wextra -Werror main.cpp -o app</pre>
         { term: "filesystem", en: "std::filesystem", g: "D", def: "경로·존재·크기·디렉터리 순회를 다루는 표준. 파일 내용은 fstream으로.", ref: "71" },
         { term: "구조적 바인딩", en: "structured bindings", g: "D", def: "C++17. auto [a,b]=...로 묶인 값을 여러 이름으로 한 번에 풀기. map 순회·다중 반환에.", ref: "72" },
         { term: "컴파일러 옵션", en: "compiler flags", g: "E", def: "-std(표준)·-O2(최적화)·-g(디버그)·-Wall(경고)·-I(헤더 경로). g++·clang++·MSVC 공통 감각.", ref: "73" },
-        { term: "-Wall", en: "warnings", g: "E", def: "경고를 켜는 옵션(-Wall -Wextra). 버그가 될 코드를 미리 알려줌. 무시하지 말 것.", ref: "73" }
+        { term: "-Wall", en: "warnings", g: "E", def: "경고를 켜는 옵션(-Wall -Wextra). 버그가 될 코드를 미리 알려줌. 무시하지 말 것.", ref: "73" },
+        { term: "빌드 시스템", en: "build system", g: "E", def: "무엇을 어떻게 컴파일할지 적어 두고 자동 빌드하는 도구. 증분 빌드·의존성 관리. CMake가 표준.", ref: "74" },
+        { term: "CMake", en: "CMake", g: "E", def: "CMakeLists.txt에 목표만 적으면 각 플랫폼 빌드를 생성하는 사실상 표준 빌드 시스템.", ref: "74" },
+        { term: "패키지 매니저", en: "package manager", g: "E", def: "라이브러리 설치·버전·링크를 관리. C++는 vcpkg·Conan. CMake와 연결해 씀.", ref: "74" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
