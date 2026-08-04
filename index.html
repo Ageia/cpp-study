@@ -2429,6 +2429,9 @@
         <button type="button" role="tab" data-tab="72" aria-selected="false">
           <span class="n">72</span><span class="t">구조적 바인딩</span>
         </button>
+        <button type="button" role="tab" data-tab="73" aria-selected="false">
+          <span class="n">73</span><span class="t">컴파일러 명령</span>
+        </button>
       </nav>
     </aside>
 
@@ -9767,6 +9770,75 @@ auto [q, r] = divmod(17, 5);   // q=3, r=2</pre>
           </div>
         </section>
 
+        <!-- ===== 73 컴파일러 명령 (C++ 더) ===== -->
+        <section class="panel" data-panel="73" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">73</span> 컴파일러 명령 · 옵션</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            컴파일 파이프라인(<a href="#03">03</a>·<a href="#45">45</a>)을 실제 <strong class="hl">명령 한 줄</strong>로.
+            컴파일러는 <code class="inline">g++</code>·<code class="inline">clang++</code>·<code class="inline">MSVC(cl)</code> 셋이 대표이고,
+            <strong class="hl">표준·최적화·경고</strong> 옵션만 알면 대부분 됩니다.
+          </p>
+
+          <article class="card">
+            <h3>한 줄로 빌드하고 실행</h3>
+            <pre># 컴파일 (여러 파일도 나열)
+g++ -std=c++20 -O2 -Wall main.cpp util.cpp -o app
+
+# 실행
+./app            # (Windows는 app.exe)
+
+# clang도 사용법 동일
+clang++ -std=c++20 -O2 -Wall main.cpp -o app</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes"><code class="inline">-o app</code>: 결과 실행파일 이름</li>
+              <li class="yes">여러 <code class="inline">.cpp</code>를 나열하면 컴파일 후 링크(<a href="#46">46</a>)까지</li>
+            </ul>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>자주 쓰는 옵션</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th>옵션</th><th>뜻</th></tr></thead>
+                  <tbody>
+                    <tr><td><code class="inline">-std=c++20</code></td><td>C++ 표준 지정</td></tr>
+                    <tr><td><code class="inline">-O2</code></td><td>최적화(릴리스)</td></tr>
+                    <tr><td><code class="inline">-g</code></td><td>디버그 정보(<a href="#75">75</a>)</td></tr>
+                    <tr><td><code class="inline">-Wall -Wextra</code></td><td>경고 켜기</td></tr>
+                    <tr><td><code class="inline">-I경로</code></td><td>헤더 검색 경로</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <h3>컴파일러 3종</h3>
+              <ul class="checklist">
+                <li class="yes"><strong>GCC(g++)</strong>: 리눅스 기본, 널리 쓰임</li>
+                <li class="yes"><strong>Clang</strong>: 빠른·친절한 에러, macOS 기본</li>
+                <li class="yes"><strong>MSVC(cl)</strong>: Windows·Visual Studio</li>
+                <li class="tip">표준을 지키면 셋 다 대체로 호환</li>
+              </ul>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>경고는 켜 두자</h3>
+            <p><code class="inline">-Wall -Wextra</code>는 “버그가 될 수 있는 코드”를 미리 알려 줍니다. 초기화 안 한 변수·비교 실수·안 쓰는 값 등.</p>
+            <pre># 경고를 에러로 승격(엄격 모드) — CI에서 자주
+g++ -std=c++20 -Wall -Wextra -Werror main.cpp -o app</pre>
+            <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 개발 중엔 <code class="inline">-g -Wall -Wextra</code>, 배포 빌드는 <code class="inline">-O2</code>. 경고를 무시하지 말 것 — 대부분 진짜 문제입니다.</p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> <code class="inline">g++ -std=c++20 -Wall main.cpp -o app</code> 한 줄이면 시작.
+            개발은 <code class="inline">-g -Wall</code>, 배포는 <code class="inline">-O2</code>. 파일이 많아지면 손으로 치기 힘들어지는데, 그때가 빌드 시스템(<a href="#74">74</a>) 차례입니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9787,7 +9859,7 @@ auto [q, r] = divmod(17, 5);   // q=3, r=2</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73"
       ];
 
       const DICT = [
@@ -10029,7 +10101,9 @@ auto [q, r] = divmod(17, 5);   // q=3, r=2</pre>
         { term: "chrono", en: "std::chrono", g: "D", def: "시간 측정·표현. steady_clock으로 경과 시간, 타입으로 단위 구분(milliseconds 등).", ref: "71" },
         { term: "random", en: "std::random", g: "D", def: "제대로 된 난수. 엔진(mt19937)+분포(uniform 등) 조합. rand()%n의 치우침을 피함.", ref: "71" },
         { term: "filesystem", en: "std::filesystem", g: "D", def: "경로·존재·크기·디렉터리 순회를 다루는 표준. 파일 내용은 fstream으로.", ref: "71" },
-        { term: "구조적 바인딩", en: "structured bindings", g: "D", def: "C++17. auto [a,b]=...로 묶인 값을 여러 이름으로 한 번에 풀기. map 순회·다중 반환에.", ref: "72" }
+        { term: "구조적 바인딩", en: "structured bindings", g: "D", def: "C++17. auto [a,b]=...로 묶인 값을 여러 이름으로 한 번에 풀기. map 순회·다중 반환에.", ref: "72" },
+        { term: "컴파일러 옵션", en: "compiler flags", g: "E", def: "-std(표준)·-O2(최적화)·-g(디버그)·-Wall(경고)·-I(헤더 경로). g++·clang++·MSVC 공통 감각.", ref: "73" },
+        { term: "-Wall", en: "warnings", g: "E", def: "경고를 켜는 옵션(-Wall -Wextra). 버그가 될 코드를 미리 알려줌. 무시하지 말 것.", ref: "73" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };

@@ -105,7 +105,7 @@
 - ✅ 구조적 바인딩 `auto [a,b] = ...` (72)
 
 ### B10. 빌드 · 도구 · 생태계
-- ⬜ 컴파일러 g++/clang/MSVC 한 줄 명령 (03 보강)
+- ✅ 컴파일러 g++/clang/MSVC 명령·옵션 (73)
 - ⬜ **빌드 시스템 CMake/Make** · 패키지 vcpkg/conan
 - ⬜ 디버거 gdb/lldb · 새니타이저 ASan/UBSan/valgrind
 - ⬜ 단위 테스트 gtest/Catch2 · git
