@@ -93,7 +93,7 @@
 ### B7. 에러 처리
 - ✅ **예외 try/catch/throw · `noexcept`** (65)
 - ✅ 에러 코드 vs 예외 · `optional`/`expected` (66)
-- ⬜ `assert` · `static_assert`
+- ✅ `assert` · `static_assert` (67)
 
 ### B8. 동시성 (심화 34+ 후보)
 - ⬜ **`std::thread`/`jthread` · `mutex`/`lock_guard`**
