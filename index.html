@@ -2308,6 +2308,11 @@
         <button type="button" role="tab" data-tab="33" aria-selected="false">
           <span class="n">33</span><span class="t">람다 · 함수 포인터</span>
         </button>
+
+        <div class="side-group">컴퓨터 더</div>
+        <button type="button" role="tab" data-tab="34" aria-selected="false">
+          <span class="n">34</span><span class="t">CPU 내부</span>
+        </button>
       </nav>
     </aside>
 
@@ -6631,6 +6636,118 @@ op(2, 3);</pre>
           </div>
         </section>
 
+        <!-- ===== 34 CPU 내부 (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="34" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">34</span> CPU 내부 — 두뇌를 열어보면</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            <a href="#02">02</a>에서 CPU를 “두뇌”라고만 했죠. 그 안엔
+            <strong class="hl">계산하는 부분(ALU)</strong>, <strong class="hl">지휘하는 부분(제어장치)</strong>,
+            <strong class="hl">가장 빠른 저장소(레지스터)</strong>가 있고,
+            <strong class="hl">클럭</strong>이라는 박자에 맞춰 명령을 하나씩 처리합니다.
+          </p>
+
+          <article class="card">
+            <h3>한눈에 보기 — CPU 블록도</h3>
+            <p>CPU는 <code class="inline">버스(bus)</code>로 RAM과 값을 주고받습니다. 자주 쓰는 값은 안쪽 <strong class="hl">캐시</strong>에 둬서 느린 RAM 왕복을 줄입니다.</p>
+            <div class="guide-viz" aria-label="CPU 블록 다이어그램">
+              <svg class="guide-svg" viewBox="0 0 480 300" role="img" aria-labelledby="cpu-title" style="max-width:460px">
+                <title id="cpu-title">CPU 내부 구성과 RAM 연결</title>
+                <defs>
+                  <marker id="mBus" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#67e8f9"/>
+                  </marker>
+                  <marker id="mBusL" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                    <path d="M10 0 L0 5 L10 10 z" fill="#67e8f9"/>
+                  </marker>
+                </defs>
+
+                <!-- CPU outer -->
+                <rect x="16" y="44" width="300" height="226" rx="16" fill="rgba(103,232,249,0.05)" stroke="#67e8f9" stroke-width="2"/>
+                <text x="28" y="66" fill="#67e8f9" font-size="13" font-weight="800" font-family="Segoe UI, sans-serif">CPU</text>
+
+                <!-- inner blocks -->
+                <g font-family="Segoe UI, sans-serif">
+                  <rect x="36" y="78" width="120" height="48" rx="10" fill="#0b0e14" stroke="#c4b5fd" stroke-width="1.6"/>
+                  <text x="96" y="100" text-anchor="middle" fill="#e9d5ff" font-size="12" font-weight="700">제어장치</text>
+                  <text x="96" y="116" text-anchor="middle" fill="#9aa3b8" font-size="10">명령 해석·지휘</text>
+
+                  <rect x="176" y="78" width="120" height="48" rx="10" fill="#0b0e14" stroke="#fde68a" stroke-width="1.6"/>
+                  <text x="236" y="100" text-anchor="middle" fill="#fde68a" font-size="12" font-weight="700">ALU</text>
+                  <text x="236" y="116" text-anchor="middle" fill="#9aa3b8" font-size="10">산술·논리 연산</text>
+
+                  <rect x="36" y="140" width="120" height="48" rx="10" fill="#0b0e14" stroke="#34d399" stroke-width="1.6"/>
+                  <text x="96" y="162" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">레지스터</text>
+                  <text x="96" y="178" text-anchor="middle" fill="#9aa3b8" font-size="10">가장 빠른 저장</text>
+
+                  <rect x="176" y="140" width="120" height="48" rx="10" fill="#0b0e14" stroke="#38bdf8" stroke-width="1.6"/>
+                  <text x="236" y="162" text-anchor="middle" fill="#7dd3fc" font-size="12" font-weight="700">L1 / L2 캐시</text>
+                  <text x="236" y="178" text-anchor="middle" fill="#9aa3b8" font-size="10">자주 쓰는 값</text>
+
+                  <rect x="36" y="204" width="260" height="44" rx="10" fill="rgba(251,191,36,0.07)" stroke="rgba(251,191,36,0.4)" stroke-width="1.4"/>
+                  <text x="166" y="231" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700">⏱ 클럭 — 초당 수십억 ‘박자’로 전체를 맞춤</text>
+                </g>
+
+                <!-- RAM -->
+                <rect x="372" y="110" width="92" height="96" rx="12" fill="#0b0e14" stroke="#9aa3b8" stroke-width="1.8"/>
+                <text x="418" y="150" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="800" font-family="Segoe UI, sans-serif">RAM</text>
+                <text x="418" y="168" text-anchor="middle" fill="#9aa3b8" font-size="10" font-family="Segoe UI, sans-serif">주 메모리</text>
+                <text x="418" y="184" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">느림 · 큼</text>
+
+                <!-- bus -->
+                <line x1="316" y1="158" x2="372" y2="158" stroke="#67e8f9" stroke-width="2.4" marker-end="url(#mBus)" marker-start="url(#mBusL)"/>
+                <text x="344" y="150" text-anchor="middle" fill="#67e8f9" font-size="10" font-weight="700" font-family="Segoe UI, sans-serif">버스</text>
+              </svg>
+              <p class="viz-cap">제어장치가 명령을 읽어 ALU에 시키고, 값은 레지스터·캐시에 두며, 부족하면 버스로 RAM을 오갑니다.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>레지스터 — 왜 이렇게 빠른가</h3>
+            <p>레지스터는 CPU <em>안</em>에 있는 손바닥만 한 저장소. 개수는 적지만(수십 개) 접근이 압도적으로 빠릅니다. 변수·연산 값이 잠깐 여기 올라와 계산됩니다.</p>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>저장소</th><th>대략 속도(사이클)</th><th>크기</th><th>위치</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>레지스터</strong></td><td>즉시 (&lt;1)</td><td>수십 개</td><td>CPU 코어 안</td></tr>
+                  <tr><td>L1 캐시</td><td>약 3~4</td><td>수십 KB</td><td>코어 안</td></tr>
+                  <tr><td>L2 / L3 캐시</td><td>약 10~40</td><td>수백 KB~수십 MB</td><td>CPU 안</td></tr>
+                  <tr><td>RAM</td><td>약 100~300</td><td>수 GB</td><td>CPU 밖(버스)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:8px 0 0"><strong class="hl">쓰임:</strong> “왜 지역성이 성능을 좌우하나”의 뿌리. 메모리 계층·캐시 → <a href="#24">24</a></p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>클럭 · 파이프라인</h3>
+              <p><strong class="hl">클럭</strong>은 초당 박자 수(3.5 GHz = 35억/초). 한 명령은 대략 네 단계를 거칩니다.</p>
+              <pre>인출(Fetch)  → 명령을 가져옴
+해독(Decode) → 무슨 일인지 파악
+실행(Execute)→ ALU가 계산
+저장(Write)  → 결과를 기록</pre>
+              <p style="margin-bottom:0"><strong class="hl">파이프라인</strong> = 세탁기·건조기처럼 단계를 <em>겹쳐</em> 돌려 처리량을 올리는 기법. 한 명령이 실행될 때 다음 명령은 벌써 해독 중.</p>
+            </article>
+            <article class="card">
+              <h3>코어 · 스레드</h3>
+              <ul class="checklist">
+                <li class="yes"><strong>코어</strong> = 독립적으로 명령을 실행하는 일꾼. 4코어 = 진짜 동시에 4가지</li>
+                <li class="tip"><strong>하드웨어 스레드</strong>(하이퍼스레딩) = 코어 하나가 노는 시간을 활용해 두 흐름을 번갈아 — 완전한 2배는 아님</li>
+                <li class="tip">프로그램의 스레드는 이 위에서 <a href="#23">OS가 번갈아</a> 얹어 돌림</li>
+              </ul>
+              <p style="margin-bottom:0">동시성의 소프트웨어 쪽 → <em>심화(예정)</em></p>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> CPU = <em>제어장치·ALU·레지스터</em>가 <em>클럭</em> 박자로 명령을 처리하고,
+            느린 RAM은 <em>캐시</em>로 감춘다. 이 그림 하나면 “왜 캐시·지역성이 중요한가”가 자연스럽게 이어집니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -6650,7 +6767,7 @@ op(2, 3);</pre>
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33"
+        "30","31","32","33","34"
       ];
 
       const DICT = [
@@ -6768,7 +6885,13 @@ op(2, 3);</pre>
         { term: "람다", en: "lambda", g: "E", def: "그 자리에서 만드는 이름 없는 함수. [캡처](매개변수){본문}. 정렬 기준·필터 조건·콜백에.", ref: "33" },
         { term: "캡처", en: "capture", g: "E", def: "람다가 바깥 변수를 데려오는 방식. [x] 값 복사, [&x] 참조. 참조 캡처는 수명 주의(댕글링).", ref: "33" },
         { term: "함수 포인터", en: "function pointer", g: "E", def: "함수를 값처럼 가리키는 포인터. C API 콜백 등. 상태(캡처)를 못 담는 게 한계.", ref: "33" },
-        { term: "std::function", en: "std::function", g: "E", def: "함수·람다·캡처 있는 것까지 한 타입에 담는 상자. 저장·전달에 편하나 약간의 런타임 비용.", ref: "33" }
+        { term: "std::function", en: "std::function", g: "E", def: "함수·람다·캡처 있는 것까지 한 타입에 담는 상자. 저장·전달에 편하나 약간의 런타임 비용.", ref: "33" },
+        { term: "레지스터", en: "register", g: "E", def: "CPU 안의 가장 빠른 저장소. 개수는 적지만 즉시 접근. 연산 값이 잠깐 올라오는 곳.", ref: "34" },
+        { term: "ALU", en: "Arithmetic Logic Unit", g: "E", def: "CPU에서 실제 산술·논리 연산을 하는 부분.", ref: "34" },
+        { term: "제어장치", en: "control unit", g: "E", def: "명령을 해석하고 CPU의 각 부분에 일을 시키는 지휘부.", ref: "34" },
+        { term: "클럭", en: "clock", g: "E", def: "CPU가 일하는 박자. 3.5 GHz = 초당 35억 박자. 명령 처리 속도의 기준.", ref: "34" },
+        { term: "파이프라인", en: "pipeline", g: "E", def: "명령의 인출·해독·실행·저장 단계를 겹쳐 돌려 처리량을 높이는 기법.", ref: "34" },
+        { term: "코어", en: "core", g: "E", def: "독립적으로 명령을 실행하는 CPU 안의 일꾼. 4코어면 진짜로 4가지를 동시에.", ref: "34" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
