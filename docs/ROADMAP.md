@@ -91,7 +91,7 @@
 - ✅ **ranges (C++20)** (64)
 
 ### B7. 에러 처리
-- ⬜ **예외 try/catch/throw · `noexcept`**
+- ✅ **예외 try/catch/throw · `noexcept`** (65)
 - ⬜ 에러 코드 vs 예외 · `optional`/`expected`
 - ⬜ `assert` · `static_assert`
 

@@ -2405,6 +2405,9 @@
         <button type="button" role="tab" data-tab="64" aria-selected="false">
           <span class="n">64</span><span class="t">ranges · views</span>
         </button>
+        <button type="button" role="tab" data-tab="65" aria-selected="false">
+          <span class="n">65</span><span class="t">예외 · try/catch</span>
+        </button>
       </nav>
     </aside>
 
@@ -9200,6 +9203,84 @@ for (int x : result) std::cout &lt;&lt; x &lt;&lt; ' ';   // 4 16 36</pre>
           </div>
         </section>
 
+        <!-- ===== 65 예외 · try/catch/throw · noexcept (C++ 더) ===== -->
+        <section class="panel" data-panel="65" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">65</span> 예외 · try / catch / throw · noexcept</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            정상 흐름으로 처리하기 어려운 <strong class="hl">실패를 알리는</strong> 방법. 문제 지점에서 <code class="inline">throw</code>로 던지면,
+            중간을 건너뛰고 <code class="inline">catch</code>가 받습니다. 그 사이 <strong class="hl">스택이 풀리며 소멸자가 불려</strong> 정리되죠(RAII <a href="#56">56</a>).
+          </p>
+
+          <article class="card">
+            <h3>기본 — 던지고, 받기</h3>
+            <pre>#include &lt;stdexcept&gt;
+
+int divide(int a, int b) {
+    if (b == 0)
+        throw std::runtime_error("0으로 나눔");  // 실패를 던짐
+    return a / b;
+}
+
+try {
+    int r = divide(10, 0);
+} catch (const std::exception&amp; e) {   // 참조로 받기
+    std::cout &lt;&lt; "에러: " &lt;&lt; e.what();
+}</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes"><code class="inline">throw</code> 이후 코드는 건너뛰고 가까운 <code class="inline">catch</code>로 점프</li>
+              <li class="yes">예외는 <strong class="hl">참조(<code class="inline">const&amp;</code>)로</strong> 받기(복사·슬라이싱 방지)</li>
+              <li class="tip"><code class="inline">e.what()</code>으로 메시지 확인</li>
+            </ul>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>표준 예외 계층</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th>예외</th><th>언제</th></tr></thead>
+                  <tbody>
+                    <tr><td><code class="inline">std::exception</code></td><td>모든 예외의 뿌리</td></tr>
+                    <tr><td><code class="inline">runtime_error</code></td><td>실행 중 문제</td></tr>
+                    <tr><td><code class="inline">logic_error</code></td><td>논리·전제 위반</td></tr>
+                    <tr><td><code class="inline">out_of_range</code></td><td><code class="inline">at()</code> 범위 밖</td></tr>
+                    <tr><td><code class="inline">bad_alloc</code></td><td><code class="inline">new</code> 실패(<a href="#15">15</a>)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <h3>스택 풀림 + RAII</h3>
+              <pre>void f() {
+    auto p = std::make_unique&lt;T&gt;();  // RAII
+    mayThrow();   // 예외 발생!
+    // 아래는 건너뛰지만...
+}   // p 소멸자는 불림 → 자동 정리(누수 없음)</pre>
+              <p style="margin-bottom:0">예외가 지나가도 <strong class="hl">지역 객체 소멸자는 호출</strong>됩니다. 그래서 RAII(<a href="#56">56</a>)가 예외 안전의 핵심.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>noexcept — “이 함수는 안 던진다”</h3>
+            <pre>int add(int a, int b) noexcept { return a + b; }  // 던지지 않음을 약속
+
+// noexcept 함수가 그래도 던지면 → std::terminate(프로그램 종료)</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes">소멸자·이동 연산은 보통 <code class="inline">noexcept</code>여야 함(컨테이너 최적화)</li>
+              <li class="tip">컴파일러·표준 라이브러리가 최적화 판단에 사용</li>
+              <li class="no">확신 없이 붙였다가 던지면 즉시 종료 — 신중히</li>
+            </ul>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> <code class="inline">throw</code>로 던지고 <code class="inline">catch (const std::exception&amp;)</code>로 받는다.
+            스택이 풀려도 RAII가 정리하니 <em>자원은 객체에 담아 두는 게</em> 예외 안전의 8할. “안 던짐”은 <code class="inline">noexcept</code>.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9220,7 +9301,7 @@ for (int x : result) std::cout &lt;&lt; x &lt;&lt; ' ';   // 4 16 36</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65"
       ];
 
       const DICT = [
@@ -9442,7 +9523,11 @@ for (int x : result) std::cout &lt;&lt; x &lt;&lt; ' ';   // 4 16 36</pre>
         { term: "deque", en: "std::deque", g: "C", def: "양끝 삽입·삭제가 O(1)인 컨테이너. 큐·덱에. queue의 기본 속.", ref: "63" },
         { term: "list", en: "std::list", g: "C", def: "이중 연결 리스트. 중간 삽입·삭제 O(1), 인덱스 접근 불가. 실무에선 드묾.", ref: "63" },
         { term: "ranges", en: "std::ranges", g: "D", def: "C++20. 컨테이너를 통째로 넘기는 알고리즘. ranges::sort(v)처럼 begin/end 생략.", ref: "64" },
-        { term: "views", en: "std::views", g: "D", def: "파이프(|)로 잇는 지연 변환. filter·transform 등. 원본 복사 없이 필요할 때 계산.", ref: "64" }
+        { term: "views", en: "std::views", g: "D", def: "파이프(|)로 잇는 지연 변환. filter·transform 등. 원본 복사 없이 필요할 때 계산.", ref: "64" },
+        { term: "예외", en: "exception", g: "D", def: "실패를 알리는 방법. throw로 던지고 catch로 받음. 중간을 건너뛰며 스택이 풀림.", ref: "65" },
+        { term: "throw / catch", en: "throw / catch", g: "D", def: "throw로 예외를 던지고, try 블록의 catch(const std::exception&)로 받음. 참조로 받기.", ref: "65" },
+        { term: "스택 풀림", en: "stack unwinding", g: "D", def: "예외가 catch까지 올라가며 지역 객체 소멸자를 호출하는 과정. RAII가 예외 안전의 핵심.", ref: "65" },
+        { term: "noexcept", en: "noexcept", g: "D", def: "‘이 함수는 예외를 안 던진다’는 약속. 그래도 던지면 terminate. 소멸자·이동에 보통 붙음.", ref: "65" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
