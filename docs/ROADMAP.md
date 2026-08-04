@@ -87,7 +87,7 @@
 - ✅ vector (14) · map·set·iterator·algorithm (31) · 재할당·무효화·span (32)
 - ✅ 람다·함수 포인터·std::function (33)
 - ✅ **유틸 타입: `optional` · `variant` · `tuple` · `pair` (62) · `string_view` (52)**
-- ⬜ 컨테이너 더: `array` · `deque` · `list` · `unordered_*` 정리
+- ✅ 컨테이너 더: `array` · `deque` · `list` · `unordered_*` 정리 (63)
 - ⬜ **ranges (C++20)**
 
 ### B7. 에러 처리

@@ -2399,6 +2399,9 @@
         <button type="button" role="tab" data-tab="62" aria-selected="false">
           <span class="n">62</span><span class="t">optional · variant · tuple</span>
         </button>
+        <button type="button" role="tab" data-tab="63" aria-selected="false">
+          <span class="n">63</span><span class="t">컨테이너 더</span>
+        </button>
       </nav>
     </aside>
 
@@ -9041,6 +9044,83 @@ auto [id, name] = p;   // id=1, name="hi"</pre>
           </div>
         </section>
 
+        <!-- ===== 63 컨테이너 더 · array · deque · list · unordered (C++ 더) ===== -->
+        <section class="panel" data-panel="63" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">63</span> 컨테이너 더 · array · deque · list · unordered</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            <code class="inline">vector</code>(<a href="#14">14</a>)·<code class="inline">map</code>/<code class="inline">set</code>(<a href="#31">31</a>) 외의 컨테이너들.
+            대부분은 vector로 충분하지만, <strong class="hl">특정 연산이 잦을 때</strong> 더 나은 선택이 있습니다(자료구조 → <a href="#48">48</a>).
+          </p>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>std::array — 고정 크기 배열</h3>
+              <pre>#include &lt;array&gt;
+
+std::array&lt;int, 3&gt; a = {1, 2, 3};  // 크기 고정(컴파일 타임)
+a.size();   // 3
+a[0];       // 인덱스 접근</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 크기가 안 변하는 배열. C 배열보다 안전(size·범위). 스택에 놓여 빠름.</p>
+            </article>
+            <article class="card">
+              <h3>std::deque — 양끝이 빠름</h3>
+              <pre>#include &lt;deque&gt;
+
+std::deque&lt;int&gt; d;
+d.push_back(1);
+d.push_front(0);   // 앞에도 O(1)
+d[0];              // 인덱스도 가능</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 양끝에서 넣고 빼는 큐·덱. <code class="inline">std::queue</code>의 기본 속.</p>
+            </article>
+          </div>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>std::list — 중간 삽입</h3>
+              <pre>#include &lt;list&gt;
+
+std::list&lt;int&gt; l = {1, 2, 3};
+// 중간 삽입/삭제 O(1) (위치를 알 때)
+// 단, 인덱스 접근 불가(순회만)</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 이중 연결 리스트(<a href="#48">48</a>). 중간 삽입·삭제가 아주 잦을 때만 — 실제론 드묾.</p>
+            </article>
+            <article class="card">
+              <h3>unordered_map / set — 해시</h3>
+              <pre>#include &lt;unordered_map&gt;
+
+std::unordered_map&lt;std::string,int&gt; m;
+m["hp"] = 100;      // 평균 O(1)
+// 순서는 보장 안 됨</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 순서가 필요 없고 <strong class="hl">빠른 조회</strong>만 원할 때. 순서·범위가 필요하면 <code class="inline">map</code>.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>전체 지도 — 무엇을 언제</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>컨테이너</th><th>강점</th><th>언제</th></tr></thead>
+                <tbody>
+                  <tr><td><code class="inline">vector</code></td><td>연속·인덱스·캐시</td><td><strong class="hl">기본 선택</strong></td></tr>
+                  <tr><td><code class="inline">array</code></td><td>고정 크기·스택</td><td>크기 안 변함</td></tr>
+                  <tr><td><code class="inline">deque</code></td><td>양끝 O(1)</td><td>큐·덱</td></tr>
+                  <tr><td><code class="inline">list</code></td><td>중간 삽입 O(1)</td><td>드묾</td></tr>
+                  <tr><td><code class="inline">map</code>/<code class="inline">set</code></td><td>정렬·O(log n)</td><td>순서 있는 키</td></tr>
+                  <tr><td><code class="inline">unordered_*</code></td><td>평균 O(1)</td><td>빠른 조회</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 고민되면 <code class="inline">vector</code>. 크기 고정이면 <code class="inline">array</code>, 양끝이면 <code class="inline">deque</code>,
+            빠른 키 조회면 <code class="inline">unordered_map</code>. <code class="inline">list</code>는 대부분 필요 없습니다 — “잦은 연산”에 맞춰 고르세요.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9061,7 +9141,7 @@ auto [id, name] = p;   // id=1, name="hi"</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63"
       ];
 
       const DICT = [
@@ -9278,7 +9358,10 @@ auto [id, name] = p;   // id=1, name="hi"</pre>
         { term: "consteval / constinit", en: "consteval / constinit", g: "D", def: "C++20. consteval=반드시 컴파일 타임 함수, constinit=정적 변수의 컴파일 타임 초기화.", ref: "61" },
         { term: "optional", en: "std::optional", g: "D", def: "값이 있을 수도/없을 수도 있음을 타입으로. nullopt로 ‘없음’. 매직값(-1) 대체.", ref: "62" },
         { term: "variant", en: "std::variant", g: "D", def: "정해진 여러 타입 중 하나를 담는 타입 안전한 합집합. C union보다 안전.", ref: "62" },
-        { term: "pair / tuple", en: "std::pair / tuple", g: "D", def: "서로 다른 값 여러 개를 묶는 타입. 구조적 바인딩으로 풀기. 이름이 중요하면 struct.", ref: "62" }
+        { term: "pair / tuple", en: "std::pair / tuple", g: "D", def: "서로 다른 값 여러 개를 묶는 타입. 구조적 바인딩으로 풀기. 이름이 중요하면 struct.", ref: "62" },
+        { term: "array", en: "std::array", g: "C", def: "크기 고정 배열. C 배열보다 안전(size·범위). 스택에 놓여 빠름.", ref: "63" },
+        { term: "deque", en: "std::deque", g: "C", def: "양끝 삽입·삭제가 O(1)인 컨테이너. 큐·덱에. queue의 기본 속.", ref: "63" },
+        { term: "list", en: "std::list", g: "C", def: "이중 연결 리스트. 중간 삽입·삭제 O(1), 인덱스 접근 불가. 실무에선 드묾.", ref: "63" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
