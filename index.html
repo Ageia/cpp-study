@@ -2316,6 +2316,9 @@
         <button type="button" role="tab" data-tab="35" aria-selected="false">
           <span class="n">35</span><span class="t">저장장치 · 휘발성</span>
         </button>
+        <button type="button" role="tab" data-tab="36" aria-selected="false">
+          <span class="n">36</span><span class="t">폰노이만 · 버스</span>
+        </button>
       </nav>
     </aside>
 
@@ -6828,6 +6831,98 @@ op(2, 3);</pre>
           </div>
         </section>
 
+        <!-- ===== 36 폰노이만 · 버스 · I/O (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="36" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">36</span> 폰노이만 구조 · 버스 · I/O</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            거의 모든 컴퓨터의 뼈대. 핵심 아이디어는
+            <strong class="hl">“명령(프로그램)도 데이터도 같은 메모리에 둔다”</strong>.
+            CPU는 메모리에서 명령을 <strong class="hl">하나 꺼내 실행</strong>하길 반복하고,
+            그 사이를 <strong class="hl">버스</strong>가 잇습니다.
+          </p>
+
+          <article class="card">
+            <h3>한눈에 보기 — CPU · 메모리 · I/O</h3>
+            <div class="guide-viz" aria-label="폰노이만 구조 다이어그램">
+              <svg class="guide-svg" viewBox="0 0 480 236" role="img" aria-labelledby="vn-title" style="max-width:460px">
+                <title id="vn-title">폰노이만 구조: CPU·메모리·입출력이 버스로 연결</title>
+
+                <!-- CPU -->
+                <rect x="40" y="48" width="110" height="68" rx="12" fill="rgba(103,232,249,0.06)" stroke="#67e8f9" stroke-width="2"/>
+                <text x="95" y="76" text-anchor="middle" fill="#67e8f9" font-size="14" font-weight="800" font-family="Segoe UI, sans-serif">CPU</text>
+                <text x="95" y="98" text-anchor="middle" fill="#9aa3b8" font-size="10" font-family="Segoe UI, sans-serif">제어·ALU·레지스터</text>
+
+                <!-- Memory -->
+                <rect x="185" y="40" width="110" height="84" rx="12" fill="rgba(196,181,253,0.05)" stroke="#c4b5fd" stroke-width="2"/>
+                <text x="240" y="56" text-anchor="middle" fill="#e9d5ff" font-size="12" font-weight="800" font-family="Segoe UI, sans-serif">메모리(RAM)</text>
+                <rect x="196" y="64" width="88" height="24" rx="6" fill="#0b0e14" stroke="#fde68a" stroke-width="1.3"/>
+                <text x="240" y="80" text-anchor="middle" fill="#fde68a" font-size="10" font-family="Segoe UI, sans-serif">명령(프로그램)</text>
+                <rect x="196" y="92" width="88" height="24" rx="6" fill="#0b0e14" stroke="#34d399" stroke-width="1.3"/>
+                <text x="240" y="108" text-anchor="middle" fill="#34d399" font-size="10" font-family="Segoe UI, sans-serif">데이터</text>
+
+                <!-- I/O -->
+                <rect x="330" y="48" width="110" height="68" rx="12" fill="rgba(148,163,184,0.06)" stroke="#9aa3b8" stroke-width="2"/>
+                <text x="385" y="76" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="800" font-family="Segoe UI, sans-serif">입출력(I/O)</text>
+                <text x="385" y="98" text-anchor="middle" fill="#9aa3b8" font-size="10" font-family="Segoe UI, sans-serif">키보드·화면·디스크</text>
+
+                <!-- connectors -->
+                <line x1="95"  y1="116" x2="95"  y2="172" stroke="#67e8f9" stroke-width="2"/>
+                <line x1="240" y1="124" x2="240" y2="172" stroke="#c4b5fd" stroke-width="2"/>
+                <line x1="385" y1="116" x2="385" y2="172" stroke="#9aa3b8" stroke-width="2"/>
+
+                <!-- bus -->
+                <rect x="30" y="172" width="420" height="30" rx="9" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.5)" stroke-width="1.6"/>
+                <text x="240" y="191" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">시스템 버스 — 주소 · 데이터 · 제어</text>
+              </svg>
+              <p class="viz-cap">명령도 데이터도 같은 메모리에. CPU·메모리·입출력이 하나의 버스로 값을 주고받습니다.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>인출–실행 사이클 — CPU가 반복하는 한 가지</h3>
+            <p>CPU가 켜진 내내 하는 일은 사실 이 순환뿐입니다(<a href="#34">34</a>의 파이프라인이 이걸 겹쳐서 돌림).</p>
+            <pre>반복 {
+  인출(Fetch)  : 다음 명령을 메모리에서 가져온다
+  해독(Decode) : 무슨 명령인지 파악한다
+  실행(Execute): ALU/레지스터로 처리한다
+  저장(Write)  : 결과를 메모리/레지스터에 쓴다
+}</pre>
+            <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> “프로그램=메모리에 놓인 명령의 나열”이라는 감각. 그래서 코드도 데이터처럼 주소를 가집니다(<a href="#22">TEXT 세그먼트(22)</a>).</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>버스 세 갈래</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th>버스</th><th>무엇을 나름</th></tr></thead>
+                  <tbody>
+                    <tr><td>주소 버스</td><td>어디에? (메모리 위치)</td></tr>
+                    <tr><td>데이터 버스</td><td>무엇을? (실제 값)</td></tr>
+                    <tr><td>제어 버스</td><td>읽기/쓰기 등 신호</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <h3>폰노이만 병목</h3>
+              <ul class="checklist">
+                <li class="no">CPU가 아무리 빨라도 명령·데이터가 <strong class="hl">같은 통로</strong>로 오가 대역폭이 발목</li>
+                <li class="yes"><strong>캐시</strong>(<a href="#24">24</a>)가 왕복을 줄여 이 병목을 크게 완화</li>
+                <li class="tip">“계산은 싼데 메모리 접근이 비싸다”는 현대 성능의 큰 그림</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 명령·데이터를 한 메모리에 두고, CPU가 <em>인출→실행</em>을 반복하며,
+            버스가 그 사이를 잇는다. 이 뼈대 위에서 세그먼트(22)·캐시(24)·파이프라인(34)이 전부 설명됩니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -6847,7 +6942,7 @@ op(2, 3);</pre>
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35"
+        "30","31","32","33","34","35","36"
       ];
 
       const DICT = [
@@ -6974,7 +7069,11 @@ op(2, 3);</pre>
         { term: "코어", en: "core", g: "E", def: "독립적으로 명령을 실행하는 CPU 안의 일꾼. 4코어면 진짜로 4가지를 동시에.", ref: "34" },
         { term: "휘발성", en: "volatile (memory)", g: "E", def: "전원이 끊기면 내용이 사라지는 성질. RAM이 대표. 변수·객체는 휘발성 RAM 위에 삶.", ref: "35" },
         { term: "ROM", en: "Read-Only Memory", g: "E", def: "주로 읽기·비휘발성. 부팅 코드·펌웨어처럼 지워지면 안 되는 것.", ref: "35" },
-        { term: "SSD / HDD", en: "SSD / HDD", g: "E", def: "비휘발성 보관 장치. SSD는 반도체라 빠르고, HDD는 원판 회전이라 느리지만 저렴.", ref: "35" }
+        { term: "SSD / HDD", en: "SSD / HDD", g: "E", def: "비휘발성 보관 장치. SSD는 반도체라 빠르고, HDD는 원판 회전이라 느리지만 저렴.", ref: "35" },
+        { term: "폰노이만 구조", en: "von Neumann architecture", g: "E", def: "명령(프로그램)과 데이터를 같은 메모리에 두는 컴퓨터 기본 설계.", ref: "36" },
+        { term: "버스", en: "bus", g: "E", def: "CPU·메모리·입출력 사이를 잇는 통로. 주소·데이터·제어 신호를 나름.", ref: "36" },
+        { term: "인출-실행 사이클", en: "fetch-execute cycle", g: "E", def: "CPU가 명령을 인출→해독→실행→저장으로 반복 처리하는 기본 순환.", ref: "36" },
+        { term: "폰노이만 병목", en: "von Neumann bottleneck", g: "E", def: "명령·데이터가 같은 통로를 오가 메모리 대역폭이 성능을 제한하는 현상. 캐시가 완화.", ref: "36" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
