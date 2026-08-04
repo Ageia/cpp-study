@@ -80,7 +80,7 @@
 ### B5. 템플릿 · 제네릭
 - ✅ 함수/클래스 템플릿 (18)
 - ✅ **템플릿 특수화 · 가변 인자 템플릿(variadic)** (59)
-- ⬜ **concepts (C++20)** · `type_traits` · SFINAE 맛보기
+- ✅ **concepts (C++20)** · `type_traits` · SFINAE 맛보기 (60)
 - ⬜ constexpr 프로그래밍
 
 ### B6. STL

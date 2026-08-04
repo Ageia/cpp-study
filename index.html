@@ -2390,6 +2390,9 @@
         <button type="button" role="tab" data-tab="59" aria-selected="false">
           <span class="n">59</span><span class="t">템플릿 특수화 · 가변</span>
         </button>
+        <button type="button" role="tab" data-tab="60" aria-selected="false">
+          <span class="n">60</span><span class="t">concepts · type_traits</span>
+        </button>
       </nav>
     </aside>
 
@@ -8820,6 +8823,68 @@ print(1, "hi", 3.14, 'x');   // 개수·타입 자유</pre>
           </div>
         </section>
 
+        <!-- ===== 60 concepts · type_traits · SFINAE (C++ 더) ===== -->
+        <section class="panel" data-panel="60" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">60</span> concepts · type_traits · SFINAE</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            템플릿(<a href="#18">18</a>)에 <strong class="hl">“이런 타입만 받아라”</strong>는 조건을 거는 법.
+            예전엔 <strong class="hl">SFINAE</strong>로 어렵게 했지만, C++20의 <strong class="hl">concepts</strong>로 훨씬 읽기 쉬워졌습니다.
+            타입을 물어보는 도구가 <strong class="hl">type_traits</strong>.
+          </p>
+
+          <article class="card">
+            <h3>concepts — 템플릿 인자에 제약 걸기</h3>
+            <p>제약이 없으면 아무 타입이나 들어와 <em>엉뚱한 곳</em>에서 에러가 터집니다. concepts는 “조건”을 앞에서 검사해 <strong class="hl">에러를 명확하게</strong> 만듭니다.</p>
+            <pre>#include &lt;concepts&gt;
+
+// 정수 타입만 받는 함수
+template &lt;std::integral T&gt;
+T twice(T x) { return x + x; }
+
+twice(21);     // ✓ int
+twice(3.14);   // ✗ 명확한 에러: double은 integral 아님
+
+// 직접 정의도 가능
+template &lt;typename T&gt;
+concept Addable = requires(T a, T b) { a + b; };</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes">잘못된 타입을 <strong class="hl">앞단에서</strong> 걸러 에러가 읽기 쉬움</li>
+              <li class="yes">함수 의도가 시그니처에 드러남(“정수만”)</li>
+            </ul>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>type_traits — 타입에게 질문</h3>
+              <pre>#include &lt;type_traits&gt;
+
+std::is_integral&lt;int&gt;::value;    // true
+std::is_pointer&lt;int*&gt;::value;    // true
+std::is_same&lt;int, long&gt;::value;  // false
+
+// C++17 단축형
+std::is_integral_v&lt;double&gt;;      // false</pre>
+              <p style="margin-bottom:0"><strong class="hl">쓰임:</strong> 컴파일 타임에 타입 성질을 검사·분기. concepts의 재료.</p>
+            </article>
+            <article class="card">
+              <h3>SFINAE — 옛 방식(맛보기)</h3>
+              <pre>// enable_if로 조건 걸던 시절 (읽기 어려움)
+template &lt;typename T,
+  std::enable_if_t&lt;std::is_integral_v&lt;T&gt;, int&gt; = 0&gt;
+T twice(T x) { return x + x; }</pre>
+              <p style="margin-bottom:0">“치환 실패는 에러가 아니다(SFINAE)”를 이용한 기법. <strong class="hl">이제는 concepts로 대체</strong> — 읽기용으로만 알면 됨.</p>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 템플릿에 조건 = <strong class="hl">concepts</strong>(C++20, 권장), 타입 질문 = <strong class="hl">type_traits</strong>,
+            옛 방식 = SFINAE(읽기용). 직접 라이브러리를 짜기 전엔 “이런 게 있다”면 충분합니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -8840,7 +8905,7 @@ print(1, "hi", 3.14, 'x');   // 개수·타입 자유</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59"
+        "51","52","53","54","55","56","57","58","59","60"
       ];
 
       const DICT = [
@@ -9048,7 +9113,10 @@ print(1, "hi", 3.14, 'x');   // 개수·타입 자유</pre>
         { term: "순수 가상 함수", en: "pure virtual", g: "D", def: "virtual ... = 0. 구현 없이 선언만. 자식이 반드시 override 해야 함.", ref: "58" },
         { term: "템플릿 특수화", en: "template specialization", g: "D", def: "일반 템플릿을 두고 특정 타입일 때만 별도 구현을 제공하는 것.", ref: "59" },
         { term: "가변 인자 템플릿", en: "variadic template", g: "D", def: "typename... Args로 임의 개수·타입 인자를 받는 템플릿. print·make_unique 등.", ref: "59" },
-        { term: "폴드 표현식", en: "fold expression", g: "D", def: "(f(args), ...)처럼 파라미터 팩을 연산자로 죽 펼치는 C++17 문법.", ref: "59" }
+        { term: "폴드 표현식", en: "fold expression", g: "D", def: "(f(args), ...)처럼 파라미터 팩을 연산자로 죽 펼치는 C++17 문법.", ref: "59" },
+        { term: "concepts", en: "concepts", g: "D", def: "C++20. 템플릿 인자에 ‘이런 타입만’ 조건을 걸어 에러를 앞단에서 명확히. std::integral 등.", ref: "60" },
+        { term: "type_traits", en: "<type_traits>", g: "D", def: "타입 성질을 컴파일 타임에 묻는 도구. is_integral_v·is_same 등. concepts의 재료.", ref: "60" },
+        { term: "SFINAE", en: "SFINAE", g: "D", def: "‘치환 실패는 에러가 아니다’를 이용한 옛 제약 기법(enable_if). 이제 concepts로 대체.", ref: "60" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
