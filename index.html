@@ -2349,6 +2349,9 @@
         <button type="button" role="tab" data-tab="46" aria-selected="false">
           <span class="n">46</span><span class="t">링크 · 실행파일 · ABI</span>
         </button>
+        <button type="button" role="tab" data-tab="47" aria-selected="false">
+          <span class="n">47</span><span class="t">복잡도 · Big-O</span>
+        </button>
       </nav>
     </aside>
 
@@ -7802,6 +7805,90 @@ in &gt;&gt; key &gt;&gt; value;   // "score", 1200</pre>
           </div>
         </section>
 
+        <!-- ===== 47 복잡도 · Big-O (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="47" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">47</span> 복잡도 · Big-O</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            “이 코드 빠른가?”를 초 단위가 아니라 <strong class="hl">입력이 커질 때 얼마나 더 일하나</strong>로 봅니다.
+            그 표기가 <strong class="hl">Big-O</strong>. 상수는 무시하고 <em>성장 추세</em>만 보는 게 요령이에요.
+            정렬·탐색(<a href="#31">31</a>)을 고를 때 바로 쓰입니다.
+          </p>
+
+          <article class="card">
+            <h3>한눈에 보기 — 성장 곡선</h3>
+            <p>입력 <code class="inline">n</code>이 커질수록 연산 수가 어떻게 늘어나는지. 위로 가파를수록 나쁩니다.</p>
+            <div class="guide-viz" aria-label="Big-O 성장 곡선">
+              <svg class="guide-svg" viewBox="0 0 480 224" role="img" aria-labelledby="bigo-title" style="max-width:470px">
+                <title id="bigo-title">복잡도별 성장 곡선</title>
+                <line x1="64" y1="20" x2="64" y2="196" stroke="rgba(148,163,184,0.5)" stroke-width="1.4"/>
+                <line x1="64" y1="196" x2="460" y2="196" stroke="rgba(148,163,184,0.5)" stroke-width="1.4"/>
+                <text x="58" y="18" text-anchor="end" fill="#6b7389" font-size="9" font-family="Segoe UI, sans-serif">연산 수 ↑</text>
+                <text x="256" y="216" text-anchor="middle" fill="#6b7389" font-size="10" font-family="Segoe UI, sans-serif">입력 크기 n →</text>
+                <polyline fill="none" stroke="#34d399" stroke-width="2.2" points="64.0,189.1 102.8,189.1 141.6,189.1 180.4,189.1 219.2,189.1 258.0,189.1 296.8,189.1 335.6,189.1 374.4,189.1 413.2,189.1 452.0,189.1"/>
+                <polyline fill="none" stroke="#67e8f9" stroke-width="2.2" points="64.0,196.0 102.8,180.5 141.6,171.5 180.4,165.0 219.2,160.1 258.0,156.0 296.8,152.5 335.6,149.6 374.4,146.9 413.2,144.6 452.0,142.4"/>
+                <polyline fill="none" stroke="#fde68a" stroke-width="2.2" points="64.0,196.0 102.8,187.4 141.6,178.8 180.4,170.2 219.2,161.6 258.0,153.0 296.8,144.4 335.6,135.8 374.4,127.2 413.2,118.6 452.0,110.0"/>
+                <polyline fill="none" stroke="#c4b5fd" stroke-width="2.2" points="64.0,196.0 102.8,191.5 141.6,181.8 180.4,169.2 219.2,154.5 258.0,138.2 296.8,120.7 335.6,102.1 374.4,82.6 413.2,62.3 452.0,41.3"/>
+                <polyline fill="none" stroke="#fb7185" stroke-width="2.2" points="64.0,196.0 102.8,194.3 141.6,189.1 180.4,180.5 219.2,168.5 258.0,153.0 296.8,134.1 335.6,111.7 374.4,85.9 413.2,56.7 452.0,24.0"/>
+              </svg>
+              <div class="mem-legend">
+                <span><i style="background:#34d399;width:12px;height:12px;border-radius:3px;display:inline-block"></i>O(1)</span>
+                <span><i style="background:#67e8f9;width:12px;height:12px;border-radius:3px;display:inline-block"></i>O(log n)</span>
+                <span><i style="background:#fde68a;width:12px;height:12px;border-radius:3px;display:inline-block"></i>O(n)</span>
+                <span><i style="background:#c4b5fd;width:12px;height:12px;border-radius:3px;display:inline-block"></i>O(n log n)</span>
+                <span><i style="background:#fb7185;width:12px;height:12px;border-radius:3px;display:inline-block"></i>O(n²)</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>커질수록 벌어진다 — n에 따른 연산 수(개략)</h3>
+            <div class="table-wrap" style="margin-top:8px">
+              <table>
+                <thead><tr><th>복잡도</th><th>n=10</th><th>n=1,000</th><th>대표 예</th></tr></thead>
+                <tbody>
+                  <tr><td><code class="inline">O(1)</code> 상수</td><td>1</td><td>1</td><td>배열 인덱스 <code class="inline">v[i]</code></td></tr>
+                  <tr><td><code class="inline">O(log n)</code> 로그</td><td>~3</td><td>~10</td><td>이진 탐색</td></tr>
+                  <tr><td><code class="inline">O(n)</code> 선형</td><td>10</td><td>1,000</td><td>전체 한 번 훑기</td></tr>
+                  <tr><td><code class="inline">O(n log n)</code></td><td>~33</td><td>~10,000</td><td>좋은 정렬(sort)</td></tr>
+                  <tr><td><code class="inline">O(n²)</code> 제곱</td><td>100</td><td>1,000,000</td><td>이중 for 비교</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin:8px 0 0"><strong class="hl">핵심:</strong> n이 작으면 다 비슷. <em>n이 커질 때</em> O(n²)가 폭발합니다. 그래서 큰 데이터엔 곡선의 “기울기”가 전부.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>코드로 감 잡기</h3>
+              <pre>v[i];                 // O(1)  — 바로 접근
+
+for (x : v) use(x);   // O(n)  — 한 번 훑기
+
+for (a : v)           // O(n²) — 훑기 안에 훑기
+  for (b : v) cmp(a,b);
+
+// 정렬된 데이터에서 이진 탐색 → O(log n)</pre>
+            </article>
+            <article class="card">
+              <h3>실전 감각</h3>
+              <ul class="checklist">
+                <li class="yes">중첩 루프가 보이면 O(n²) 의심 → 규모 클 때 위험</li>
+                <li class="yes"><code class="inline">map</code>/<code class="inline">set</code>·정렬로 O(n²)를 O(n log n)로 낮추기</li>
+                <li class="tip">상수·작은 n에선 “단순한 게” 더 빠를 때도 많음</li>
+                <li class="tip">최악·평균을 구분(해시는 평균 O(1), 최악 O(n))</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> Big-O = 입력이 커질 때의 성장 추세. O(1)&lt;O(log n)&lt;O(n)&lt;O(n log n)&lt;O(n²).
+            “중첩 루프를 줄이고, 자료구조로 탐색을 낮춘다”가 대부분의 최적화입니다. 자료구조는 다음 장(<a href="#48">48</a>).
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -7821,7 +7908,7 @@ in &gt;&gt; key &gt;&gt; value;   // "score", 1200</pre>
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46"
+        "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47"
       ];
 
       const DICT = [
@@ -7987,7 +8074,10 @@ in &gt;&gt; key &gt;&gt; value;   // "score", 1200</pre>
         { term: "정적 링크", en: "static linking", g: "E", def: "라이브러리를 실행파일에 통째로 넣는 것. 파일은 크지만 혼자 실행 가능.", ref: "46" },
         { term: "동적 링크", en: "dynamic linking", g: "E", def: "실행 시 외부 공유 라이브러리(.dll/.so)를 불러 쓰는 것. 파일은 작지만 lib 동봉 필요.", ref: "46" },
         { term: "실행파일 포맷", en: "executable format", g: "E", def: "Windows PE(.exe)·리눅스 ELF·macOS Mach-O. 코드·데이터 세그먼트와 시작 주소·심볼표를 담음.", ref: "46" },
-        { term: "ABI", en: "Application Binary Interface", g: "E", def: "컴파일된 코드끼리의 바이너리 약속(호출 규약·이름 맹글링·구조체 레이아웃). 어긋나면 크래시.", ref: "46" }
+        { term: "ABI", en: "Application Binary Interface", g: "E", def: "컴파일된 코드끼리의 바이너리 약속(호출 규약·이름 맹글링·구조체 레이아웃). 어긋나면 크래시.", ref: "46" },
+        { term: "시간 복잡도", en: "time complexity", g: "E", def: "입력이 커질 때 연산 수가 늘어나는 추세. Big-O로 표기. 상수는 무시하고 성장만 봄.", ref: "47" },
+        { term: "Big-O", en: "Big-O notation", g: "E", def: "복잡도 표기. O(1)<O(log n)<O(n)<O(n log n)<O(n²) 순으로 나빠짐.", ref: "47" },
+        { term: "O(n²)", en: "quadratic", g: "E", def: "중첩 루프의 대표 복잡도. n이 커지면 폭발적으로 느려짐. 자료구조로 낮추는 게 최적화.", ref: "47" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
