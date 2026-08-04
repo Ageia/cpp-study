@@ -2426,6 +2426,9 @@
         <button type="button" role="tab" data-tab="71" aria-selected="false">
           <span class="n">71</span><span class="t">chrono · random · fs</span>
         </button>
+        <button type="button" role="tab" data-tab="72" aria-selected="false">
+          <span class="n">72</span><span class="t">구조적 바인딩</span>
+        </button>
       </nav>
     </aside>
 
@@ -9700,6 +9703,70 @@ for (auto&amp; e : fs::directory_iterator("."))
           </div>
         </section>
 
+        <!-- ===== 72 구조적 바인딩 (C++ 더) ===== -->
+        <section class="panel" data-panel="72" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">72</span> 구조적 바인딩</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            <code class="inline">auto [a, b] = ...</code> — 묶인 값을 <strong class="hl">한 번에 여러 이름으로 풀어</strong> 담는 C++17 문법.
+            <code class="inline">pair</code>/<code class="inline">tuple</code>(<a href="#62">62</a>)·구조체·<code class="inline">map</code> 원소(<a href="#31">31</a>)를 읽기 좋게 꺼냅니다.
+          </p>
+
+          <article class="card">
+            <h3>pair · tuple · 구조체 풀기</h3>
+            <pre>std::pair&lt;int, std::string&gt; p{1, "hero"};
+auto [id, name] = p;      // id=1, name="hero"
+
+std::tuple&lt;int, double, char&gt; t{1, 2.5, 'x'};
+auto [a, b, c] = t;       // 셋을 한 번에
+
+struct Point { int x, y; };
+Point pt{3, 4};
+auto [x, y] = pt;         // 구조체 멤버도</pre>
+            <p style="margin-bottom:0"><code class="inline">.first</code>·<code class="inline">std::get&lt;0&gt;</code> 대신 <strong class="hl">의미 있는 이름</strong>으로 — 읽기가 확 좋아집니다.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>map 순회에서</h3>
+              <pre>std::map&lt;std::string,int&gt; inv;
+
+for (const auto&amp; [name, count] : inv) {
+    std::cout &lt;&lt; name &lt;&lt; ": " &lt;&lt; count;
+}
+// .first/.second 안 써도 됨</pre>
+              <p style="margin-bottom:0">map/unordered_map 순회의 표준 관용구. 키·값을 바로 이름으로.</p>
+            </article>
+            <article class="card">
+              <h3>값 · 참조</h3>
+              <pre>auto [a, b] = p;       // 복사본
+auto&amp; [a, b] = p;      // 원본 참조(수정 가능)
+const auto&amp; [a, b] = p; // 읽기 전용 참조</pre>
+              <p style="margin-bottom:0"><code class="inline">auto</code> 규칙(<a href="#53">53</a>)과 동일 — 읽기 순회는 <code class="inline">const auto&amp;</code>.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — 여러 값 반환 받기</h3>
+            <p><strong class="hl">상황:</strong> 함수가 값 두 개를 돌려줄 때(예: 몫과 나머지). tuple로 반환하고 바로 풀기.</p>
+            <pre>#include &lt;tuple&gt;
+
+std::tuple&lt;int, int&gt; divmod(int a, int b) {
+    return {a / b, a % b};
+}
+
+auto [q, r] = divmod(17, 5);   // q=3, r=2</pre>
+            <p><strong class="hl">쓰임:</strong> 여러 값 반환, map 순회, 좌표·범위 언팩. 다만 값이 3개 넘고 의미가 중요하면 <strong>이름 있는 struct</strong>(<a href="#12">12</a>)가 더 읽기 좋습니다.</p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> <code class="inline">auto [a, b] = ...</code>로 묶인 값을 이름으로 풀어라.
+            map 순회·다중 반환에서 특히 빛나고, 읽기 순회는 <code class="inline">const auto&amp;</code>. 의미가 중요하면 struct를 함께 고려하세요.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -9720,7 +9787,7 @@ for (auto&amp; e : fs::directory_iterator("."))
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71"
+        "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72"
       ];
 
       const DICT = [
@@ -9961,7 +10028,8 @@ for (auto&amp; e : fs::directory_iterator("."))
         { term: "promise", en: "std::promise", g: "E", def: "값을 쓰는 쪽. get_future()로 얻은 future가 읽는 쪽. 한 번의 값 전달 파이프.", ref: "70" },
         { term: "chrono", en: "std::chrono", g: "D", def: "시간 측정·표현. steady_clock으로 경과 시간, 타입으로 단위 구분(milliseconds 등).", ref: "71" },
         { term: "random", en: "std::random", g: "D", def: "제대로 된 난수. 엔진(mt19937)+분포(uniform 등) 조합. rand()%n의 치우침을 피함.", ref: "71" },
-        { term: "filesystem", en: "std::filesystem", g: "D", def: "경로·존재·크기·디렉터리 순회를 다루는 표준. 파일 내용은 fstream으로.", ref: "71" }
+        { term: "filesystem", en: "std::filesystem", g: "D", def: "경로·존재·크기·디렉터리 순회를 다루는 표준. 파일 내용은 fstream으로.", ref: "71" },
+        { term: "구조적 바인딩", en: "structured bindings", g: "D", def: "C++17. auto [a,b]=...로 묶인 값을 여러 이름으로 한 번에 풀기. map 순회·다중 반환에.", ref: "72" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
