@@ -2369,6 +2369,9 @@
         <button type="button" role="tab" data-tab="52" aria-selected="false">
           <span class="n">52</span><span class="t">배열 · 문자열 더</span>
         </button>
+        <button type="button" role="tab" data-tab="53" aria-selected="false">
+          <span class="n">53</span><span class="t">auto · 타입 추론</span>
+        </button>
       </nav>
     </aside>
 
@@ -8292,6 +8295,73 @@ greet("bob");  // 리터럴도 그대로</pre>
           </div>
         </section>
 
+        <!-- ===== 53 auto · 타입 추론 · decltype (C++ 더) ===== -->
+        <section class="panel" data-panel="53" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">53</span> auto · 타입 추론 · decltype</h2>
+            <span class="tag tag-cyan">C++</span>
+          </div>
+          <p class="panel-lead">
+            타입을 일일이 적는 대신 <strong class="hl">컴파일러가 초기값에서 알아내게</strong> 하는 <code class="inline">auto</code>.
+            반복자(<a href="#31">31</a>)·긴 타입에서 특히 편하지만, <strong class="hl">const·참조를 떨어뜨리는</strong> 함정이 있어 규칙만 알면 됩니다.
+          </p>
+
+          <article class="card">
+            <h3>auto — 초기값에서 타입 뽑기</h3>
+            <pre>auto n = 42;         // int
+auto pi = 3.14;      // double
+auto s = std::string("hi");  // std::string
+
+std::vector&lt;int&gt; v = {1,2,3};
+for (auto it = v.begin(); it != v.end(); ++it) { }  // 긴 반복자 타입 생략</pre>
+            <ul class="checklist" style="margin-top:6px">
+              <li class="yes">반복자·람다·긴 템플릿 타입에서 코드가 짧아짐</li>
+              <li class="yes"><strong class="hl">반드시 초기값 필요</strong>(그걸로 타입을 정하므로)</li>
+              <li class="tip">타입이 눈에 중요할 땐 그냥 명시하는 게 읽기 좋을 때도</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>함정 — auto는 const·참조를 벗긴다</h3>
+            <p><code class="inline">auto</code>는 값 <em>복사</em>로 추론합니다. 원본을 참조하거나 const를 유지하려면 <strong class="hl">직접 붙여야</strong> 합니다.</p>
+            <pre>const std::string name = "hero";
+
+auto        a = name;   // std::string (복사! const 떨어짐)
+auto&       b = name;   // const std::string&  (원본 참조 — 안전·빠름)
+const auto& c = name;   // 같은 뜻, 의도를 명시
+
+// 범위 for에서 특히 중요
+for (auto x : big_vec)        { }  // 매 원소 복사(느릴 수 있음)
+for (const auto&amp; x : big_vec) { }  // 복사 없음(읽기)</pre>
+            <p style="margin-bottom:0"><strong class="hl">규칙:</strong> 읽기만 하면 <code class="inline">const auto&amp;</code>, 바꿔야 하면 <code class="inline">auto&amp;</code>, 값이 필요하면 <code class="inline">auto</code>. 참조 감각 → <a href="#11">11</a>·<a href="#30">30</a></p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>구조적 바인딩과 함께</h3>
+              <pre>std::map&lt;std::string,int&gt; m;
+for (const auto&amp; [key, val] : m) {
+    // key, val 로 바로 꺼내기
+}</pre>
+              <p style="margin-bottom:0">여러 값을 한 번에 풀어 담기 = <strong class="hl">구조적 바인딩</strong>(뒤 유틸 심화에서 자세히).</p>
+            </article>
+            <article class="card">
+              <h3>decltype 맛보기</h3>
+              <pre>int x = 5;
+decltype(x) y = 10;   // x의 타입(int)을 그대로
+
+// 표현식의 타입을 그대로 가져올 때
+// (템플릿·제네릭 코드에서 주로)</pre>
+              <p style="margin-bottom:0"><code class="inline">decltype</code>는 “이 표현식의 타입”을 뽑습니다. 지금은 “그런 게 있다” 정도면 충분.</p>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> <code class="inline">auto</code>는 초기값에서 타입을 뽑되 <em>복사·const 벗김</em>이 기본.
+            읽기 순회는 <code class="inline">const auto&amp;</code>가 안전판입니다. 이 한 규칙이 auto 함정의 대부분을 막아 줍니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -8312,7 +8382,7 @@ greet("bob");  // 리터럴도 그대로</pre>
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
         "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-        "51","52"
+        "51","52","53"
       ];
 
       const DICT = [
@@ -8499,7 +8569,10 @@ greet("bob");  // 리터럴도 그대로</pre>
         { term: "inline", en: "inline", g: "D", def: "요즘 핵심 의미는 ‘이 정의를 여러 파일에 넣어도 됨’(ODR 예외). 헤더 전용 함수에 유용.", ref: "51" },
         { term: "2차원 배열", en: "2D array", g: "D", def: "grid[행][열]. 메모리엔 행 우선으로 한 줄 저장. 타일 맵·행렬에. 크기 가변이면 vector 중첩.", ref: "52" },
         { term: "C 문자열", en: "C-string", g: "D", def: "char 배열+널 문자(\\0)로 끝나는 옛 문자열. ==는 주소 비교라 함정. std::string 권장.", ref: "52" },
-        { term: "string_view", en: "std::string_view", g: "D", def: "문자열을 복사 없이 읽기만 하는 뷰. 읽기 전용 인자에. 원본 수명 동안만 유효.", ref: "52" }
+        { term: "string_view", en: "std::string_view", g: "D", def: "문자열을 복사 없이 읽기만 하는 뷰. 읽기 전용 인자에. 원본 수명 동안만 유효.", ref: "52" },
+        { term: "auto", en: "auto", g: "D", def: "초기값에서 타입을 추론. 복사·const 벗김이 기본이라 읽기 순회엔 const auto&.", ref: "53" },
+        { term: "타입 추론", en: "type deduction", g: "D", def: "컴파일러가 초기값·인자에서 타입을 알아내는 것. auto·템플릿의 기반.", ref: "53" },
+        { term: "decltype", en: "decltype", g: "D", def: "표현식의 타입을 그대로 가져오는 키워드. 제네릭·템플릿 코드에서 주로.", ref: "53" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };

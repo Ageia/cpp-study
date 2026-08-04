@@ -60,7 +60,7 @@
 
 ### B2. 타입 시스템
 - ✅ const · const 멤버 함수 (30) · constexpr (사전)
-- ⬜ **`auto` · 타입 추론 · `decltype`** (정식 주제로)
+- ✅ **`auto` · 타입 추론 · `decltype`** (53)
 - ✅ 참조 vs 포인터 (10, 11)
 - ⬜ **형변환 4종: `static_cast` · `dynamic_cast` · `reinterpret_cast` · `const_cast`** (+ C 스타일 왜 피하나)
 - ⬜ 균일 초기화 `{}` · `nullptr` · 리터럴
