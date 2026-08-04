@@ -2340,6 +2340,9 @@
         <button type="button" role="tab" data-tab="43" aria-selected="false">
           <span class="n">43</span><span class="t">시스템 콜 · 커널</span>
         </button>
+        <button type="button" role="tab" data-tab="44" aria-selected="false">
+          <span class="n">44</span><span class="t">파일시스템 기초</span>
+        </button>
       </nav>
     </aside>
 
@@ -7550,6 +7553,77 @@ void inc() {
           </div>
         </section>
 
+        <!-- ===== 44 파일시스템 기초 (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="44" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">44</span> 파일시스템 기초</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            디스크(<a href="#35">35</a>)의 바이트 더미를 <strong class="hl">이름·폴더로 정리</strong>해 주는 층.
+            파일은 결국 <strong class="hl">바이트 열 + 메타데이터</strong>이고,
+            <strong class="hl">경로</strong>로 찾아갑니다. 접근은 전부 커널의 시스템 콜(<a href="#43">43</a>)로 일어나죠.
+          </p>
+
+          <article class="card">
+            <h3>한눈에 보기 — 디렉터리 트리와 경로</h3>
+            <p>폴더(디렉터리) 안에 폴더·파일이 겹겹이. 루트에서부터의 길이 <strong class="hl">절대 경로</strong>, 지금 위치 기준이 <strong class="hl">상대 경로</strong>.</p>
+            <div class="guide-viz" aria-label="디렉터리 트리">
+              <pre style="margin:0;background:#0b0e14;border:1px solid var(--border)">C:\  (루트)
+├─ Users\
+│  └─ me\
+│     ├─ game.cpp        ← 상대경로:  game.cpp
+│     └─ save\
+│        └─ slot1.dat    ← 절대경로:  C:\Users\me\save\slot1.dat
+└─ Windows\</pre>
+              <p class="viz-cap">Windows는 <code>\</code>, macOS·리눅스는 <code>/</code>로 구분. C++ 문자열에선 <code>\\</code> 또는 <code>/</code>를 씁니다.</p>
+            </div>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>파일 = 바이트 + 메타데이터</h3>
+              <ul class="checklist">
+                <li class="yes"><strong class="hl">내용</strong>: 그냥 바이트 열(<a href="#39">39</a>)</li>
+                <li class="yes"><strong class="hl">메타데이터</strong>: 크기·수정 시각·권한·이름</li>
+                <li class="tip">확장자(<code class="inline">.cpp</code>·<code class="inline">.png</code>)는 <em>힌트일 뿐</em> — 내용을 강제하진 않음</li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>텍스트 vs 바이너리</h3>
+              <ul class="checklist">
+                <li class="yes"><strong>텍스트</strong>: 사람이 읽는 글자(인코딩 적용) — 소스·설정·로그</li>
+                <li class="yes"><strong>바이너리</strong>: 값 그대로의 바이트 — 이미지·실행파일·세이브</li>
+                <li class="tip">바이너리를 텍스트 편집기로 열면 깨져 보이는 이유</li>
+              </ul>
+            </article>
+          </div>
+
+          <article class="card">
+            <h3>상황 · 코드 · 쓰임 — 파일 읽고 쓰기</h3>
+            <p><strong class="hl">상황:</strong> 점수를 파일에 저장하고 다시 읽기. <code class="inline">&lt;fstream&gt;</code>이 <code class="inline">cout</code>(<a href="#04">04</a>)과 똑같은 <code class="inline">&lt;&lt;</code>/<code class="inline">&gt;&gt;</code>를 파일에 씁니다.</p>
+            <pre>#include &lt;fstream&gt;
+#include &lt;string&gt;
+
+// 쓰기
+std::ofstream out("save.txt");
+out &lt;&lt; "score " &lt;&lt; 1200 &lt;&lt; "\n";
+// out 소멸 시 자동으로 닫힘(flush) — RAII
+
+// 읽기
+std::ifstream in("save.txt");
+std::string key; int value;
+in &gt;&gt; key &gt;&gt; value;   // "score", 1200</pre>
+            <p><strong class="hl">쓰임:</strong> 세이브 파일, 설정, 로그, 데이터 입출력. 파일이 없거나 권한이 없으면 열기 실패 → 항상 <code class="inline">if (in)</code>로 확인.
+              모던 경로 처리는 <code class="inline">&lt;filesystem&gt;</code> → <em>유틸 심화(예정)</em></p>
+          </article>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 파일 = 바이트 + 메타데이터, 경로로 찾고, <code class="inline">fstream</code>으로 읽고 쓴다.
+            내용·확장자·인코딩은 별개라는 감각이면 충분합니다. 실제 접근은 커널(43)이 대신합니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -7569,7 +7643,7 @@ void inc() {
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35","36","37","38","39","40","41","42","43"
+        "30","31","32","33","34","35","36","37","38","39","40","41","42","43","44"
       ];
 
       const DICT = [
@@ -7724,7 +7798,10 @@ void inc() {
         { term: "뮤텍스(락)", en: "mutex / lock", g: "E", def: "임계 구역을 한 번에 하나만 통과시키는 자물쇠. lock_guard로 RAII 잠금.", ref: "42" },
         { term: "데드락", en: "deadlock", g: "E", def: "여러 스레드가 서로가 쥔 락을 기다리며 영원히 멈춤(순환 대기). 락을 같은 순서로 잡아 예방.", ref: "42" },
         { term: "시스템 콜", en: "system call", g: "E", def: "프로그램이 파일·화면 같은 특권 작업을 커널에 요청하는 것. cout·파일 I/O 속에서 일어남.", ref: "43" },
-        { term: "커널 모드 / 유저 모드", en: "kernel / user mode", g: "E", def: "특권 작업은 커널 모드(커널만), 일반 코드는 권한 낮은 유저 모드. 사이 전환에 비용.", ref: "43" }
+        { term: "커널 모드 / 유저 모드", en: "kernel / user mode", g: "E", def: "특권 작업은 커널 모드(커널만), 일반 코드는 권한 낮은 유저 모드. 사이 전환에 비용.", ref: "43" },
+        { term: "파일시스템", en: "file system", g: "E", def: "디스크의 바이트를 이름·폴더로 정리해 주는 층. 파일=바이트 열+메타데이터.", ref: "44" },
+        { term: "경로", en: "path", g: "E", def: "파일 위치를 가리키는 문자열. 루트부터면 절대 경로, 현재 위치 기준이면 상대 경로.", ref: "44" },
+        { term: "텍스트 / 바이너리 파일", en: "text / binary file", g: "E", def: "텍스트는 인코딩된 글자, 바이너리는 값 그대로의 바이트. 확장자는 힌트일 뿐.", ref: "44" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
