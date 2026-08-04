@@ -2337,6 +2337,9 @@
         <button type="button" role="tab" data-tab="42" aria-selected="false">
           <span class="n">42</span><span class="t">경쟁 상태 · 락 · 데드락</span>
         </button>
+        <button type="button" role="tab" data-tab="43" aria-selected="false">
+          <span class="n">43</span><span class="t">시스템 콜 · 커널</span>
+        </button>
       </nav>
     </aside>
 
@@ -7458,6 +7461,95 @@ void inc() {
           </div>
         </section>
 
+        <!-- ===== 43 시스템 콜 · 커널/유저 모드 (컴퓨터 심화) ===== -->
+        <section class="panel" data-panel="43" role="tabpanel" hidden>
+          <div class="topic-head">
+            <h2><span class="num">43</span> 시스템 콜 · 커널 / 유저 모드</h2>
+            <span class="tag tag-cyan">컴퓨터</span>
+          </div>
+          <p class="panel-lead">
+            내 프로그램은 디스크·화면·네트워크 같은 <strong class="hl">장치를 직접 만질 수 없습니다</strong>.
+            대신 운영체제(<strong class="hl">커널</strong>)에게 “해 달라”고 부탁하는데, 그 요청이 <strong class="hl">시스템 콜</strong>.
+            평소 코드는 권한이 낮은 <strong class="hl">유저 모드</strong>, 커널만 <strong class="hl">커널 모드</strong>로 특권 작업을 합니다.
+          </p>
+
+          <article class="card">
+            <h3>한눈에 보기 — 유저 ↔ 커널</h3>
+            <div class="guide-viz" aria-label="시스템 콜 흐름">
+              <svg class="guide-svg" viewBox="0 0 480 200" role="img" aria-labelledby="sys-title" style="max-width:460px">
+                <title id="sys-title">시스템 콜: 유저 모드에서 커널 모드로 요청</title>
+                <defs>
+                  <marker id="mSys" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 z" fill="#67e8f9"/>
+                  </marker>
+                </defs>
+                <line x1="20" y1="106" x2="460" y2="106" stroke="rgba(148,163,184,0.5)" stroke-width="1.4" stroke-dasharray="6 4"/>
+                <text x="452" y="30"  text-anchor="end" fill="#9aa3b8" font-size="10" font-weight="700" font-family="Segoe UI, sans-serif">유저 모드 (권한 낮음)</text>
+                <text x="452" y="196" text-anchor="end" fill="#9aa3b8" font-size="10" font-weight="700" font-family="Segoe UI, sans-serif">커널 모드 (특권)</text>
+
+                <rect x="56" y="40" width="184" height="48" rx="10" fill="rgba(103,232,249,0.06)" stroke="#67e8f9" stroke-width="1.8"/>
+                <text x="148" y="62" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">내 프로그램</text>
+                <text x="148" y="78" text-anchor="middle" fill="#9aa3b8" font-size="10" font-family="Segoe UI, sans-serif">read() · write() · cout</text>
+
+                <rect x="56" y="124" width="184" height="48" rx="10" fill="rgba(196,181,253,0.06)" stroke="#c4b5fd" stroke-width="1.8"/>
+                <text x="148" y="146" text-anchor="middle" fill="#e9d5ff" font-size="12" font-weight="700" font-family="Segoe UI, sans-serif">커널</text>
+                <text x="148" y="162" text-anchor="middle" fill="#9aa3b8" font-size="10" font-family="Segoe UI, sans-serif">실제 장치 접근</text>
+
+                <rect x="316" y="124" width="140" height="48" rx="10" fill="#0b0e14" stroke="#9aa3b8" stroke-width="1.6"/>
+                <text x="386" y="146" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">디스크·화면</text>
+                <text x="386" y="162" text-anchor="middle" fill="#9aa3b8" font-size="10" font-family="Segoe UI, sans-serif">네트워크 등</text>
+
+                <line x1="116" y1="88" x2="116" y2="124" stroke="#67e8f9" stroke-width="2" marker-end="url(#mSys)"/>
+                <text x="104" y="110" text-anchor="end" fill="#67e8f9" font-size="10" font-family="Segoe UI, sans-serif">① syscall</text>
+                <line x1="188" y1="124" x2="188" y2="88" stroke="#34d399" stroke-width="2" marker-end="url(#mSys)"/>
+                <text x="200" y="110" fill="#34d399" font-size="10" font-family="Segoe UI, sans-serif">② 반환</text>
+                <line x1="240" y1="148" x2="316" y2="148" stroke="#9aa3b8" stroke-width="2" marker-end="url(#mSys)"/>
+              </svg>
+              <p class="viz-cap">유저 코드가 syscall로 커널에 요청 → 커널이 장치를 다루고 결과를 돌려줌. 이 <strong>모드 전환</strong>에 비용이 듭니다.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>왜 이렇게 나눴나 — 보호</h3>
+            <ul class="checklist">
+              <li class="yes">한 프로그램의 실수가 <strong class="hl">다른 프로그램·OS를 못 망가뜨리게</strong> 격리</li>
+              <li class="yes">장치 접근을 커널이 <strong class="hl">중재</strong>해 충돌·보안 문제 차단</li>
+              <li class="tip">그래서 잘못된 포인터 접근은 유저 모드에서 즉시 차단(세그폴트)</li>
+            </ul>
+            <p style="margin:8px 0 0">가상 메모리(<a href="#23">23</a>)로 각 프로그램에 독립 주소를 주는 것과 한 쌍의 보호 장치입니다.</p>
+          </article>
+
+          <div class="split-cards">
+            <article class="card">
+              <h3>익숙한 것들의 정체</h3>
+              <div class="table-wrap" style="margin-top:8px">
+                <table style="min-width:0">
+                  <thead><tr><th>내가 쓴 코드</th><th>속에서 부르는 것</th></tr></thead>
+                  <tbody>
+                    <tr><td><code class="inline">std::cout</code> (<a href="#04">04</a>)</td><td>write 계열 syscall</td></tr>
+                    <tr><td>파일 읽기/쓰기</td><td>open·read·write</td></tr>
+                    <tr><td>큰 <code class="inline">new</code> (<a href="#15">15</a>)</td><td>가끔 mmap/sbrk</td></tr>
+                    <tr><td>스레드 생성</td><td>clone 계열</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+            <article class="card">
+              <h3>왜 느린가</h3>
+              <ul class="checklist">
+                <li class="no">유저→커널 <strong class="hl">모드 전환</strong> 비용</li>
+                <li class="tip">그래서 출력·파일 I/O는 <strong class="hl">모아서(버퍼링)</strong> 한 번에</li>
+                <li class="tip"><code class="inline">"\n"</code> 잦은 flush보다 버퍼가 유리할 때가 많음</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="callout warn">
+            <strong>지금은 여기까지:</strong> 특권 작업은 전부 커널에게 <em>시스템 콜</em>로 부탁한다. 유저/커널 모드 분리는 보호 장치이자
+            I/O가 비싼 이유. “출력·파일은 모아서”가 여기서 나오는 실전 감각입니다.
+          </div>
+        </section>
+
         <div class="nav-row">
           <button type="button" id="btn-prev">← 이전</button>
           <button type="button" id="btn-next">다음 →</button>
@@ -7477,7 +7569,7 @@ void inc() {
         "01","02","03","04","05","06","07","08","09","10",
         "11","12","13","14","15","16","17","18","19","20","21",
         "22","23","24","25","26","27","28","29",
-        "30","31","32","33","34","35","36","37","38","39","40","41","42"
+        "30","31","32","33","34","35","36","37","38","39","40","41","42","43"
       ];
 
       const DICT = [
@@ -7630,7 +7722,9 @@ void inc() {
         { term: "경쟁 상태", en: "race condition", g: "E", def: "여러 스레드가 공유 데이터를 동시에 수정해 결과가 꼬이는 버그. 실행마다 결과가 달라짐.", ref: "42" },
         { term: "임계 구역", en: "critical section", g: "E", def: "한 번에 한 스레드만 들어가야 하는 코드 구간. 락(뮤텍스)으로 보호.", ref: "42" },
         { term: "뮤텍스(락)", en: "mutex / lock", g: "E", def: "임계 구역을 한 번에 하나만 통과시키는 자물쇠. lock_guard로 RAII 잠금.", ref: "42" },
-        { term: "데드락", en: "deadlock", g: "E", def: "여러 스레드가 서로가 쥔 락을 기다리며 영원히 멈춤(순환 대기). 락을 같은 순서로 잡아 예방.", ref: "42" }
+        { term: "데드락", en: "deadlock", g: "E", def: "여러 스레드가 서로가 쥔 락을 기다리며 영원히 멈춤(순환 대기). 락을 같은 순서로 잡아 예방.", ref: "42" },
+        { term: "시스템 콜", en: "system call", g: "E", def: "프로그램이 파일·화면 같은 특권 작업을 커널에 요청하는 것. cout·파일 I/O 속에서 일어남.", ref: "43" },
+        { term: "커널 모드 / 유저 모드", en: "kernel / user mode", g: "E", def: "특권 작업은 커널 모드(커널만), 일반 코드는 권한 낮은 유저 모드. 사이 전환에 비용.", ref: "43" }
       ];
 
       const gLabel = { A: "시작", B: "값·흐름", C: "메모리", D: "현대", E: "심화" };
