@@ -81,7 +81,7 @@
 - ✅ 함수/클래스 템플릿 (18)
 - ✅ **템플릿 특수화 · 가변 인자 템플릿(variadic)** (59)
 - ✅ **concepts (C++20)** · `type_traits` · SFINAE 맛보기 (60)
-- ⬜ constexpr 프로그래밍
+- ✅ constexpr 프로그래밍 (61)
 
 ### B6. STL
 - ✅ vector (14) · map·set·iterator·algorithm (31) · 재할당·무효화·span (32)
